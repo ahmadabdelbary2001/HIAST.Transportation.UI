@@ -1,5 +1,6 @@
 {
   "name": "hiast-transportation",
+  "homepage": "https://ahmadabdelbary2001.github.io/HIAST.Transportation.UI",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,9 +8,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "postbuild": "node scripts/copy-404.cjs",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "gh-pages": "^6.3.0",
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

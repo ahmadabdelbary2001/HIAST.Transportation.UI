@@ -6,7 +6,7 @@ const App = () => (
   <BrowserRouter>
     <Routes>
       <Route
-        path="/"
+        path="/HIAST.Transportation.UI"
         element={
           <MainLayout>
             <Dashboard />
