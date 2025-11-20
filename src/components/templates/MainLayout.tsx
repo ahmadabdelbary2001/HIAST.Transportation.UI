@@ -1,3 +1,5 @@
+// src/components/templates/MainLayout.tsx
+
 import type { ReactNode } from 'react';
 import { Header } from '@/components/organisms/Header';
 
@@ -7,11 +9,12 @@ interface MainLayoutProps {
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="main-layout">
+    <div className="min-h-screen bg-background">
       <Header />
-      <main className="main-content">
+  
+      <div className="py-0">
         {children}
-      </main>
+      </div>
     </div>
   );
 }
