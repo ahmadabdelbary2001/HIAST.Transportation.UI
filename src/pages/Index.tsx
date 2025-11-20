@@ -2,20 +2,21 @@
 
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import useTheme from '@/hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 
 export default function Dashboard() {
-  const { theme, mode } = useTheme();
+  const { t } = useTranslation();
+
   const stats = [
-    { title: 'Total Employees', value: '156' },
-    { title: 'Available Buses', value: '24' },
-    { title: 'Upcoming Schedules', value: '8' },
+    { title: t('totalEmployees'), value: '156' },
+    { title: t('availableBuses'), value: '24' },
+    { title: t('upcomingSchedules'), value: '8' },
   ];
 
   const quickActions = [
-    'Manage Employees',
-    'View Schedule',
-    'Bus Maintenance'
+    t('manageEmployees'),
+    t('viewSchedule'),
+    t('busMaintenance')
   ];
 
   return (
@@ -24,10 +25,10 @@ export default function Dashboard() {
         {/* Welcome Section */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-2">
-            Welcome to HIAST Transportation
+            {t('welcome')}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Manage your transportation system efficiently with real-time tracking and scheduling tools.
+            {t('description')}
           </p>
         </div>
 
@@ -48,7 +49,9 @@ export default function Dashboard() {
 
         {/* Quick Actions */}
         <div className="bg-theme-secondary rounded-xl shadow-sm border border-border p-6 transition-colors duration-200 theme-card">
-          <h2 className="text-xl font-semibold text-foreground mb-4">Quick Actions</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-4">
+            {t('quickActions')}
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
               <Button 
@@ -62,13 +65,6 @@ export default function Dashboard() {
               </Button>
             ))}
           </div>
-        </div>
-
-        {/* Theme indicator */}
-        <div className="mt-8 text-center text-sm text-muted-foreground">
-          Current theme: <span className="font-medium text-foreground">{theme === 'syrian' ? 'Syrian Identity' : theme === 'pastel' ? 'Soft Pastel' : 'Default'}</span>
-          {' | '}
-          Mode: <span className="font-medium text-foreground">{mode}</span>
         </div>
       </div>
     </div>

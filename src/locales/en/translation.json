@@ -1,11 +1,24 @@
 {
-  "welcome": "Welcome to HIAST Transportation",
-  "description": "Manage your transportation system efficiently with real-time tracking and scheduling tools.",
+  "welcome": "Welcome to 2AF Work",
+  "description": "Manage the HIAST's transportation system for employees to and from work.",
   "totalEmployees": "Total Employees",
-  "availableBuses": "Available Buses", 
+  "availableBuses": "Available Buses",
   "upcomingSchedules": "Upcoming Schedules",
   "quickActions": "Quick Actions",
   "manageEmployees": "Manage Employees",
   "viewSchedule": "View Schedule",
-  "busMaintenance": "Bus Maintenance"
+  "busMaintenance": "Bus Maintenance",
+  "logo": {
+    "title": "2AF Work",
+    "subtitle": "Transportation System"
+  },
+  "theme": {
+    "currentTheme": "Current theme",
+    "mode": "Mode",
+    "syrian": "Syrian Identity",
+    "pastel": "Soft Pastel", 
+    "default": "Default",
+    "light": "light",
+    "dark": "dark"
+  }
 }

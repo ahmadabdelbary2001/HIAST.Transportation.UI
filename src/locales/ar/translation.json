@@ -1,11 +1,24 @@
 {
-  "welcome": "مرحباً بكم في نقل هيئ",
-  "description": "إدارة نظام النقل الخاص بك بكفاءة مع أدوات التتبع والجدولة في الوقت الحقيقي.",
+  "welcome": "مرحباً بكم في 2AF Work",
+  "description": "إدارة النظام الخاص بالمعهد العالي لنقل الموظفين من وإلى العمل.",
   "totalEmployees": "إجمالي الموظفين",
   "availableBuses": "الحافلات المتاحة",
   "upcomingSchedules": "الجدولات القادمة",
   "quickActions": "إجراءات سريعة",
   "manageEmployees": "إدارة الموظفين",
   "viewSchedule": "عرض الجدول",
-  "busMaintenance": "صيانة الحافلات"
+  "busMaintenance": "صيانة الحافلات",
+  "logo": {
+    "title": "2AF Work",
+    "subtitle": "نظام النقل"
+  },
+  "theme": {
+    "currentTheme": "السمة الحالية",
+    "mode": "الوضع",
+    "syrian": "الهوية السورية",
+    "pastel": "باستيل ناعم",
+    "default": "افتراضي",
+    "light": "نهاري",
+    "dark": "ليلي"
+  }
 }
