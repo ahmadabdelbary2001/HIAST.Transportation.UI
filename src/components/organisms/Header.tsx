@@ -3,6 +3,7 @@
 import { Logo } from '@/components/atoms/Logo';
 import { ModeToggler } from '@/components/atoms/ModeToggler';
 import { ThemeSelector } from '@/components/atoms/ThemeSelector';
+import { LanguageSelector } from '../atoms/LanguageSelector';
 
 export function Header() {
   return (
@@ -16,6 +17,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <ThemeSelector />
             <ModeToggler />
+            <LanguageSelector />
           </div>
         </div>
       </div>

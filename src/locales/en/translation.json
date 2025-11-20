@@ -1,0 +1,11 @@
+{
+  "welcome": "Welcome to HIAST Transportation",
+  "description": "Manage your transportation system efficiently with real-time tracking and scheduling tools.",
+  "totalEmployees": "Total Employees",
+  "availableBuses": "Available Buses", 
+  "upcomingSchedules": "Upcoming Schedules",
+  "quickActions": "Quick Actions",
+  "manageEmployees": "Manage Employees",
+  "viewSchedule": "View Schedule",
+  "busMaintenance": "Bus Maintenance"
+}

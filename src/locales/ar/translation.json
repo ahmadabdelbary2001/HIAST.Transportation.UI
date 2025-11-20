@@ -1,0 +1,11 @@
+{
+  "welcome": "مرحباً بكم في نقل هيئ",
+  "description": "إدارة نظام النقل الخاص بك بكفاءة مع أدوات التتبع والجدولة في الوقت الحقيقي.",
+  "totalEmployees": "إجمالي الموظفين",
+  "availableBuses": "الحافلات المتاحة",
+  "upcomingSchedules": "الجدولات القادمة",
+  "quickActions": "إجراءات سريعة",
+  "manageEmployees": "إدارة الموظفين",
+  "viewSchedule": "عرض الجدول",
+  "busMaintenance": "صيانة الحافلات"
+}
