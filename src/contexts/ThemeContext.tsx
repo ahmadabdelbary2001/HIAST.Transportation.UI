@@ -2,10 +2,9 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants';
-import { THEME_OPTIONS } from '@/lib/theme';
+import { type ThemeId, getThemeById } from '@/lib/theme';
 
 type ThemeMode = 'light' | 'dark';
-type ThemeId = 'syrian' | 'default';
 
 interface ThemeContextType {
   theme: ThemeId;
@@ -32,6 +31,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const root = document.documentElement;
+    const selectedTheme = getThemeById(theme);
     
     // Apply dark mode class
     if (mode === 'dark') {
@@ -40,39 +40,31 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove('dark');
     }
 
-    // Apply theme-specific CSS variables
-    const selectedTheme = THEME_OPTIONS.find((t) => t.id === theme);
+    // Set theme-specific CSS custom properties
     if (selectedTheme) {
-      const colors = selectedTheme.colors;
+      const { colors, shadcn } = selectedTheme;
+      const { backgrounds } = colors;
       
-      // Set CSS custom properties for the theme
-      root.style.setProperty('--theme-primary', colors.primary.DEFAULT);
-      root.style.setProperty('--theme-primary-dark', colors.primary.dark);
-      root.style.setProperty('--theme-primary-light', colors.primary.light);
-      root.style.setProperty('--theme-accent', colors.accent.DEFAULT);
-      root.style.setProperty('--theme-accent-light', colors.accent.light);
-      root.style.setProperty('--theme-accent-dark', colors.accent.dark);
-      root.style.setProperty('--theme-secondary', colors.secondary.DEFAULT);
-      root.style.setProperty('--theme-secondary-dark', colors.secondary.dark);
-      
-      // Update Shadcn color variables based on theme
-      if (theme === 'syrian') {
-        // Syrian theme colors
-        root.style.setProperty('--primary', '166 50% 48%'); // #428177
-        root.style.setProperty('--primary-foreground', '0 0% 100%');
-        root.style.setProperty('--accent', '42 35% 60%'); // #b9a779
-        root.style.setProperty('--accent-foreground', '0 0% 0%');
-        root.style.setProperty('--secondary', '349 69% 27%'); // #6b1f2a
-        root.style.setProperty('--secondary-foreground', '0 0% 100%');
-      } else {
-        // Default theme colors
-        root.style.setProperty('--primary', '221 83% 53%');
-        root.style.setProperty('--primary-foreground', '0 0% 100%');
-        root.style.setProperty('--accent', '38 92% 50%');
-        root.style.setProperty('--accent-foreground', '0 0% 0%');
-        root.style.setProperty('--secondary', '262 83% 58%');
-        root.style.setProperty('--secondary-foreground', '0 0% 100%');
-      }
+      // Set theme color variables
+      Object.entries(colors).forEach(([colorCategory, shades]) => {
+        if (colorCategory === 'backgrounds') return; // Skip backgrounds for now
+        
+        Object.entries(shades as Record<string, string>).forEach(([shade, value]) => {
+          const variableName = `--theme-${colorCategory}${shade !== 'DEFAULT' ? `-${shade}` : ''}`;
+          root.style.setProperty(variableName, value);
+        });
+      });
+
+      // Set background colors based on mode
+      const modeBackgrounds = mode === 'light' ? backgrounds.light : backgrounds.dark;
+      Object.entries(modeBackgrounds).forEach(([backgroundType, value]) => {
+        root.style.setProperty(`--theme-background-${backgroundType}`, value);
+      });
+
+      // Set Shadcn color variables
+      Object.entries(shadcn).forEach(([variable, value]) => {
+        root.style.setProperty(`--${variable}`, value);
+      });
     }
   }, [theme, mode]);
 

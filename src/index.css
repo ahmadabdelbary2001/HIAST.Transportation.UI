@@ -6,11 +6,11 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: var(--theme-background-primary);
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: var(--theme-background-secondary);
     --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
+    --popover: var(--theme-background-secondary);
     --popover-foreground: 0 0% 3.9%;
     --primary: 166 50% 48%;
     --primary-foreground: 0 0% 100%;
@@ -29,11 +29,11 @@
   }
 
   .dark {
-    --background: 0 0% 3.9%;
+    --background: var(--theme-background-primary);
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: var(--theme-background-secondary);
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
+    --popover: var(--theme-background-secondary);
     --popover-foreground: 0 0% 98%;
     --primary: 166 50% 48%;
     --primary-foreground: 0 0% 100%;
@@ -56,7 +56,7 @@
     border-color: hsl(var(--border));
   }
   body {
-    background-color: hsl(var(--background));
+    background-color: var(--theme-background-primary);
     color: hsl(var(--foreground));
     font-family: 'Inter', system-ui, sans-serif;
   }
@@ -72,7 +72,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: hsl(var(--muted));
+  background-color: var(--theme-background-tertiary);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -98,4 +98,54 @@
   transition-property: color, background-color, border-color;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Theme-aware action button styles */
+.action-button {
+  @apply border border-input bg-background text-foreground transition-all duration-200;
+}
+
+.action-button:hover {
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary));
+  background-color: var(--theme-accent-light);
+}
+
+/* Enhanced theme cards with better contrast */
+.theme-card {
+  @apply bg-card border border-border transition-all duration-200;
+}
+
+.theme-card:hover {
+  border-color: hsl(var(--primary) / 0.3);
+  box-shadow: 0 4px 12px hsl(var(--primary) / 0.1);
+  background-color: var(--theme-background-tertiary);
+}
+
+/* Interactive elements with theme-aware hover states */
+.interactive-element {
+  @apply transition-all duration-200;
+}
+
+.interactive-element:hover {
+  background-color: var(--theme-accent-light);
+  border-color: hsl(var(--primary));
+}
+
+/* Theme transition animations */
+.theme-transition * {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Additional utility classes for background variations */
+.bg-theme-primary {
+  background-color: var(--theme-background-primary);
+}
+
+.bg-theme-secondary {
+  background-color: var(--theme-background-secondary);
+}
+
+.bg-theme-tertiary {
+  background-color: var(--theme-background-tertiary);
 }

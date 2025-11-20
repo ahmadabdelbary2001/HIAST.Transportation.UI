@@ -11,7 +11,7 @@ export function Logo() {
       </div>
       <div className="flex flex-col">
         <span className="text-lg font-bold leading-tight">HIAST Transportation</span>
-        <span className="text-xs text-muted-foreground">HIAST</span>
+        <span className="text-xs text-muted-foreground">Management System</span>
       </div>
     </div>
   );
