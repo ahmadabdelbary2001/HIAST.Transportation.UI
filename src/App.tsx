@@ -5,6 +5,8 @@ import { MainLayout } from '@/components/templates/MainLayout';
 import Dashboard from '@/pages/Index';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { ROUTES } from '@/lib/constants';
+import DriverList from '@/pages/drivers/DriverList';
 import '@/i18n';
 
 const App = () => (
@@ -13,14 +15,21 @@ const App = () => (
       <BrowserRouter basename="/HIAST.Transportation.UI">
         <Routes>
           <Route
-            path="/"
+            path={ROUTES.DASHBOARD}
             element={
               <MainLayout>
                 <Dashboard />
               </MainLayout>
             }
           />
-          {/* Add other routes as needed */}
+          <Route
+            path={ROUTES.DRIVERS}
+            element={
+              <MainLayout>
+                <DriverList />
+              </MainLayout>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </LanguageProvider>
