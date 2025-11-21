@@ -33,20 +33,22 @@ export function ThemeSelector({ className }: ThemeSelectorProps) {
           <Palette className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-popover text-popover-foreground">
-        {THEME_OPTIONS.map((themeOption) => (
-          <DropdownMenuItem
-            key={themeOption.id}
-            onClick={() => setTheme(themeOption.id)}
-            className={cn(
-              'cursor-pointer focus:bg-accent focus:text-accent-foreground',
-              theme === themeOption.id && 'bg-accent text-accent-foreground'
-            )}
-          >
-            {themeOption.name[language as 'en' | 'ar']}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
+        <DropdownMenuContent align="end" className="min-w-[160px]">
+          {THEME_OPTIONS.map((themeOption) => (
+            <DropdownMenuItem
+              key={themeOption.id}
+              onClick={() => setTheme(themeOption.id)}
+              className={cn(
+                'cursor-pointer transition-colors',
+                theme === themeOption.id 
+                  ? 'bg-[var(--theme-sidebar-active)] text-[var(--theme-sidebar-active-text)]' 
+                  : 'hover:bg-[var(--theme-sidebar-hover)] hover:text-[var(--theme-sidebar-hover-text)]'
+              )}
+            >
+              {themeOption.name[language as 'en' | 'ar']}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
     </DropdownMenu>
   );
 }

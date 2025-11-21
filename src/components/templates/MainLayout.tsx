@@ -17,9 +17,22 @@ export function MainLayout({ children }: MainLayoutProps) {
     return saved ? JSON.parse(saved) : false;
   });
 
+    const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.SIDEBAR_COLLAPSED, JSON.stringify(sidebarCollapsed));
-  }, [sidebarCollapsed]);
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -35,6 +48,17 @@ export function MainLayout({ children }: MainLayoutProps) {
     setSidebarCollapsed(false);
   };
 
+  // Determine sidebar props based on device
+  const sidebarProps = isMobile 
+    ? {
+        isOpen: sidebarOpen,
+        onClose: () => setSidebarOpen(false),
+        sidebarCollapsed: false // Always expanded on mobile
+      }
+    : {
+        isOpen: sidebarOpen || !sidebarCollapsed,
+        onClose: () => setSidebarOpen(false)      };
+
   return (
     <div className="min-h-screen flex flex-col bg-theme-primary">
       <Header 
@@ -44,10 +68,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       />
       
       <div className="flex flex-1">
-        <Sidebar 
-          isOpen={sidebarOpen || !sidebarCollapsed} 
-          onClose={() => setSidebarOpen(false)}
-        />
+        <Sidebar {...sidebarProps} />
         
         <main 
           className={cn(

@@ -95,7 +95,7 @@ export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarPro
                     'border border-transparent hover:border-[var(--theme-sidebar-border)]',
                     // Consistent padding on all sides for both states
                     isCollapsed 
-                      ? 'justify-center p-2'  // Equal padding on all sides when collapsed
+                      ? 'justify-center p-3'  // Equal padding on all sides when collapsed
                       : 'gap-3 p-2',         // Equal padding on all sides when expanded
                     isActive
                       ? 'bg-[var(--theme-sidebar-active)] text-[var(--theme-sidebar-active-text)] shadow-lg hover:shadow-xl border-[var(--theme-primary)]'

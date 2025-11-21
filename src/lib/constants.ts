@@ -8,7 +8,7 @@ export const LOCAL_STORAGE_KEYS = {
 } as const;
 
 export const ROUTES = {
-  DASHBOARD: '/HIAST.Transportation.UI',
+  DASHBOARD: '/',
   EMPLOYEES: '/employees',
   DRIVERS: '/drivers',
   BUSES: '/buses',
