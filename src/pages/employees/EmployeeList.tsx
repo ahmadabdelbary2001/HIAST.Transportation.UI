@@ -49,7 +49,7 @@ export default function EmployeeList() {
       const data = await employeeService.getAll();
       setEmployees(data);
     } catch (err) {
-      setError(t('common:messages.error'));
+      setError(t('common.messages.error'));
       console.error('Error loading employees:', err);
     } finally {
       setLoading(false);
@@ -87,10 +87,10 @@ export default function EmployeeList() {
 
     try {
       await employeeService.delete(deleteId);
-      toast.success(t('common:messages.deleteSuccess'));
+      toast.success(t('common.messages.deleteSuccess'));
       loadEmployees();
     } catch (err) {
-      toast.error(t('common:messages.error'));
+      toast.error(t('common.messages.error'));
       console.error('Error deleting employee:', err);
     } finally {
       setDeleteId(null);
@@ -98,7 +98,7 @@ export default function EmployeeList() {
   };
 
   if (loading) {
-    return <LoadingSpinner text={t('common:messages.loadingData')} />;
+    return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
 
   if (error) {
@@ -121,7 +121,7 @@ export default function EmployeeList() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder={t('common:actions.search')}
+            placeholder={t('common.actions.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -131,7 +131,7 @@ export default function EmployeeList() {
 
       {filteredEmployees.length === 0 ? (
         <EmptyState
-          title={t('common:messages.noResults')}
+          title={t('common.messages.noResults')}
           actionLabel={t('employee.create')}
           onAction={() => (window.location.href = ROUTES.EMPLOYEE_CREATE)}
         />
@@ -145,7 +145,7 @@ export default function EmployeeList() {
                 <TableHead>{t('employee.email')}</TableHead>
                 <TableHead>{t('employee.department')}</TableHead>
                 <TableHead>{t('employee.isActive')}</TableHead>
-                <TableHead className="text-right">{t('common:actions.actions')}</TableHead>
+                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -159,7 +159,7 @@ export default function EmployeeList() {
                   <TableCell>{employee.department || '-'}</TableCell>
                   <TableCell>
                     <Badge variant={employee.isActive ? 'default' : 'secondary'}>
-                      {employee.isActive ? t('common:status.active') : t('common:status.inactive')}
+                      {employee.isActive ? t('common.status.active') : t('common.status.inactive')}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -193,12 +193,12 @@ export default function EmployeeList() {
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('common:actions.delete')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common:messages.confirmDelete')}</AlertDialogDescription>
+            <AlertDialogTitle>{t('common.actions.delete')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('common.messages.confirmDelete')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common:actions.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>{t('common:actions.delete')}</AlertDialogAction>
+            <AlertDialogCancel>{t('common.actions.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>{t('common.actions.delete')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

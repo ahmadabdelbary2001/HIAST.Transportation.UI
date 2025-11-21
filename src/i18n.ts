@@ -13,11 +13,11 @@ import arCommon from './locales/ar/common.json';
 const resources = {
   en: {
     translation: enTranslation,
-    common: enCommon,
+    common. enCommon,
   },
   ar: {
     translation: arTranslation,
-    common: arCommon,
+    common. arCommon,
   },
 };
 

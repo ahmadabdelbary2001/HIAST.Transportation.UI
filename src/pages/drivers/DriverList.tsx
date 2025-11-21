@@ -47,7 +47,7 @@ export default function DriverList() {
               <TableHead>{t('driver.name')}</TableHead>
               <TableHead>{t('driver.licenseNumber')}</TableHead>
               <TableHead>{t('driver.contactInfo')}</TableHead>
-              <TableHead className="text-right">{t('common:actions.actions')}</TableHead>
+              <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -30,5 +30,110 @@
     "stops": "المحطات",
     "subscriptions": "الاشتراكات",
     "supervisors": "المشرفين"
+  },
+  "employee": {
+    "list": "الموظفين",
+    "create": "إضافة موظف",
+    "edit": "تعديل موظف",
+    "detail": "تفاصيل الموظف",
+    "employeeNumber": "رقم الموظف",
+    "fullName": "الاسم الكامل",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "department": "القسم",
+    "isActive": "الحالة",
+    "personalInfo": "المعلومات الشخصية",
+    "employmentInfo": "معلومات التوظيف",
+    "createSuccess": "تم إنشاء الموظف بنجاح",
+    "updateSuccess": "تم تحديث الموظف بنجاح",
+    "deleteSuccess": "تم حذف الموظف بنجاح",
+    "form": {
+      "firstNameRequired": "الاسم الأول مطلوب",
+      "lastNameRequired": "اسم العائلة مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+      "employeeNumberRequired": "رقم الموظف مطلوب",
+      "phoneNumberInvalid": "يرجى إدخال رقم هاتف صالح"
+    }
+  },
+  "driver": {
+    "list": "السائقين",
+    "create": "إضافة سائق",
+    "edit": "تعديل سائق",
+    "detail": "تفاصيل السائق",
+    "name": "الاسم",
+    "licenseNumber": "رقم الرخصة",
+    "licenseExpiryDate": "تاريخ انتهاء الرخصة",
+    "contactInfo": "معلومات الاتصال",
+    "personalInfo": "المعلومات الشخصية",
+    "licenseInfo": "معلومات الرخصة",
+    "createSuccess": "تم إنشاء السائق بنجاح",
+    "updateSuccess": "تم تحديث السائق بنجاح",
+    "deleteSuccess": "تم حذف السائق بنجاح",
+    "licenseStatus": {
+      "valid": "سارية",
+      "expiring": "تنتهي قريباً",
+      "expired": "منتهية"
+    },
+    "form": {
+      "nameRequired": "الاسم مطلوب",
+      "licenseNumberRequired": "رقم الرخصة مطلوب",
+      "licenseExpiryDateRequired": "تاريخ انتهاء الرخصة مطلوب",
+      "contactInfoRequired": "معلومات الاتصال مطلوبة",
+      "licenseExpiryPast": "تاريخ انتهاء الرخصة لا يمكن أن يكون في الماضي"
+    }
+  },
+  "common": {
+    "actions": {
+      "create": "إنشاء",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "confirm": "تأكيد",
+      "search": "بحث",
+      "filter": "تصفية",
+      "view": "عرض",
+      "actions": "الإجراءات",
+      "back": "رجوع",
+      "next": "التالي",
+      "submit": "إرسال",
+      "reset": "إعادة تعيين",
+      "close": "إغلاق"
+    },
+    "status": {
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "pending": "قيد الانتظار",
+      "completed": "مكتمل",
+      "cancelled": "ملغى"
+    },
+    "messages": {
+      "loadingData": "جاري تحميل البيانات...",
+      "noData": "لا توجد بيانات متاحة",
+      "noResults": "لم يتم العثور على نتائج",
+      "error": "حدث خطأ",
+      "success": "تمت العملية بنجاح",
+      "confirmDelete": "هل أنت متأكد من أنك تريد حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.",
+      "deleteSuccess": "تم حذف العنصر بنجاح",
+      "createSuccess": "تم إنشاء العنصر بنجاح",
+      "updateSuccess": "تم تحديث العنصر بنجاح",
+      "requiredField": "هذا الحقل مطلوب",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صالح"
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "email": "يرجى إدخال بريد إلكتروني صالح",
+      "minLength": "يجب أن يكون على الأقل {{count}} أحرف",
+      "maxLength": "يجب أن يكون على الأكثر {{count}} أحرف",
+      "phone": "يرجى إدخال رقم هاتف صالح"
+    }
+  },
+  "sidebar": {
+    "close": "إغلاق الشريط الجانبي",
+    "collapse": "طي الشريط الجانبي",
+    "expand": "توسيع الشريط الجانبي"
   }
 }
