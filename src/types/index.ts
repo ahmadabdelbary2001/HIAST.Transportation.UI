@@ -7,6 +7,31 @@ export interface BaseEntity {
   updatedBy?: string;
 }
 
+// Employee
+export interface Employee extends BaseEntity {
+  employeeNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  department?: string;
+  isActive: boolean;
+}
+
+export interface CreateEmployeeDto {
+  employeeNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  department?: string;
+  isActive?: boolean;
+}
+
+export interface UpdateEmployeeDto extends CreateEmployeeDto {
+  id: number;
+}
+
 // Driver
 export interface Driver extends BaseEntity {
   name: string;

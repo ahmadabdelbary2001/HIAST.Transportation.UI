@@ -8,6 +8,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { ROUTES } from '@/lib/constants';
 import DriverList from '@/pages/drivers/DriverList';
 import '@/i18n';
+import EmployeeList from './pages/employees/EmployeeList';
 
 const App = () => (
   <ThemeProvider>
@@ -19,6 +20,14 @@ const App = () => (
             element={
               <MainLayout>
                 <Dashboard />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.EMPLOYEES}
+            element={
+              <MainLayout>
+                <EmployeeList />
               </MainLayout>
             }
           />
