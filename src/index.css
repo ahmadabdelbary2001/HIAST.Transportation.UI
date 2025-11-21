@@ -49,17 +49,20 @@
     --input: 0 0% 14.9%;
     --ring: 166 50% 48%;
   }
-}
 
-@layer base {
   * {
     border-color: hsl(var(--border));
+    transition-property: color, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   body {
     background-color: var(--theme-background-primary);
     color: hsl(var(--foreground));
     font-family: 'Inter', system-ui, sans-serif;
   }
+
   body.font-arabic {
     font-family: 'Cairo', 'Tajawal', system-ui, sans-serif;
   }
@@ -93,59 +96,234 @@
   direction: ltr;
 }
 
-/* Smooth transitions */
-* {
-  transition-property: color, background-color, border-color;
-  transition-duration: 200ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+@layer components {
+  /* Theme-aware action button styles */
+  .action-button {
+    @apply border border-input bg-background text-foreground transition-all duration-200;
+  }
+
+  .action-button:hover {
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary));
+    background-color: var(--theme-accent-light);
+  }
+
+  /* Enhanced theme cards with better contrast */
+  .theme-card {
+    @apply bg-card border border-border transition-all duration-200;
+  }
+
+  .theme-card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 4px 12px hsl(var(--primary) / 0.1);
+    background-color: var(--theme-background-tertiary);
+  }
+
+  /* Interactive elements with theme-aware hover states */
+  .interactive-element {
+    @apply transition-all duration-200;
+  }
+
+  .interactive-element:hover {
+    background-color: var(--theme-accent-light);
+    border-color: hsl(var(--primary));
+  }
+
+  /* Additional utility classes for background variations */
+  .bg-theme-primary {
+    background-color: var(--theme-background-primary);
+  }
+
+  .bg-theme-secondary {
+    background-color: var(--theme-background-secondary);
+  }
+
+  .bg-theme-tertiary {
+    background-color: var(--theme-background-tertiary);
+  }
+
+  /* Component-specific background utilities */
+  .bg-sidebar {
+    background-color: var(--theme-sidebar-bg);
+  }
+
+  .bg-header {
+    background-color: var(--theme-header-bg);
+  }
+
+  .border-sidebar {
+    border-color: var(--theme-sidebar-border);
+  }
 }
 
-/* Theme-aware action button styles */
-.action-button {
-  @apply border border-input bg-background text-foreground transition-all duration-200;
+@layer utilities {
+  /* Theme transition animations */
+  .theme-transition * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Enhanced sidebar styles and animations */
+  .sidebar-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Smooth sidebar collapse/expand */
+  .sidebar-collapsed {
+    transform: translateX(-100%);
+  }
+
+  @media (min-width: 768px) {
+    .sidebar-collapsed {
+      transform: translateX(0);
+      width: 5rem;
+    }
+  }
+
+  /* Modern sidebar animations */
+  @keyframes gentle-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(255,255,255,0.3); }
+    50% { box-shadow: 0 0 20px rgba(255,255,255,0.6); }
+  }
+
+  .sidebar-nav-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-nav-item:hover {
+    animation: gentle-bounce 0.6s ease-in-out;
+  }
+
+  /* Creative toggle button effects */
+  .toggle-button-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Smooth backdrop blur for modern feel */
+  .sidebar-backdrop {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Gradient text effect for active items */
+  .sidebar-active-glow {
+    background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Improved collapsed sidebar alignment */
+  .sidebar-collapsed .sidebar-nav-item {
+    justify-content: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Ensure consistent icon sizing in collapsed state */
+  .sidebar-collapsed .sidebar-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Prevent hover displacement in collapsed sidebar */
+  .sidebar-collapsed .sidebar-nav-item:hover {
+    transform: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Center align tooltips for collapsed state */
+  .sidebar-collapsed .sidebar-nav-item[title] {
+    position: relative;
+  }
+
+  /* Smooth transitions for all sidebar states */
+  .sidebar-item-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Consistent hover effects for both states */
+  .sidebar-nav-item-hover {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .sidebar-nav-item-hover:hover {
+    background-color: var(--theme-sidebar-hover);
+    transform: translateY(-1px);
+  }
+
+  /* Active state improvements */
+  .sidebar-nav-item-active {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--theme-primary) 20%, transparent);
+  }
+
+  /* Enhanced transparency for light mode */
+  .light .bg-sidebar,
+  .light .bg-header {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* Improved layout balancing */
+  .main-content-balance {
+    margin-left: 0;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (min-width: 768px) {
+    .main-content-balance {
+      margin-left: 16rem;
+    }
+    
+    .sidebar-collapsed .main-content-balance {
+      margin-left: 5rem;
+    }
+  }
+
+  /* Better spacing for content */
+  .content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .content-container {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .content-container {
+      padding: 2rem 2rem;
+    }
+  }
+
+  /* Balanced card spacing */
+  .balanced-card {
+    margin: 0.5rem 0;
+    padding: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .balanced-card {
+      margin: 1rem 0;
+      padding: 2rem;
+    }
+  }
 }
 
-.action-button:hover {
-  border-color: hsl(var(--primary));
-  color: hsl(var(--primary));
-  background-color: var(--theme-accent-light);
-}
-
-/* Enhanced theme cards with better contrast */
-.theme-card {
-  @apply bg-card border border-border transition-all duration-200;
-}
-
-.theme-card:hover {
-  border-color: hsl(var(--primary) / 0.3);
-  box-shadow: 0 4px 12px hsl(var(--primary) / 0.1);
-  background-color: var(--theme-background-tertiary);
-}
-
-/* Interactive elements with theme-aware hover states */
-.interactive-element {
-  @apply transition-all duration-200;
-}
-
-.interactive-element:hover {
-  background-color: var(--theme-accent-light);
-  border-color: hsl(var(--primary));
-}
-
-/* Theme transition animations */
-.theme-transition * {
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-}
-
-/* Additional utility classes for background variations */
-.bg-theme-primary {
-  background-color: var(--theme-background-primary);
-}
-
-.bg-theme-secondary {
-  background-color: var(--theme-background-secondary);
-}
-
-.bg-theme-tertiary {
-  background-color: var(--theme-background-tertiary);
+/* Fallback for browsers that don't support color-mix */
+@supports not (background: color-mix(in srgb, red, blue)) {
+  .sidebar-nav-item-active {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }

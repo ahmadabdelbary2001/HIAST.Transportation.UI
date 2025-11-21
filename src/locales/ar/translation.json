@@ -20,5 +20,15 @@
     "default": "افتراضي",
     "light": "نهاري",
     "dark": "ليلي"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "employees": "الموظفين",
+    "drivers": "السائقين",
+    "buses": "الحافلات",
+    "lines": "الخطوط",
+    "stops": "المحطات",
+    "subscriptions": "الاشتراكات",
+    "supervisors": "المشرفين"
   }
 }

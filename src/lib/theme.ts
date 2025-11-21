@@ -27,11 +27,15 @@ export interface ThemeColors {
       primary: string;    // Main background
       secondary: string;  // Card background
       tertiary: string;   // Alternative background
+      sidebar: string;    // NEW: Sidebar background for light mode
+      header: string;     // NEW: Header background for light mode
     };
     dark: {
       primary: string;    // Main background
       secondary: string;  // Card background  
       tertiary: string;   // Alternative background
+      sidebar: string;    // NEW: Sidebar background for dark mode
+      header: string;     // NEW: Header background for dark mode
     };
   };
 }
@@ -63,12 +67,16 @@ export const THEME_OPTIONS: ThemeConfig[] = [
         light: {
           primary: '#f8f9fa',      // Very light warm gray
           secondary: '#ffffff',     // Pure white for cards
-          tertiary: '#f1f3f4'      // Slightly darker for contrast
+          tertiary: '#f1f3f4',     // Slightly darker for contrast
+          sidebar: '#eaf4f6',      // NEW: Very light, almost white for sidebar
+          header: '#dff0ee'        // NEW: Slightly darker than sidebar for header
         },
         dark: {
           primary: '#0f1419',      // Dark blue-gray instead of pure black
           secondary: '#1a1f2b',    // Slightly lighter for cards
-          tertiary: '#252a35'      // Even lighter for contrast
+          tertiary: '#252a35',     // Even lighter for contrast
+          sidebar: '#002623',      // NEW: Dark sidebar background
+          header: '#001613'        // NEW: Slightly darker header background
         }
       }
     },
@@ -93,12 +101,16 @@ export const THEME_OPTIONS: ThemeConfig[] = [
         light: {
           primary: '#f8fafc',      // Light blue-gray
           secondary: '#ffffff',     // White for cards
-          tertiary: '#f1f5f9'      // Slightly darker blue-gray
+          tertiary: '#f1f5f9',     // Slightly darker blue-gray
+          sidebar: '#eaf2ff',      // NEW: Very light blue-white for sidebar
+          header: '#dbeafe'        // NEW: Slightly darker than sidebar for header
         },
         dark: {
           primary: '#0f172a',      // Dark blue-gray
           secondary: '#1e293b',    // Slate for cards
-          tertiary: '#334155'      // Lighter slate for contrast
+          tertiary: '#334155',     // Lighter slate for contrast
+          sidebar: '#0e3060',      // NEW: Dark sidebar background
+          header: '#0e1d45'        // NEW: Slightly darker header background
         }
       }
     },
@@ -118,17 +130,21 @@ export const THEME_OPTIONS: ThemeConfig[] = [
       primary: { DEFAULT: '#a3b9e5', dark: '#7a9ad6', darker: '#5a7bc2', light: '#c7d4f0' },
       accent: { DEFAULT: '#f8b4d9', light: '#fcddec', dark: '#f48ec6' },
       secondary: { DEFAULT: '#b5e8c3', dark: '#8dd9a3', darker: '#6ac989' },
-      neutral: { DEFAULT: '#9ca3af', dark: '#6b7280', light: '#f9fafb' },
+      neutral: { DEFAULT: '#1d294a', dark: '#6b7280', light: '#f9fafb' },
       backgrounds: {
         light: {
           primary: '#faf7ff',      // Very light lavender
           secondary: '#ffffff',     // White for cards
-          tertiary: '#f0ebfa'      // Light lavender for contrast
+          tertiary: '#f0ebfa',     // Light lavender for contrast
+          sidebar: '#eaecf9',      // NEW: Very light lavender-white for sidebar
+          header: '#dde4f6'        // NEW: Slightly darker than sidebar for header
         },
         dark: {
           primary: '#1a1625',      // Dark purple-gray
           secondary: '#2a2438',    // Slightly lighter for cards
-          tertiary: '#3a324b'      // Even lighter for contrast
+          tertiary: '#3a324b',     // Even lighter for contrast
+          sidebar: '#2d3d61',      // NEW: Dark sidebar background
+          header: '#1d294a'        // NEW: Slightly darker header background
         }
       }
     },

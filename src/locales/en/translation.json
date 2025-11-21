@@ -20,5 +20,15 @@
     "default": "Default",
     "light": "light",
     "dark": "dark"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "employees": "Employees",
+    "drivers": "Drivers",
+    "buses": "Buses",
+    "lines": "Lines",
+    "stops": "Stops",
+    "subscriptions": "Subscriptions",
+    "supervisors": "Supervisors"
   }
 }

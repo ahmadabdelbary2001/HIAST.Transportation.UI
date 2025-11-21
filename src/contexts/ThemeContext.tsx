@@ -43,11 +43,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Set theme-specific CSS custom properties
     if (selectedTheme) {
       const { colors, shadcn } = selectedTheme;
-      const { backgrounds } = colors;
       
       // Set theme color variables
       Object.entries(colors).forEach(([colorCategory, shades]) => {
-        if (colorCategory === 'backgrounds') return; // Skip backgrounds for now
+        if (colorCategory === 'backgrounds') return;
         
         Object.entries(shades as Record<string, string>).forEach(([shade, value]) => {
           const variableName = `--theme-${colorCategory}${shade !== 'DEFAULT' ? `-${shade}` : ''}`;
@@ -56,10 +55,37 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       });
 
       // Set background colors based on mode
-      const modeBackgrounds = mode === 'light' ? backgrounds.light : backgrounds.dark;
+      const modeBackgrounds = mode === 'light' ? colors.backgrounds.light : colors.backgrounds.dark;
       Object.entries(modeBackgrounds).forEach(([backgroundType, value]) => {
         root.style.setProperty(`--theme-background-${backgroundType}`, value);
       });
+
+      // Set sidebar and header specific colors
+      root.style.setProperty('--theme-sidebar-bg', modeBackgrounds.sidebar);
+      root.style.setProperty('--theme-header-bg', modeBackgrounds.header);
+
+      // Set sidebar and header colors based on mode
+      const isDark = mode === 'dark';
+      
+      // Sidebar border
+      root.style.setProperty('--theme-sidebar-border', isDark ? colors.primary.darker : colors.primary.DEFAULT);
+      
+      // Sidebar text
+      root.style.setProperty('--theme-sidebar-text', isDark ? colors.neutral.light : colors.neutral.DEFAULT);
+      
+      // Sidebar hover - second theme color (accent)
+      root.style.setProperty('--theme-sidebar-hover', isDark ? colors.accent.dark : colors.accent.light);
+      root.style.setProperty('--theme-sidebar-hover-text', isDark ? colors.neutral.light : colors.neutral.dark);
+      
+      // Sidebar active - third theme color (secondary)
+      root.style.setProperty('--theme-sidebar-active', isDark ? colors.secondary.dark : colors.secondary.DEFAULT);
+      root.style.setProperty('--theme-sidebar-active-text', colors.neutral.light);
+      
+      // Sidebar icons
+      root.style.setProperty('--theme-sidebar-icon-bg', isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)');
+      root.style.setProperty('--theme-sidebar-icon', isDark ? colors.neutral.light : colors.neutral.DEFAULT);
+      root.style.setProperty('--theme-sidebar-icon-hover-bg', isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)');
+      root.style.setProperty('--theme-sidebar-icon-hover', isDark ? colors.neutral.light : colors.neutral.dark);
 
       // Set Shadcn color variables
       Object.entries(shadcn).forEach(([variable, value]) => {
