@@ -1,0 +1,30 @@
+// src/types/enums.ts
+
+export const BusStatus = {
+  Available: 1,
+  InService: 2,
+  UnderMaintenance: 3,
+  OutOfService: 4,
+} as const;
+
+// Create a type for the values of BusStatus
+export type BusStatus = typeof BusStatus[keyof typeof BusStatus];
+
+// Use a function to get labels instead of computed property syntax
+export const getBusStatusLabel = (status: BusStatus, language: 'en' | 'ar'): string => {
+  const labels = {
+    [BusStatus.Available]: { en: 'Available', ar: 'متاح' },
+    [BusStatus.InService]: { en: 'In Service', ar: 'قيد الخدمة' },
+    [BusStatus.UnderMaintenance]: { en: 'Under Maintenance', ar: 'تحت الصيانة' },
+    [BusStatus.OutOfService]: { en: 'Out of Service', ar: 'خارج الخدمة' },
+  };
+  return labels[status]?.[language] || '';
+};
+
+// Alternative: Use a simple object without computed properties
+export const BusStatusLabels = {
+  1: { en: 'Available', ar: 'متاح' },
+  2: { en: 'In Service', ar: 'قيد الخدمة' },
+  3: { en: 'Under Maintenance', ar: 'تحت الصيانة' },
+  4: { en: 'Out of Service', ar: 'خارج الخدمة' },
+};

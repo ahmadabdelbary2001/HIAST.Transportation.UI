@@ -65,7 +65,6 @@
     "detail": "Driver Details",
     "name": "Name",
     "licenseNumber": "License Number",
-    "licenseExpiryDate": "License Expiry Date",
     "contactInfo": "Contact Info",
     "personalInfo": "Personal Information",
     "licenseInfo": "License Information",
@@ -80,9 +79,26 @@
     "form": {
       "nameRequired": "Name is required",
       "licenseNumberRequired": "License number is required",
-      "licenseExpiryDateRequired": "License expiry date is required",
-      "contactInfoRequired": "Contact information is required",
-      "licenseExpiryPast": "License expiry date cannot be in the past"
+      "contactInfoRequired": "Contact information is required"
+    }
+  },
+  "bus": {
+    "list": "Buses",
+    "detail": "Bus Details",
+    "create": "Create Bus",
+    "edit": "Edit Bus",
+    "createNew": "Create New Bus",
+    "editBus": "Edit Bus",
+    "information": "Bus Information",
+    "licensePlate": "License Plate",
+    "capacity": "Capacity",
+    "status": "Status",
+    "noBuses": "No buses found",
+    "statuses": {
+      "1": "Available",
+      "2": "In Service", 
+      "3": "Under Maintenance",
+      "4": "Out of Service"
     }
   },
   "common": {

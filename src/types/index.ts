@@ -1,3 +1,7 @@
+// src/types/index.ts
+
+import { BusStatus } from "./enums";
+
 // Base Entity Types
 export interface BaseEntity {
   id: number;
@@ -46,5 +50,22 @@ export interface CreateDriverDto {
 }
 
 export interface UpdateDriverDto extends CreateDriverDto {
+  id: number;
+}
+
+// Bus
+export interface Bus extends BaseEntity {
+  licensePlate: string;
+  capacity: number;
+  status: BusStatus;
+}
+
+export interface CreateBusDto {
+  licensePlate: string;
+  capacity: number;
+  status?: BusStatus;
+}
+
+export interface UpdateBusDto extends CreateBusDto {
   id: number;
 }

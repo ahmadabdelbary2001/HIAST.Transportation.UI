@@ -65,7 +65,6 @@
     "detail": "تفاصيل السائق",
     "name": "الاسم",
     "licenseNumber": "رقم الرخصة",
-    "licenseExpiryDate": "تاريخ انتهاء الرخصة",
     "contactInfo": "معلومات الاتصال",
     "personalInfo": "المعلومات الشخصية",
     "licenseInfo": "معلومات الرخصة",
@@ -80,9 +79,26 @@
     "form": {
       "nameRequired": "الاسم مطلوب",
       "licenseNumberRequired": "رقم الرخصة مطلوب",
-      "licenseExpiryDateRequired": "تاريخ انتهاء الرخصة مطلوب",
-      "contactInfoRequired": "معلومات الاتصال مطلوبة",
-      "licenseExpiryPast": "تاريخ انتهاء الرخصة لا يمكن أن يكون في الماضي"
+      "contactInfoRequired": "معلومات الاتصال مطلوبة"
+    }
+  },
+  "bus": {
+    "list": "الحافلات",
+    "detail": "تفاصيل الحافلة",
+    "create": "إضافة حافلة",
+    "edit": "تعديل حافلة",
+    "createNew": "إضافة حافلة جديدة",
+    "editBus": "تعديل الحافلة",
+    "information": "معلومات الحافلة",
+    "licensePlate": "لوحة الرخصة",
+    "capacity": "السعة",
+    "status": "الحالة",
+    "noBuses": "لا توجد حافلات",
+    "statuses": {
+      "1": "متاح",
+      "2": "قيد الخدمة",
+      "3": "تحت الصيانة",
+      "4": "خارج الخدمة"
     }
   },
   "common": {

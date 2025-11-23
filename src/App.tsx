@@ -9,9 +9,12 @@ import { ROUTES } from '@/lib/constants';
 import DriverList from '@/pages/drivers/DriverList';
 import DriverForm from '@/pages/drivers/DriverForm';
 import DriverDetail from '@/pages/drivers/DriverDetail';
-import '@/i18n';
+import BusList from '@/pages/buses/BusList';
+import BusForm from '@/pages/buses/BusForm';
+import BusDetail from '@/pages/buses/BusDetail';
 import EmployeeList from './pages/employees/EmployeeList';
 import EmployeeForm from './pages/employees/EmployeeForm';
+import '@/i18n';
 const App = () => (
   <ThemeProvider>
     <LanguageProvider>
@@ -78,6 +81,38 @@ const App = () => (
             element={
               <MainLayout>
                 <DriverDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.BUSES}
+            element={
+              <MainLayout>
+                <BusList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.BUS_CREATE}
+            element={
+              <MainLayout>
+                <BusForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.BUS_EDIT}
+            element={
+              <MainLayout>
+                <BusForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.BUS_DETAIL}
+            element={
+              <MainLayout>
+                <BusDetail />
               </MainLayout>
             }
           />
