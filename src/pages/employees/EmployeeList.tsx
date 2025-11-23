@@ -28,7 +28,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { employeeService } from '@/services/employeeService';
+import { employeeApiService } from '@/services/employeeApiService';
 import type { Employee } from '@/types/index';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
@@ -46,7 +46,7 @@ export default function EmployeeList() {
     try {
       setLoading(true);
       setError(null);
-      const data = await employeeService.getAll();
+      const data = await employeeApiService.getAll();
       setEmployees(data);
     } catch (err) {
       setError(t('common.messages.error'));
@@ -86,7 +86,7 @@ export default function EmployeeList() {
     if (!deleteId) return;
 
     try {
-      await employeeService.delete(deleteId);
+      await employeeApiService.delete(deleteId);
       toast.success(t('common.messages.deleteSuccess'));
       loadEmployees();
     } catch (err) {

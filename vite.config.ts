@@ -10,5 +10,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: "/HIAST.Transportation.UI"
-});
+  base: "/HIAST.Transportation.UI",
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5066',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+})

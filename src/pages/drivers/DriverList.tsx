@@ -7,7 +7,7 @@ import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { driverService } from '@/services/driverService';
+import { driverApiService } from '@/services/driverApiService';
 import type { Driver } from '@/types/index';
 
 export default function DriverList() {
@@ -21,7 +21,7 @@ export default function DriverList() {
 
   const loadDrivers = async () => {
     try {
-      const data = await driverService.getAll();
+      const data = await driverApiService.getAll();
       setDrivers(data);
     } finally {
       setLoading(false);

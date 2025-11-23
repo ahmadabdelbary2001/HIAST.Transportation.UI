@@ -5,8 +5,6 @@ export const LOCAL_STORAGE_KEYS = {
   DARK_MODE: '2af_work_dark_mode',
   LANGUAGE: '2af_work_language',
   SIDEBAR_COLLAPSED: '2af_work_sidebar_collapsed',
-  EMPLOYEES: '2af_work__employees',
-  DRIVERS: '2af_work_drivers',
 } as const;
 
 export const ROUTES = {
@@ -24,4 +22,32 @@ export const ROUTES = {
   STOPS: '/stops',
   SUBSCRIPTIONS: '/subscriptions',
   SUPERVISORS: '/supervisors',
+};
+
+export const APP_CONFIG = {
+  name: 'HIAST Transportation',
+  fullName: 'Higher Institute Transportation Management System',
+  version: '1.0.0',
+  defaultLanguage: 'en',
+  supportedLanguages: ['en', 'ar'],
+  defaultTheme: 'syrian',
+  dateFormat: 'yyyy-MM-dd',
+  timeFormat: 'HH:mm',
+  dateTimeFormat: 'yyyy-MM-dd HH:mm',
+  pagination: {
+    defaultPageSize: 10,
+    pageSizeOptions: [5, 10, 20, 50, 100],
+  },
+};
+
+export const API_ENDPOINTS = {
+  EMPLOYEES: '/api/employees',
+  DRIVERS: '/api/drivers',
+  BUSES: '/api/buses',
+  LINES: '/api/lines',
+  STOPS: '/api/stops',
+  TRIPS: '/api/trips',
+  SUBSCRIPTIONS: '/api/subscriptions',
+  SUPERVISORS: '/api/supervisors',
+  DASHBOARD: '/api/dashboard/stats',
 };
