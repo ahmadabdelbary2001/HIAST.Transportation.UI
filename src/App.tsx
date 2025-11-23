@@ -9,7 +9,7 @@ import { ROUTES } from '@/lib/constants';
 import DriverList from '@/pages/drivers/DriverList';
 import '@/i18n';
 import EmployeeList from './pages/employees/EmployeeList';
-
+import EmployeeForm from './pages/employees/EmployeeForm';
 const App = () => (
   <ThemeProvider>
     <LanguageProvider>
@@ -28,6 +28,22 @@ const App = () => (
             element={
               <MainLayout>
                 <EmployeeList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.EMPLOYEE_CREATE}
+            element={
+              <MainLayout>
+                <EmployeeForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.EMPLOYEE_EDIT}
+            element={
+              <MainLayout>
+                <EmployeeForm />
               </MainLayout>
             }
           />
