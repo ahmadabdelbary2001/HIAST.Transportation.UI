@@ -7,6 +7,8 @@ import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { ROUTES } from '@/lib/constants';
 import DriverList from '@/pages/drivers/DriverList';
+import DriverForm from '@/pages/drivers/DriverForm';
+import DriverDetail from '@/pages/drivers/DriverDetail';
 import '@/i18n';
 import EmployeeList from './pages/employees/EmployeeList';
 import EmployeeForm from './pages/employees/EmployeeForm';
@@ -52,6 +54,30 @@ const App = () => (
             element={
               <MainLayout>
                 <DriverList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.DRIVER_CREATE}
+            element={
+              <MainLayout>
+                <DriverForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.DRIVER_EDIT}
+            element={
+              <MainLayout>
+                <DriverForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.DRIVER_DETAIL}
+            element={
+              <MainLayout>
+                <DriverDetail />
               </MainLayout>
             }
           />

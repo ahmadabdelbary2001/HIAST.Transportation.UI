@@ -36,14 +36,12 @@ export interface UpdateEmployeeDto extends CreateEmployeeDto {
 export interface Driver extends BaseEntity {
   name: string;
   licenseNumber: string;
-  licenseExpiryDate: Date;
   contactInfo?: string;
 }
 
 export interface CreateDriverDto {
   name: string;
   licenseNumber: string;
-  licenseExpiryDate: Date;
   contactInfo?: string;
 }
 
