@@ -57,6 +57,9 @@ export default function LineDetail() {
     );
   }
 
+  // The 'line' object now contains the 'stops' array, ready to be used.
+  const { stops } = line;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -95,7 +98,28 @@ export default function LineDetail() {
         </CardContent>
       </Card>
 
-      {/* You can add sections for Stops and Subscriptions here later */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('line.stops')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {stops.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{t('line.noStops')}</p>
+          ) : (
+            <ol className="space-y-4">
+              {stops.map((stop) => (
+                <li key={stop.id} className="flex items-center gap-3">
+                  <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                    {stop.sequenceOrder}
+                  </span>
+                  <span className="font-medium">{stop.address}</span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </CardContent>
+      </Card>
+      
     </div>
   );
 }

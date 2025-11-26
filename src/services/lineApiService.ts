@@ -14,7 +14,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.getAll
    */
   getAll: async (): Promise<LineListDto[]> => {
-    const response = await handleResponse(await fetch('/api/Lines'));
+    const response = await handleResponse(await fetch('/api/Line'));
     return response.json();
   },
 
@@ -23,7 +23,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.getById
    */
   getById: async (id: number): Promise<Line> => {
-    const response = await handleResponse(await fetch(`/api/Lines/${id}`));
+    const response = await handleResponse(await fetch(`/api/Line/${id}`));
     return response.json();
   },
 
@@ -32,7 +32,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.delete
    */
   delete: async (id: number): Promise<void> => {
-    await handleResponse(await fetch(`/api/Lines/${id}`, {
+    await handleResponse(await fetch(`/api/Line/${id}`, {
       method: 'DELETE',
     }));
   },
@@ -42,7 +42,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.create
    */
   create: async (line: CreateLineDto): Promise<number> => {
-    const response = await handleResponse(await fetch('/api/Lines', {
+    const response = await handleResponse(await fetch('/api/Line', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(line),
@@ -62,7 +62,7 @@ export const lineApiService = {
    */
   update: async (line: UpdateLineDto): Promise<void> => {
     // Does not use handleResponse, matching the driver service's update method
-    const response = await fetch(`/api/Lines/${line.id}`, {
+    const response = await fetch(`/api/Line/${line.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(line),

@@ -26,6 +26,8 @@ export const ROUTES = {
   LINE_CREATE: '/lines/create',
   LINE_EDIT: '/lines/:id/edit',
   STOPS: '/stops',
+  STOP_CREATE: '/stops/create',
+  STOP_EDIT: '/stops/:id/edit',
   SUBSCRIPTIONS: '/subscriptions',
   SUPERVISORS: '/supervisors',
 };

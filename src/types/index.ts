@@ -1,6 +1,6 @@
 // src/types/index.ts
 
-import { BusStatus } from "./enums";
+import { BusStatus, StopType } from "./enums";
 
 // Base Entity Types
 export interface BaseEntity {
@@ -71,7 +71,7 @@ export interface UpdateBusDto extends CreateBusDto {
 }
 
 // Line
-// This represents the detailed Line object returned from GET /api/Lines/{id}
+// This represents the detailed Line object returned from GET /api/Line/{id}
 export interface Line extends BaseEntity {
   supervisorId: number;
   supervisorName: string;
@@ -82,11 +82,11 @@ export interface Line extends BaseEntity {
   name: string;
   description?: string;
   // Assuming StopDto and LineSubscriptionDto will be defined for detail views
-  stops: StopDto[]; 
+  stops: Stop[]; 
   subscriptions: LineSubscriptionDto[];
 }
 
-// This represents the lighter Line object for list views from GET /api/Lines
+// This represents the lighter Line object for list views from GET /api/Line
 export interface LineListDto {
   id: number;
   name: string;
@@ -94,7 +94,7 @@ export interface LineListDto {
   supervisorName: string;
 }
 
-// DTO for creating a new line (POST /api/Lines)
+// DTO for creating a new line (POST /api/Line)
 export interface CreateLineDto {
   supervisorId: number;
   busId: number;
@@ -103,16 +103,9 @@ export interface CreateLineDto {
   description?: string;
 }
 
-// DTO for updating an existing line (PUT /api/Lines/{id})
+// DTO for updating an existing line (PUT /api/Line/{id})
 export interface UpdateLineDto extends CreateLineDto {
   id: number;
-}
-
-export interface StopDto {
-  id: number;
-  address: string;
-  sequenceOrder: number;
-  // You might want a StopType enum here as well
 }
 
 export interface LineSubscriptionDto {
@@ -130,4 +123,36 @@ export interface SupervisorLineDto {
   employeeName: string;
   lineId: number;
   lineName: string;
+}
+
+// Represents the detailed Stop object from GET /api/Stop/{id}
+export interface Stop extends BaseEntity {
+  lineId: number;
+  lineName: string;
+  address: string;
+  sequenceOrder: number;
+  stopType: StopType;
+}
+
+// Represents the lighter Stop object for list views from GET /api/Stop
+export interface StopListDto {
+  id: number;
+  lineId: number;
+  lineName: string;
+  address: string;
+  sequenceOrder: number;
+  stopType: StopType;
+}
+
+// DTO for creating a new stop (POST /api/Stop)
+export interface CreateStopDto {
+  lineId: number;
+  address: string;
+  sequenceOrder: number;
+  stopType: StopType;
+}
+
+// DTO for updating an existing stop (PUT /api/Stop/{id})
+export interface UpdateStopDto extends CreateStopDto {
+  id: number;
 }

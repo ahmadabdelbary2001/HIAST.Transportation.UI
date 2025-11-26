@@ -101,7 +101,9 @@
       "selectSupervisor": "Select a supervisor",
       "selectDriver": "Select a driver",
       "selectBus": "Select a bus"
-    }
+    },
+    "stops": "Stops",
+    "noStops": "This line does not have any stops assigned to it yet."
   },
   "bus": {
     "list": "Buses",
@@ -128,6 +130,27 @@
     "lineName": "Line Name",
     "supervisorName": "Supervisor Name",
     "employeeNumber": "Employee Number"
+  },
+  "stop": {
+    "list": "Stops",
+    "create": "Create Stop",
+    "edit": "Edit Stop",
+    "information": "Stop Information",
+    "address": "Address",
+    "lineName": "Line",
+    "sequence": "Sequence Order",
+    "type": "Stop Type",
+    "noStops": "No stops have been created yet.",
+    "errors": {
+      "lineRequired": "Please select a line for this stop."
+    },
+    "placeholders": {
+      "selectLine": "Select a line"
+    },
+    "types": {
+      "intermediate": "Intermediate",
+      "terminus": "Terminus"
+    }
   },
   "common": {
     "passengers": "Passengers",

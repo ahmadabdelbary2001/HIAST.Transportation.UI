@@ -28,3 +28,10 @@ export const BusStatusLabels = {
   3: { en: 'Under Maintenance', ar: 'تحت الصيانة' },
   4: { en: 'Out of Service', ar: 'خارج الخدمة' },
 };
+
+export const StopType = {
+  Intermediate: 1,
+  Terminus: 2,
+} as const;
+
+export type StopType = typeof StopType[keyof typeof StopType];

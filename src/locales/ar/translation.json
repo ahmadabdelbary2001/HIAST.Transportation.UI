@@ -120,7 +120,9 @@
       "selectSupervisor": "اختر مشرفًا",
       "selectDriver": "اختر سائقًا",
       "selectBus": "اختر حافلة"
-    }
+    },
+    "stops": "المواقف",
+    "noStops": "لا توجد مواقف معينة لهذا الخط بعد."
   },
   "supervisor": {
     "reportTitle": "تعيينات خطوط المشرفين",
@@ -128,6 +130,27 @@
     "lineName": "اسم الخط",
     "supervisorName": "اسم المشرف",
     "employeeNumber": "الرقم الذاتي"
+  },
+  "stop": {
+    "list": "المواقف",
+    "create": "إنشاء موقف",
+    "edit": "تعديل موقف",
+    "information": "معلومات الموقف",
+    "address": "العنوان",
+    "lineName": "الخط",
+    "sequence": "ترتيب التسلسل",
+    "type": "نوع الموقف",
+    "noStops": "لم يتم إنشاء أي مواقف بعد.",
+    "errors": {
+      "lineRequired": "يرجى اختيار خط لهذا الموقف."
+    },
+    "placeholders": {
+      "selectLine": "اختر خطًا"
+    },
+    "types": {
+      "intermediate": "موقف وسطي",
+      "terminus": "موقف نهائي"
+    }
   },
   "common": {
     "passengers": "ركاب",

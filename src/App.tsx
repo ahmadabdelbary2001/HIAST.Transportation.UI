@@ -18,6 +18,8 @@ import LineList from './pages/lines/LineList';
 import LineForm from './pages/lines/LineForm';
 import LineDetail from './pages/lines/LineDetail';
 import SupervisorReport from './pages/supervisors/SupervisorReport';
+import StopList from './pages/stops/StopList';
+import StopForm from './pages/stops/StopForm';
 import '@/i18n';
 const App = () => (
   <ThemeProvider>
@@ -149,6 +151,30 @@ const App = () => (
             element={
               <MainLayout>
                 <LineDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.STOPS}
+            element={
+              <MainLayout>
+                <StopList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.STOP_CREATE}
+            element={
+              <MainLayout>
+                <StopForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.STOP_EDIT}
+            element={
+              <MainLayout>
+                <StopForm />
               </MainLayout>
             }
           />
