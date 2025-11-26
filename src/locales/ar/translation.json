@@ -36,7 +36,7 @@
     "create": "إضافة موظف",
     "edit": "تعديل موظف",
     "detail": "تفاصيل الموظف",
-    "employeeNumber": "رقم الموظف",
+    "employeeNumber": "الرقم الذاتي",
     "fullName": "الاسم الكامل",
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
@@ -121,6 +121,13 @@
       "selectDriver": "اختر سائقًا",
       "selectBus": "اختر حافلة"
     }
+  },
+  "supervisor": {
+    "reportTitle": "تعيينات خطوط المشرفين",
+    "noAssignments": "لا توجد حاليًا أي خطوط معينة لأي مشرفين.",
+    "lineName": "اسم الخط",
+    "supervisorName": "اسم المشرف",
+    "employeeNumber": "الرقم الذاتي"
   },
   "common": {
     "passengers": "ركاب",

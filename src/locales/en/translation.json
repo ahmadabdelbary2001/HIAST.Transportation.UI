@@ -122,6 +122,13 @@
       "4": "Out of Service"
     }
   },
+  "supervisor": {
+    "reportTitle": "Supervisor Line Assignments",
+    "noAssignments": "There are currently no lines assigned to any supervisors.",
+    "lineName": "Line Name",
+    "supervisorName": "Supervisor Name",
+    "employeeNumber": "Employee Number"
+  },
   "common": {
     "passengers": "Passengers",
     "createdAt": "Created At",

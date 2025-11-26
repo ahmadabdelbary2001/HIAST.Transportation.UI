@@ -122,3 +122,12 @@ export interface LineSubscriptionDto {
   startDate: Date;
   endDate?: Date;
 }
+
+// Represents the read-only report data from GET /api/Supervisor/LineAssignments
+export interface SupervisorLineDto {
+  employeeId: number;
+  employeeNumber: string;
+  employeeName: string;
+  lineId: number;
+  lineName: string;
+}

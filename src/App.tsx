@@ -17,6 +17,7 @@ import EmployeeForm from './pages/employees/EmployeeForm';
 import LineList from './pages/lines/LineList';
 import LineForm from './pages/lines/LineForm';
 import LineDetail from './pages/lines/LineDetail';
+import SupervisorReport from './pages/supervisors/SupervisorReport';
 import '@/i18n';
 const App = () => (
   <ThemeProvider>
@@ -148,6 +149,14 @@ const App = () => (
             element={
               <MainLayout>
                 <LineDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.SUPERVISORS}
+            element={
+              <MainLayout>
+                <SupervisorReport />
               </MainLayout>
             }
           />
