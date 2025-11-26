@@ -14,6 +14,9 @@ import BusForm from '@/pages/buses/BusForm';
 import BusDetail from '@/pages/buses/BusDetail';
 import EmployeeList from './pages/employees/EmployeeList';
 import EmployeeForm from './pages/employees/EmployeeForm';
+import LineList from './pages/lines/LineList';
+import LineForm from './pages/lines/LineForm';
+import LineDetail from './pages/lines/LineDetail';
 import '@/i18n';
 const App = () => (
   <ThemeProvider>
@@ -113,6 +116,38 @@ const App = () => (
             element={
               <MainLayout>
                 <BusDetail />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.LINES}
+            element={
+              <MainLayout>
+                <LineList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.LINE_CREATE}
+            element={
+              <MainLayout>
+                <LineForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.LINE_EDIT}
+            element={
+              <MainLayout>
+                <LineForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.LINE_DETAIL}
+            element={
+              <MainLayout>
+                <LineDetail />
               </MainLayout>
             }
           />

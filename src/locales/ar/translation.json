@@ -101,7 +101,30 @@
       "4": "خارج الخدمة"
     }
   },
+  "line": {
+    "list": "الخطوط",
+    "detail": "تفاصيل الخط",
+    "create": "إنشاء خط",
+    "edit": "تعديل خط",
+    "information": "معلومات الخط",
+    "name": "اسم الخط",
+    "description": "الوصف",
+    "supervisor": "المشرف",
+    "driver": "السائق",
+    "bus": "الحافلة",
+    "noLines": "لم يتم إنشاء أي خطوط بعد.",
+    "errors": {
+      "allFieldsRequired": "يرجى اختيار مشرف وسائق وحافلة."
+    },
+    "placeholders": {
+      "selectSupervisor": "اختر مشرفًا",
+      "selectDriver": "اختر سائقًا",
+      "selectBus": "اختر حافلة"
+    }
+  },
   "common": {
+    "passengers": "ركاب",
+    "createdAt": "تاريخ الإنشاء",
     "actions": {
       "create": "إنشاء",
       "edit": "تعديل",

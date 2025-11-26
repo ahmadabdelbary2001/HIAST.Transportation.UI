@@ -69,3 +69,56 @@ export interface CreateBusDto {
 export interface UpdateBusDto extends CreateBusDto {
   id: number;
 }
+
+// Line
+// This represents the detailed Line object returned from GET /api/Lines/{id}
+export interface Line extends BaseEntity {
+  supervisorId: number;
+  supervisorName: string;
+  busId: number;
+  busLicensePlate: string;
+  driverId: number;
+  driverName: string;
+  name: string;
+  description?: string;
+  // Assuming StopDto and LineSubscriptionDto will be defined for detail views
+  stops: StopDto[]; 
+  subscriptions: LineSubscriptionDto[];
+}
+
+// This represents the lighter Line object for list views from GET /api/Lines
+export interface LineListDto {
+  id: number;
+  name: string;
+  description?: string;
+  supervisorName: string;
+}
+
+// DTO for creating a new line (POST /api/Lines)
+export interface CreateLineDto {
+  supervisorId: number;
+  busId: number;
+  driverId: number;
+  name: string;
+  description?: string;
+}
+
+// DTO for updating an existing line (PUT /api/Lines/{id})
+export interface UpdateLineDto extends CreateLineDto {
+  id: number;
+}
+
+export interface StopDto {
+  id: number;
+  address: string;
+  sequenceOrder: number;
+  // You might want a StopType enum here as well
+}
+
+export interface LineSubscriptionDto {
+  id: number;
+  employeeId: number;
+  employeeName: string; // Example property
+  startDate: Date;
+  endDate?: Date;
+}

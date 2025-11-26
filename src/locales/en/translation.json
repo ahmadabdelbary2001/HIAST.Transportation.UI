@@ -82,6 +82,27 @@
       "contactInfoRequired": "Contact information is required"
     }
   },
+  "line": {
+    "list": "Lines",
+    "detail": "Line Details",
+    "create": "Create Line",
+    "edit": "Edit Line",
+    "information": "Line Information",
+    "name": "Line Name",
+    "description": "Description",
+    "supervisor": "Supervisor",
+    "driver": "Driver",
+    "bus": "Bus",
+    "noLines": "No lines have been created yet.",
+    "errors": {
+      "allFieldsRequired": "Please select a supervisor, driver, and bus."
+    },
+    "placeholders": {
+      "selectSupervisor": "Select a supervisor",
+      "selectDriver": "Select a driver",
+      "selectBus": "Select a bus"
+    }
+  },
   "bus": {
     "list": "Buses",
     "detail": "Bus Details",
@@ -102,6 +123,8 @@
     }
   },
   "common": {
+    "passengers": "Passengers",
+    "createdAt": "Created At",
     "actions": {
       "create": "Create",
       "edit": "Edit",
