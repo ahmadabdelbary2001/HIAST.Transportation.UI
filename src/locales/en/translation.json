@@ -103,7 +103,10 @@
       "selectBus": "Select a bus"
     },
     "stops": "Stops",
-    "noStops": "This line does not have any stops assigned to it yet."
+    "noStops": "This line does not have any stops assigned to it yet.",
+    "subscribers": "Subscribers",
+    "noSubscribers": "There are no employees subscribed to this line yet."
+
   },
   "bus": {
     "list": "Buses",
@@ -150,6 +153,25 @@
     "types": {
       "intermediate": "Intermediate",
       "terminus": "Terminus"
+    }
+  },
+  "subscription": {
+    "list": "Subscriptions",
+    "create": "Create Subscription",
+    "edit": "Edit Subscription",
+    "information": "Subscription Information",
+    "employeeName": "Employee",
+    "lineName": "Line",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "noEndDate": "Active",
+    "noSubscriptions": "No subscriptions have been created yet.",
+    "errors": {
+      "allFieldsRequired": "Please select an employee and a line."
+    },
+    "placeholders": {
+      "selectEmployee": "Select an employee",
+      "selectLine": "Select a line"
     }
   },
   "common": {

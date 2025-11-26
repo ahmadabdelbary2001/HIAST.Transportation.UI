@@ -20,6 +20,8 @@ import LineDetail from './pages/lines/LineDetail';
 import SupervisorReport from './pages/supervisors/SupervisorReport';
 import StopList from './pages/stops/StopList';
 import StopForm from './pages/stops/StopForm';
+import SubscriptionList from './pages/subscriptions/SubscriptionList';
+import SubscriptionForm from './pages/subscriptions/SubscriptionForm';
 import '@/i18n';
 const App = () => (
   <ThemeProvider>
@@ -183,6 +185,30 @@ const App = () => (
             element={
               <MainLayout>
                 <SupervisorReport />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.SUBSCRIPTIONS}
+            element={
+              <MainLayout>
+                <SubscriptionList />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.SUBSCRIPTION_CREATE}
+            element={
+              <MainLayout>
+                <SubscriptionForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.SUBSCRIPTION_EDIT}
+            element={
+              <MainLayout>
+                <SubscriptionForm />
               </MainLayout>
             }
           />

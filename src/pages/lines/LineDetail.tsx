@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Edit } from 'lucide-react';
+import { ArrowLeft, Edit, Users } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
@@ -41,6 +41,11 @@ export default function LineDetail() {
     }
   }, [id, loadLine]);
 
+  const formatDate = (date?: Date | string) => {
+    if (!date) return t('subscription.noEndDate');
+    return new Date(date).toLocaleDateString();
+  };
+
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
@@ -57,8 +62,7 @@ export default function LineDetail() {
     );
   }
 
-  // The 'line' object now contains the 'stops' array, ready to be used.
-  const { stops } = line;
+  const { stops, subscriptions } = line;
 
   return (
     <div className="space-y-6">
@@ -119,6 +123,32 @@ export default function LineDetail() {
           )}
         </CardContent>
       </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('line.subscribers')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {subscriptions.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t('line.noSubscribers')}</p>
+            ) : (
+              <ul className="space-y-3">
+                {subscriptions.map((sub) => (
+                  <li key={sub.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      <span className="font-medium">{sub.employeeName}</span>
+                    </div>
+                    <div className="text-right text-sm text-muted-foreground">
+                      <p>{t('subscription.startDate')}: {formatDate(sub.startDate)}</p>
+                      <p>{t('subscription.endDate')}: {formatDate(sub.endDate)}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
       
     </div>
   );

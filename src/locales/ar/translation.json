@@ -122,7 +122,9 @@
       "selectBus": "اختر حافلة"
     },
     "stops": "المواقف",
-    "noStops": "لا توجد مواقف معينة لهذا الخط بعد."
+    "noStops": "لا توجد مواقف معينة لهذا الخط بعد.",
+    "subscribers": "المشتركون",
+    "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد."
   },
   "supervisor": {
     "reportTitle": "تعيينات خطوط المشرفين",
@@ -150,6 +152,25 @@
     "types": {
       "intermediate": "موقف وسطي",
       "terminus": "موقف نهائي"
+    }
+  },
+  "subscription": {
+    "list": "الاشتراكات",
+    "create": "إنشاء اشتراك",
+    "edit": "تعديل اشتراك",
+    "information": "معلومات الاشتراك",
+    "employeeName": "الموظف",
+    "lineName": "الخط",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "noEndDate": "فعال",
+    "noSubscriptions": "لم يتم إنشاء أي اشتراكات بعد.",
+    "errors": {
+      "allFieldsRequired": "يرجى اختيار موظف وخط."
+    },
+    "placeholders": {
+      "selectEmployee": "اختر موظفًا",
+      "selectLine": "اختر خطًا"
     }
   },
   "common": {

@@ -156,3 +156,39 @@ export interface CreateStopDto {
 export interface UpdateStopDto extends CreateStopDto {
   id: number;
 }
+
+// =================================
+// Line Subscription
+// =================================
+
+// Represents the detailed object from GET /api/LineSubscription/{id}
+export interface LineSubscription extends BaseEntity {
+  employeeId: number;
+  lineId: number;
+  startDate: string; // Use string for dates from API
+  endDate?: string;
+  employeeName: string;
+  lineName: string;
+}
+
+// Represents the lighter object for list views from GET /api/LineSubscription
+export interface LineSubscriptionListDto {
+  id: number;
+  employeeName: string;
+  lineName: string;
+  startDate: string;
+  endDate?: string;
+}
+
+// DTO for creating a new subscription (POST /api/LineSubscription)
+export interface CreateLineSubscriptionDto {
+  employeeId: number;
+  lineId: number;
+  startDate: string;
+  endDate?: string;
+}
+
+// DTO for updating an existing subscription (PUT /api/LineSubscription/{id})
+export interface UpdateLineSubscriptionDto extends CreateLineSubscriptionDto {
+  id: number;
+}
