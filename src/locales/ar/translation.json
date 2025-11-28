@@ -80,7 +80,13 @@
       "nameRequired": "الاسم مطلوب",
       "licenseNumberRequired": "رقم الرخصة مطلوب",
       "contactInfoRequired": "معلومات الاتصال مطلوبة"
-    }
+    },
+    "assignmentDetails": "تفاصيل التعيين",
+    "assignedLine": "الخط المُعيّن",
+    "assignedBus": "الحافلة المُعيّنة",
+    "noLineAssigned": "هذا السائق غير مُعيّن على أي خط حالياً.",
+    "viewLineDetails": "عرض تفاصيل الخط",
+    "viewBusDetails": "عرض تفاصيل الحافلة"
   },
   "bus": {
     "list": "الحافلات",
@@ -176,6 +182,8 @@
   "common": {
     "passengers": "ركاب",
     "createdAt": "تاريخ الإنشاء",
+    "updatedAt": "تاريخ التعديل",
+    "auditInfo": "معلومات التدقيق",
     "actions": {
       "create": "إنشاء",
       "edit": "تعديل",

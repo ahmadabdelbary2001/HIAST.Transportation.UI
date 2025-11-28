@@ -41,6 +41,10 @@ export interface Driver extends BaseEntity {
   name: string;
   licenseNumber: string;
   contactInfo?: string;
+  lineId?: number;
+  lineName?: string;
+  busId?: number;
+  busLicensePlate?: string;
 }
 
 export interface CreateDriverDto {

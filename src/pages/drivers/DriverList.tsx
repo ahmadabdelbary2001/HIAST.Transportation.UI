@@ -67,7 +67,6 @@ export default function DriverList() {
   const columns: ColumnDefinition<Driver>[] = [
     { key: 'name', header: t('driver.name') },
     { key: 'licenseNumber', header: t('driver.licenseNumber') },
-    { key: 'contactInfo', header: t('driver.contactInfo') },
     {
       key: 'actions',
       header: t('common.actions.actions'),

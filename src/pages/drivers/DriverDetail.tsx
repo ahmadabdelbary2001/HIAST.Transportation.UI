@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Edit, Phone } from 'lucide-react';
+import { ArrowLeft, Edit, Phone, Bus as BusIcon, Clock, Route } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
@@ -39,6 +39,11 @@ export default function DriverDetail() {
       loadDriver(parseInt(id));
     }
   }, [id, loadDriver]);
+
+  const formatDate = (dateString?: string | Date) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString();
+  };
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -92,6 +97,69 @@ export default function DriverDetail() {
               <a href={`tel:${driver.contactInfo}`} className="text-primary hover:underline">
                 {driver.contactInfo}
               </a>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Line & Bus Assignment Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('driver.assignmentDetails')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {driver.lineId && driver.lineName ? (
+            <div className="space-y-6">
+              {/* Line Info */}
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{t('driver.assignedLine')}</p>
+                <div className="flex items-center gap-3 mt-1">
+                  {/* Icon for the Line */}
+                  <Route className="h-5 w-5 text-primary" />
+                  <p className="text-lg font-semibold">{driver.lineName}</p>
+                </div>
+                <Button asChild variant="outline" size="sm" className="mt-2">
+                  <Link to={`/lines/${driver.lineId}`}>{t('driver.viewLineDetails')}</Link>
+                </Button>
+              </div>
+
+              {/* Bus Info - UPDATED BLOCK */}
+              {driver.busId && driver.busLicensePlate && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('driver.assignedBus')}</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    {/* Icon for the Bus */}
+                    <BusIcon className="h-5 w-5 text-primary" />
+                    <p className="text-lg font-semibold">{driver.busLicensePlate}</p>
+                  </div>
+                  <Button asChild variant="outline" size="sm" className="mt-2">
+                    <Link to={`/buses/${driver.busId}`}>{t('driver.viewBusDetails')}</Link>
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">{t('driver.noLineAssigned')}</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Audit Info Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('common.auditInfo')}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center gap-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Clock className="h-4 w-4" />
+            <span>{t('common.createdAt')}:</span>
+            <span className="font-medium text-foreground">{formatDate(driver.createdAt)}</span>
+          </div>
+          {driver.updatedAt && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <span>{t('common.updatedAt')}:</span>
+              <span className="font-medium text-foreground">{formatDate(driver.updatedAt)}</span>
             </div>
           )}
         </CardContent>

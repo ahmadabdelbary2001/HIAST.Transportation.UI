@@ -80,7 +80,13 @@
       "nameRequired": "Name is required",
       "licenseNumberRequired": "License number is required",
       "contactInfoRequired": "Contact information is required"
-    }
+    },
+    "assignmentDetails": "Assignment Details",
+    "assignedLine": "Assigned Line",
+    "assignedBus": "Assigned Bus",
+    "noLineAssigned": "This driver is not currently assigned to a line.",
+    "viewLineDetails": "View Line Details",
+    "viewBusDetails": "View Bus Details"
   },
   "line": {
     "list": "Lines",
@@ -177,6 +183,8 @@
   "common": {
     "passengers": "Passengers",
     "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "auditInfo": "Audit Information",
     "actions": {
       "create": "Create",
       "edit": "Edit",
