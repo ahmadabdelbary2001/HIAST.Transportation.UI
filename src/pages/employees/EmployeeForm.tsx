@@ -9,10 +9,11 @@ import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { employeeApiService } from '@/services/employeeApiService';
-import type { CreateEmployeeDto, UpdateEmployeeDto } from '@/types/index';
+import type { CreateEmployeeDto, UpdateEmployeeDto } from '@/types';
+import { Department } from '@/types/enums'; // Import the enum
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
@@ -30,8 +31,7 @@ export default function EmployeeForm() {
     lastName: '',
     email: '',
     phoneNumber: '',
-    department: '',
-    isActive: true,
+    department: undefined,
   });
 
   const loadEmployee = useCallback(async (employeeId: number) => {
@@ -45,8 +45,7 @@ export default function EmployeeForm() {
           lastName: employee.lastName,
           email: employee.email,
           phoneNumber: employee.phoneNumber || '',
-          department: employee.department || '',
-          isActive: employee.isActive,
+          department: employee.department,
         });
       }
     } catch (err) {
@@ -69,7 +68,10 @@ export default function EmployeeForm() {
 
     try {
       if (isEdit && id) {
-        await employeeApiService.update({ ...formData, id: parseInt(id) } as UpdateEmployeeDto & { id: number });
+        await employeeApiService.update({
+          ...formData,
+          id: parseInt(id),
+        } as UpdateEmployeeDto);
         toast.success(t('common.messages.updateSuccess'));
       } else {
         await employeeApiService.create(formData);
@@ -94,12 +96,12 @@ export default function EmployeeForm() {
         <Button variant="ghost" size="icon" onClick={() => navigate(ROUTES.EMPLOYEES)}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <PageTitle>{isEdit ? t('employee.edit') : t('employee.create')}</PageTitle>
+        <PageTitle>{isEdit ? t('employee.editEmployee') : t('employee.createNew')}</PageTitle>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{isEdit ? t('employee.edit') : t('employee.create')}</CardTitle>
+          <CardTitle>{isEdit ? t('employee.editEmployee') : t('employee.createNew')}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -113,7 +115,24 @@ export default function EmployeeForm() {
                   onChange={(e) => setFormData({ ...formData, employeeNumber: e.target.value })}
                 />
               </div>
-
+              <div className="space-y-2">
+                <Label htmlFor="firstName">{t('employee.firstName')} *</Label>
+                <Input
+                  id="firstName"
+                  required
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">{t('employee.lastName')} *</Label>
+                <Input
+                  id="lastName"
+                  required
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email">{t('employee.email')} *</Label>
                 <Input
@@ -124,27 +143,6 @@ export default function EmployeeForm() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="firstName">{t('employee.firstName')} *</Label>
-                <Input
-                  id="firstName"
-                  required
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="lastName">{t('employee.lastName')} *</Label>
-                <Input
-                  id="lastName"
-                  required
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                />
-              </div>
-
               <div className="space-y-2">
                 <Label htmlFor="phoneNumber">{t('employee.phoneNumber')}</Label>
                 <Input
@@ -153,24 +151,24 @@ export default function EmployeeForm() {
                   onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="department">{t('employee.department')}</Label>
-                <Input
-                  id="department"
+                <Select
                   value={formData.department}
-                  onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                />
+                  onValueChange={(value: Department) => setFormData({ ...formData, department: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('employee.selectDepartment')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(Department).map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="isActive">{t('employee.isActive')}</Label>
             </div>
 
             <div className="flex gap-4">

@@ -14,6 +14,7 @@ import BusForm from '@/pages/buses/BusForm';
 import BusDetail from '@/pages/buses/BusDetail';
 import EmployeeList from './pages/employees/EmployeeList';
 import EmployeeForm from './pages/employees/EmployeeForm';
+import EmployeeDetail from './pages/employees/EmployeeDetail';
 import LineList from './pages/lines/LineList';
 import LineForm from './pages/lines/LineForm';
 import LineDetail from './pages/lines/LineDetail';
@@ -57,6 +58,14 @@ const App = () => (
             element={
               <MainLayout>
                 <EmployeeForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.EMPLOYEE_DETAIL}
+            element={
+              <MainLayout>
+                <EmployeeDetail />
               </MainLayout>
             }
           />

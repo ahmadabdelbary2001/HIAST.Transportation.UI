@@ -1,6 +1,6 @@
 // src/types/index.ts
 
-import { BusStatus, StopType } from "./enums";
+import { BusStatus, StopType, Department } from "./enums";
 
 // Base Entity Types
 export interface BaseEntity {
@@ -12,14 +12,24 @@ export interface BaseEntity {
 }
 
 // Employee
-export interface Employee extends BaseEntity {
+export interface EmployeeDto extends BaseEntity {
+  id: number;
   employeeNumber: string;
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber?: string;
-  department?: string;
-  isActive: boolean;
+  department?: Department;
+  subscribedLineId?: number;
+  subscribedLineName?: string;
+}
+
+export interface EmployeeListDto {
+  id: number;
+  employeeNumber: string;
+  firstName: string;
+  lastName: string;
+  department?: Department;
 }
 
 export interface CreateEmployeeDto {
@@ -28,7 +38,7 @@ export interface CreateEmployeeDto {
   lastName: string;
   email: string;
   phoneNumber?: string;
-  department?: string;
+  department?: Department;
   isActive?: boolean;
 }
 

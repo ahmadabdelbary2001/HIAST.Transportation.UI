@@ -32,10 +32,18 @@
     "supervisors": "المشرفين"
   },
   "employee": {
-    "list": "الموظفين",
-    "create": "إضافة موظف",
-    "edit": "تعديل موظف",
+    "list": "الموظفون",
     "detail": "تفاصيل الموظف",
+    "create": "إضافة موظف",
+    "createNew": "إضافة موظف جديد",
+    "editEmployee": "تعديل بيانات الموظف",
+    "searchPlaceholder": "ابحث بالاسم أو الرقم الذاتي...",
+    "noEmployees": "لم يتم إضافة أي موظفين بعد.",
+    "confirmDelete": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف سجل الموظف بشكل دائم.",
+    "personalInfo": "المعلومات الشخصية",
+    "subscriptionDetails": "تفاصيل الاشتراك",
+    "subscribedLine": "الخط المُشترَك به",
+    "noSubscription": "هذا الموظف ليس لديه اشتراك فعال.",
     "employeeNumber": "الرقم الذاتي",
     "fullName": "الاسم الكامل",
     "firstName": "الاسم الأول",
@@ -43,19 +51,9 @@
     "email": "البريد الإلكتروني",
     "phoneNumber": "رقم الهاتف",
     "department": "القسم",
-    "isActive": "الحالة",
-    "personalInfo": "المعلومات الشخصية",
-    "employmentInfo": "معلومات التوظيف",
-    "createSuccess": "تم إنشاء الموظف بنجاح",
-    "updateSuccess": "تم تحديث الموظف بنجاح",
-    "deleteSuccess": "تم حذف الموظف بنجاح",
-    "form": {
-      "firstNameRequired": "الاسم الأول مطلوب",
-      "lastNameRequired": "اسم العائلة مطلوب",
-      "emailRequired": "البريد الإلكتروني مطلوب",
-      "emailInvalid": "يرجى إدخال بريد إلكتروني صالح",
-      "employeeNumberRequired": "رقم الموظف مطلوب",
-      "phoneNumberInvalid": "يرجى إدخال رقم هاتف صالح"
+    "selectDepartment": "اختر قسمًا",
+    "actions": {
+      "viewLine": "عرض تفاصيل الخط"
     }
   },
   "driver": {

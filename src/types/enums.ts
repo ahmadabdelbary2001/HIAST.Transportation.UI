@@ -35,3 +35,18 @@ export const StopType = {
 } as const;
 
 export type StopType = typeof StopType[keyof typeof StopType];
+
+export const Department = {
+  IT: 'IT',
+  AI: 'AI',
+  Network: 'Network',
+  Finance: 'Finance',
+  Mechatronics: 'Mechatronics',
+  Mathematics: 'Mathematics',
+  Communications: 'Communications',
+  Environment: 'Environment',
+  Administration: 'Administration',
+  Languages: 'Languages',
+} as const;
+
+export type Department = typeof Department[keyof typeof Department];

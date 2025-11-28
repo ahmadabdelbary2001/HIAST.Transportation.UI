@@ -33,9 +33,17 @@
   },
   "employee": {
     "list": "Employees",
-    "create": "Add Employee",
-    "edit": "Edit Employee",
     "detail": "Employee Details",
+    "create": "Create Employee",
+    "createNew": "Create New Employee",
+    "editEmployee": "Edit Employee",
+    "searchPlaceholder": "Search by name or employee number...",
+    "noEmployees": "No employees have been added yet.",
+    "confirmDelete": "This action cannot be undone. This will permanently delete the employee's record.",
+    "personalInfo": "Personal Information",
+    "subscriptionDetails": "Subscription Details",
+    "subscribedLine": "Subscribed Line",
+    "noSubscription": "This employee does not have an active subscription.",
     "employeeNumber": "Employee Number",
     "fullName": "Full Name",
     "firstName": "First Name",
@@ -43,19 +51,9 @@
     "email": "Email",
     "phoneNumber": "Phone Number",
     "department": "Department",
-    "isActive": "Status",
-    "personalInfo": "Personal Information",
-    "employmentInfo": "Employment Information",
-    "createSuccess": "Employee created successfully",
-    "updateSuccess": "Employee updated successfully",
-    "deleteSuccess": "Employee deleted successfully",
-    "form": {
-      "firstNameRequired": "First name is required",
-      "lastNameRequired": "Last name is required",
-      "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address",
-      "employeeNumberRequired": "Employee number is required",
-      "phoneNumberInvalid": "Please enter a valid phone number"
+    "selectDepartment": "Select a department",
+    "actions": {
+      "viewLine": "View Line Details"
     }
   },
   "driver": {

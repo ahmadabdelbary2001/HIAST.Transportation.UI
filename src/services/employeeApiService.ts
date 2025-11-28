@@ -1,14 +1,13 @@
-// src/services/employeeApiService.ts
-import type { Employee, CreateEmployeeDto, UpdateEmployeeDto } from '@/types/index';
+import type { EmployeeDto, EmployeeListDto, CreateEmployeeDto, UpdateEmployeeDto } from '@/types';
 import { handleResponse } from './apiHelper';
 
 export const employeeApiService = {
-  getAll: async (): Promise<Employee[]> => {
+  getAll: async (): Promise<EmployeeListDto[]> => {
     const response = await handleResponse(await fetch('/api/Employee'));
     return response.json();
   },
 
-  getById: async (id: number): Promise<Employee> => {
+  getById: async (id: number): Promise<EmployeeDto> => {
     const response = await handleResponse(await fetch(`/api/Employee/${id}`));
     return response.json();
   },
@@ -33,7 +32,7 @@ export const employeeApiService = {
     return response.json();
   },
 
-  update: async (employee: UpdateEmployeeDto & { id: number }): Promise<void> => {
+  update: async (employee: UpdateEmployeeDto): Promise<void> => {
     const response = await fetch(`/api/Employee/${employee.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

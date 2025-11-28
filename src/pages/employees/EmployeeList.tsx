@@ -1,17 +1,15 @@
 // src/pages/employees/EmployeeList.tsx
+
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Plus, Search, Eye, Edit, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,20 +20,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { employeeApiService } from '@/services/employeeApiService';
-import type { Employee } from '@/types/index';
+import type { EmployeeListDto } from '@/types/index';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
 export default function EmployeeList() {
   const { t } = useTranslation();
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const navigate = useNavigate();
+  const [employees, setEmployees] = useState<EmployeeListDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [searchTerm] = useState('');
-  
+  const [searchTerm, setSearchTerm] = useState('');
+
   const loadEmployees = useCallback(async () => {
     try {
       setLoading(true);
@@ -70,50 +69,46 @@ export default function EmployeeList() {
   };
 
   const filteredEmployees = useMemo(() => {
-    if (!searchTerm) return employees;
     return employees.filter(
-      (employee) =>
-        `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        employee.employeeNumber.toLowerCase().includes(searchTerm.toLowerCase())
+      (emp) =>
+        `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp.employeeNumber.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [employees, searchTerm]);
 
-  // --- DEFINE COLUMNS FOR THE DATATABLE ---
-  const columns: ColumnDefinition<Employee>[] = [
-    { key: 'employeeNumber', header: t('employee.employeeNumber') },
+  const columns: ColumnDefinition<EmployeeListDto>[] = [
+    {
+      key: 'employeeNumber',
+      header: t('employee.employeeNumber'),
+      cell: (item) => <span className="font-medium">{item.employeeNumber}</span>,
+    },
     {
       key: 'firstName', // Key can be anything for custom cells, but firstName is descriptive
       header: t('employee.fullName'),
       cell: (employee) => `${employee.firstName} ${employee.lastName}`,
     },
-    { key: 'email', header: t('employee.email') },
-    { key: 'department', header: t('employee.department') },
     {
-      key: 'isActive',
-      header: t('employee.isActive'),
-      cell: (employee) => (
-        <Badge variant={employee.isActive ? 'default' : 'secondary'}>
-          {employee.isActive ? t('common.status.active') : t('common.status.inactive')}
-        </Badge>
-      ),
+      key: 'department',
+      header: t('employee.department'),
+      cell: (item) => item.department || '-',
     },
     {
       key: 'actions',
       header: t('common.actions.actions'),
       isAction: true,
-      cell: (employee) => (
+      cell: (item) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/employees/${employee.id}`}>
+            <Link to={`/employees/${item.id}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/employees/${employee.id}/edit`}>
+            <Link to={`/employees/${item.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteId(employee.id)}>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -141,23 +136,19 @@ export default function EmployeeList() {
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder={t('common.actions.search')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
+      <Input
+        placeholder={t('employee.searchPlaceholder')}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="max-w-sm"
+      />
 
       {filteredEmployees.length === 0 ? (
         <EmptyState
           title={t('common.messages.noResults')}
+          description={t('employee.noEmployees')}
           actionLabel={t('employee.create')}
-          onAction={() => (window.location.href = ROUTES.EMPLOYEE_CREATE)}
+          onAction={() => navigate(ROUTES.EMPLOYEE_CREATE)}
         />
       ) : (
         <DataTable columns={columns} data={filteredEmployees} />
@@ -166,11 +157,11 @@ export default function EmployeeList() {
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('common.actions.delete')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common.messages.confirmDelete')}</AlertDialogDescription>
+            <AlertDialogTitle>{t('common.messages.confirmDelete')}</AlertDialogTitle>
+            <AlertDialogDescription>{t('employee.confirmDelete')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.actions.cancel')}</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setDeleteId(null)}>{t('common.actions.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>{t('common.actions.delete')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
