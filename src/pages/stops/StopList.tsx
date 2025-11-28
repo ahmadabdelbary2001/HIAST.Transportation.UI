@@ -1,3 +1,5 @@
+// src/pages/stops/StopList.tsx
+
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -7,7 +9,7 @@ import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { stopApiService } from '@/services/stopApiService';
 import type { StopListDto } from '@/types';
@@ -54,6 +56,34 @@ export default function StopList() {
     }
   };
 
+  const columns: ColumnDefinition<StopListDto>[] = [
+    { key: 'address', header: t('stop.address') },
+    { key: 'lineName', header: t('stop.lineName') },
+    { key: 'sequenceOrder', header: t('stop.sequence') },
+    {
+      key: 'stopType',
+      header: t('stop.type'),
+      cell: (stop) => (stop.stopType === StopType.Terminus ? t('stop.types.terminus') : t('stop.types.intermediate')),
+    },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (stop) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/stops/${stop.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(stop.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   if (loading) return <LoadingSpinner text={t('common.messages.loadingData')} />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -72,41 +102,7 @@ export default function StopList() {
       {stops.length === 0 ? (
         <EmptyState title={t('common.messages.noData')} description={t('stop.noStops')} />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('stop.address')}</TableHead>
-                <TableHead>{t('stop.lineName')}</TableHead>
-                <TableHead>{t('stop.sequence')}</TableHead>
-                <TableHead>{t('stop.type')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {stops.map((stop) => (
-                <TableRow key={stop.id}>
-                  <TableCell className="font-medium">{stop.address}</TableCell>
-                  <TableCell>{stop.lineName}</TableCell>
-                  <TableCell>{stop.sequenceOrder}</TableCell>
-                  <TableCell>{stop.stopType === StopType.Terminus ? t('stop.types.terminus') : t('stop.types.intermediate')}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/stops/${stop.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => setDeleteId(stop.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={stops} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

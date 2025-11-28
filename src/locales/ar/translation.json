@@ -127,7 +127,7 @@
     "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد."
   },
   "supervisor": {
-    "reportTitle": "تعيينات خطوط المشرفين",
+    "reportTitle": "تعيينات مشرف الخط",
     "noAssignments": "لا توجد حاليًا أي خطوط معينة لأي مشرفين.",
     "lineName": "اسم الخط",
     "supervisorName": "اسم المشرف",

@@ -10,7 +10,7 @@ import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable'; // Import the new component
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,6 +66,43 @@ export default function BusList() {
     }
   };
 
+  const columns: ColumnDefinition<Bus>[] = [
+    { key: 'licensePlate', header: t('bus.licensePlate') },
+    { key: 'capacity', header: t('bus.capacity') },
+    {
+      key: 'status',
+      header: t('bus.status'),
+      cell: (bus) => <StatusBadge status={bus.status} type="bus" />,
+    },
+    {
+      key: 'createdAt',
+      header: t('common.createdAt'),
+      cell: (bus) => (bus.createdAt ? new Date(bus.createdAt).toLocaleDateString() : '-'),
+    },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (bus) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/buses/${bus.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/buses/${bus.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(bus.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
@@ -94,54 +131,7 @@ export default function BusList() {
           onAction={() => (window.location.href = ROUTES.BUS_CREATE)}
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('bus.licensePlate')}</TableHead>
-                <TableHead>{t('bus.capacity')}</TableHead>
-                <TableHead>{t('bus.status')}</TableHead>
-                <TableHead>{t('common.createdAt')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {buses.map((bus) => (
-                <TableRow key={bus.id}>
-                  <TableCell className="font-medium">{bus.licensePlate}</TableCell>
-                  <TableCell>{bus.capacity}</TableCell>
-                  <TableCell>
-                    <StatusBadge status={bus.status} type="bus" />
-                  </TableCell>
-                  <TableCell>
-                    {bus.createdAt ? new Date(bus.createdAt).toLocaleDateString() : '-'}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/buses/${bus.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/buses/${bus.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setDeleteId(bus.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={buses} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

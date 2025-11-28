@@ -1,5 +1,5 @@
 // src/pages/employees/EmployeeList.tsx
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Eye, Edit, Trash2 } from 'lucide-react';
@@ -10,14 +10,8 @@ import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,12 +30,12 @@ import { toast } from 'sonner';
 export default function EmployeeList() {
   const { t } = useTranslation();
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteId, setDeleteId] = useState<number | null>(null);
-
+  const [searchTerm] = useState('');
+  
   const loadEmployees = useCallback(async () => {
     try {
       setLoading(true);
@@ -56,31 +50,9 @@ export default function EmployeeList() {
     }
   }, [t]);
 
-  const filterEmployees = useCallback(() => {
-    if (!searchQuery.trim()) {
-      setFilteredEmployees(employees);
-      return;
-    }
-
-    const query = searchQuery.toLowerCase();
-    const filtered = employees.filter(
-      (emp) =>
-        emp.firstName.toLowerCase().includes(query) ||
-        emp.lastName.toLowerCase().includes(query) ||
-        emp.employeeNumber.toLowerCase().includes(query) ||
-        emp.email.toLowerCase().includes(query) ||
-        emp.department?.toLowerCase().includes(query)
-    );
-    setFilteredEmployees(filtered);
-  }, [searchQuery, employees]);
-
   useEffect(() => {
     loadEmployees();
   }, [loadEmployees]);
-
-  useEffect(() => {
-    filterEmployees();
-  }, [filterEmployees]);
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -96,6 +68,58 @@ export default function EmployeeList() {
       setDeleteId(null);
     }
   };
+
+  const filteredEmployees = useMemo(() => {
+    if (!searchTerm) return employees;
+    return employees.filter(
+      (employee) =>
+        `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        employee.employeeNumber.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [employees, searchTerm]);
+
+  // --- DEFINE COLUMNS FOR THE DATATABLE ---
+  const columns: ColumnDefinition<Employee>[] = [
+    { key: 'employeeNumber', header: t('employee.employeeNumber') },
+    {
+      key: 'firstName', // Key can be anything for custom cells, but firstName is descriptive
+      header: t('employee.fullName'),
+      cell: (employee) => `${employee.firstName} ${employee.lastName}`,
+    },
+    { key: 'email', header: t('employee.email') },
+    { key: 'department', header: t('employee.department') },
+    {
+      key: 'isActive',
+      header: t('employee.isActive'),
+      cell: (employee) => (
+        <Badge variant={employee.isActive ? 'default' : 'secondary'}>
+          {employee.isActive ? t('common.status.active') : t('common.status.inactive')}
+        </Badge>
+      ),
+    },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (employee) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/employees/${employee.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/employees/${employee.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(employee.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -136,58 +160,7 @@ export default function EmployeeList() {
           onAction={() => (window.location.href = ROUTES.EMPLOYEE_CREATE)}
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('employee.employeeNumber')}</TableHead>
-                <TableHead>{t('employee.fullName')}</TableHead>
-                <TableHead>{t('employee.email')}</TableHead>
-                <TableHead>{t('employee.department')}</TableHead>
-                <TableHead>{t('employee.isActive')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredEmployees.map((employee) => (
-                <TableRow key={employee.id}>
-                  <TableCell className="font-medium">{employee.employeeNumber}</TableCell>
-                  <TableCell>
-                    {employee.firstName} {employee.lastName}
-                  </TableCell>
-                  <TableCell>{employee.email}</TableCell>
-                  <TableCell>{employee.department || '-'}</TableCell>
-                  <TableCell>
-                    <Badge variant={employee.isActive ? 'default' : 'secondary'}>
-                      {employee.isActive ? t('common.status.active') : t('common.status.inactive')}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/employees/${employee.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/employees/${employee.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setDeleteId(employee.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={filteredEmployees} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

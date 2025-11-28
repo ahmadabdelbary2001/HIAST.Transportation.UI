@@ -1,10 +1,12 @@
+// src/pages/supervisors/SupervisorReport.tsx
+
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { supervisorApiService } from '@/services/supervisorApiService';
 import type { SupervisorLineDto } from '@/types';
 
@@ -32,6 +34,17 @@ export default function SupervisorReport() {
     loadAssignments();
   }, [loadAssignments]);
 
+  const tableData = assignments.map(item => ({
+    ...item,
+    id: `${item.lineId}-${item.employeeId}`,
+  }));
+
+  const columns: ColumnDefinition<SupervisorLineDto>[] = [
+    { key: 'employeeNumber', header: t('supervisor.employeeNumber') },
+    { key: 'employeeName', header: t('supervisor.supervisorName') },
+    { key: 'lineName', header: t('supervisor.lineName') },
+  ];
+
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
@@ -52,26 +65,7 @@ export default function SupervisorReport() {
           description={t('supervisor.noAssignments')}
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('supervisor.lineName')}</TableHead>
-                <TableHead>{t('supervisor.supervisorName')}</TableHead>
-                <TableHead>{t('supervisor.employeeNumber')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {assignments.map((item) => (
-                <TableRow key={`${item.lineId}-${item.employeeId}`}>
-                  <TableCell className="font-medium">{item.lineName}</TableCell>
-                  <TableCell>{item.employeeName}</TableCell>
-                  <TableCell>{item.employeeNumber}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={tableData} />
       )}
     </div>
   );

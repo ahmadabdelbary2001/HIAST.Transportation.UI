@@ -128,7 +128,7 @@
     }
   },
   "supervisor": {
-    "reportTitle": "Supervisor Line Assignments",
+    "reportTitle": "Line Supervisor Appointments",
     "noAssignments": "There are currently no lines assigned to any supervisors.",
     "lineName": "Line Name",
     "supervisorName": "Supervisor Name",

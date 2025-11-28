@@ -8,7 +8,6 @@ import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +22,7 @@ import { driverApiService } from '@/services/driverApiService';
 import type { Driver } from '@/types/index';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 
 export default function DriverList() {
   const { t } = useTranslation();
@@ -64,6 +64,34 @@ export default function DriverList() {
     }
   };
 
+  const columns: ColumnDefinition<Driver>[] = [
+    { key: 'name', header: t('driver.name') },
+    { key: 'licenseNumber', header: t('driver.licenseNumber') },
+    { key: 'contactInfo', header: t('driver.contactInfo') },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true, // Mark this as the actions column
+      cell: (driver) => ( // Custom renderer for the action buttons
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/drivers/${driver.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/drivers/${driver.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(driver.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
@@ -91,48 +119,7 @@ export default function DriverList() {
           onAction={() => (window.location.href = ROUTES.DRIVER_CREATE)}
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('driver.name')}</TableHead>
-                <TableHead>{t('driver.licenseNumber')}</TableHead>
-                <TableHead>{t('driver.contactInfo')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {drivers.map((driver) => (
-                <TableRow key={driver.id}>
-                  <TableCell className="font-medium">{driver.name}</TableCell>
-                  <TableCell>{driver.licenseNumber}</TableCell>
-                  <TableCell>{driver.contactInfo || '-'}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/drivers/${driver.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/drivers/${driver.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setDeleteId(driver.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={drivers} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

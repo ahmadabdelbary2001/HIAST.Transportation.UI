@@ -9,7 +9,7 @@ import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,6 +65,38 @@ export default function LineList() {
     }
   };
 
+  const columns: ColumnDefinition<LineListDto>[] = [
+    { key: 'name', header: t('line.name') },
+    {
+      key: 'description',
+      header: t('line.description'),
+      cell: (line) => line.description || '-',
+    },
+    { key: 'supervisorName', header: t('line.supervisor') },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (line) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/lines/${line.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/lines/${line.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(line.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
   }
@@ -93,48 +125,7 @@ export default function LineList() {
           onAction={() => (window.location.href = ROUTES.LINE_CREATE)}
         />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('line.name')}</TableHead>
-                <TableHead>{t('line.description')}</TableHead>
-                <TableHead>{t('line.supervisor')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {lines.map((line) => (
-                <TableRow key={line.id}>
-                  <TableCell className="font-medium">{line.name}</TableCell>
-                  <TableCell>{line.description || '-'}</TableCell>
-                  <TableCell>{line.supervisorName}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/lines/${line.id}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/lines/${line.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setDeleteId(line.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={lines} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

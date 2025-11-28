@@ -9,7 +9,7 @@ import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import type { LineSubscriptionListDto } from '@/types';
@@ -60,6 +60,38 @@ export default function SubscriptionList() {
     return new Date(dateString).toLocaleDateString();
   };
 
+  const columns: ColumnDefinition<LineSubscriptionListDto>[] = [
+    { key: 'employeeName', header: t('subscription.employeeName') },
+    { key: 'lineName', header: t('subscription.lineName') },
+    {
+      key: 'startDate',
+      header: t('subscription.startDate'),
+      cell: (sub) => formatDate(sub.startDate),
+    },
+    {
+      key: 'endDate',
+      header: t('subscription.endDate'),
+      cell: (sub) => formatDate(sub.endDate),
+    },
+    {
+      key: 'actions',
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (sub) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/subscriptions/${sub.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(sub.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   if (loading) return <LoadingSpinner text={t('common.messages.loadingData')} />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -78,41 +110,7 @@ export default function SubscriptionList() {
       {subscriptions.length === 0 ? (
         <EmptyState title={t('common.messages.noData')} description={t('subscription.noSubscriptions')} />
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t('subscription.employeeName')}</TableHead>
-                <TableHead>{t('subscription.lineName')}</TableHead>
-                <TableHead>{t('subscription.startDate')}</TableHead>
-                <TableHead>{t('subscription.endDate')}</TableHead>
-                <TableHead className="text-right">{t('common.actions.actions')}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {subscriptions.map((sub) => (
-                <TableRow key={sub.id}>
-                  <TableCell className="font-medium">{sub.employeeName}</TableCell>
-                  <TableCell>{sub.lineName}</TableCell>
-                  <TableCell>{formatDate(sub.startDate)}</TableCell>
-                  <TableCell>{formatDate(sub.endDate)}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/subscriptions/${sub.id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => setDeleteId(sub.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <DataTable columns={columns} data={subscriptions} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
