@@ -124,12 +124,7 @@
     "capacity": "Capacity",
     "status": "Status",
     "noBuses": "No buses found",
-    "statuses": {
-      "1": "Available",
-      "2": "In Service", 
-      "3": "Under Maintenance",
-      "4": "Out of Service"
-    }
+    "selectStatus": "Select a status"
   },
   "supervisor": {
     "reportTitle": "Line Supervisor Appointments",

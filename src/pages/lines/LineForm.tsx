@@ -15,7 +15,7 @@ import { lineApiService } from '@/services/lineApiService';
 import { employeeApiService } from '@/services/employeeApiService'; // Assuming you have this
 import { driverApiService } from '@/services/driverApiService';
 import { busApiService } from '@/services/busApiService';
-import type { CreateLineDto, UpdateLineDto, Employee, Driver, Bus } from '@/types';
+import type { CreateLineDto, UpdateLineDto, EmployeeListDto, Driver, Bus } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
@@ -36,7 +36,7 @@ export default function LineForm() {
   });
 
   // State for dropdown options
-  const [supervisors, setSupervisors] = useState<Employee[]>([]);
+  const [supervisors, setSupervisors] = useState<EmployeeListDto[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [buses, setBuses] = useState<Bus[]>([]);
 

@@ -1,11 +1,11 @@
 // src/components/atoms/StatusBadge.tsx
 
 import { Badge } from '@/components/ui/badge';
-import { BusStatus, BusStatusLabels } from '@/types/enums';
+import { BusStatus, getBusStatusLabel } from '@/types/enums';
 import { useLanguage } from '@/hooks/useLanguage';
 
 interface StatusBadgeProps {
-  status: BusStatus;
+  status: BusStatus | undefined | null;
   type: 'bus';
 }
 
@@ -32,7 +32,7 @@ export function StatusBadge({ status, type }: StatusBadgeProps) {
 
   const getLabel = () => {
     if (type === 'bus') {
-      return BusStatusLabels[status as BusStatus][lang];
+      return getBusStatusLabel(status, lang);
     } else {
       return;
     }

@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import { lineApiService } from '@/services/lineApiService';
 import { employeeApiService } from '@/services/employeeApiService'; // Assuming you have this service
-import type { CreateLineSubscriptionDto, UpdateLineSubscriptionDto, LineListDto, Employee } from '@/types';
+import type { CreateLineSubscriptionDto, UpdateLineSubscriptionDto, LineListDto, EmployeeListDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
@@ -33,7 +33,7 @@ export default function SubscriptionForm() {
     endDate: '',
   });
   const [lines, setLines] = useState<LineListDto[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<EmployeeListDto[]>([]);
 
   const loadRelatedData = useCallback(async () => {
     try {

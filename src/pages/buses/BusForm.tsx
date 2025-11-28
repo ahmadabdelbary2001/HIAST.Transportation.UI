@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
@@ -13,12 +14,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { busApiService } from '@/services/busApiService';
 import type { CreateBusDto, UpdateBusDto } from '@/types';
-import { BusStatus } from '@/types/enums';
-import { ROUTES } from '@/lib/constants';
+import { BusStatus, busStatusInfo } from '@/types/enums'; import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
 export default function BusForm() {
   const { t } = useTranslation();
+  const { language } = useLanguage();
+  const lang = language as 'en' | 'ar';
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = !!id;
@@ -127,17 +129,20 @@ export default function BusForm() {
               <div className="space-y-2">
                 <Label htmlFor="status">{t('bus.status')}</Label>
                 <Select
-                  value={formData.status?.toString()}
-                  onValueChange={(value: string) => setFormData({ ...formData, status: parseInt(value) as BusStatus })}
+                  value={formData.status}
+                  onValueChange={(value: string) => setFormData({ ...formData, status: value as BusStatus })}
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder={t('bus.selectStatus')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={BusStatus.Available.toString()}>{t('bus.statuses.available')}</SelectItem>
-                    <SelectItem value={BusStatus.InService.toString()}>{t('bus.statuses.inService')}</SelectItem>
-                    <SelectItem value={BusStatus.UnderMaintenance.toString()}>{t('bus.statuses.underMaintenance')}</SelectItem>
-                    <SelectItem value={BusStatus.OutOfService.toString()}>{t('bus.statuses.outOfService')}</SelectItem>
+                    {/* Loop over the centralized busStatusInfo array */}
+                    {busStatusInfo.map((statusInfo) => (
+                      <SelectItem key={statusInfo.value} value={statusInfo.value}>
+                        {/* Display the label for the current language */}
+                        {statusInfo[lang]}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

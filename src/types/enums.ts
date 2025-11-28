@@ -1,32 +1,35 @@
 // src/types/enums.ts
 
 export const BusStatus = {
-  Available: 1,
-  InService: 2,
-  UnderMaintenance: 3,
-  OutOfService: 4,
+  Available: 'Available',
+  InService: 'InService',
+  UnderMaintenance: 'UnderMaintenance',
+  OutOfService: 'OutOfService',
 } as const;
 
-// Create a type for the values of BusStatus
 export type BusStatus = typeof BusStatus[keyof typeof BusStatus];
 
-// Use a function to get labels instead of computed property syntax
-export const getBusStatusLabel = (status: BusStatus, language: 'en' | 'ar'): string => {
-  const labels = {
-    [BusStatus.Available]: { en: 'Available', ar: 'متاح' },
-    [BusStatus.InService]: { en: 'In Service', ar: 'قيد الخدمة' },
-    [BusStatus.UnderMaintenance]: { en: 'Under Maintenance', ar: 'تحت الصيانة' },
-    [BusStatus.OutOfService]: { en: 'Out of Service', ar: 'خارج الخدمة' },
-  };
-  return labels[status]?.[language] || '';
-};
+export const busStatusInfo = [
+  { value: BusStatus.Available, en: 'Available', ar: 'متاح' },
+  { value: BusStatus.InService, en: 'In Service', ar: 'قيد الخدمة' },
+  { value: BusStatus.UnderMaintenance, en: 'Under Maintenance', ar: 'تحت الصيانة' },
+  { value: BusStatus.OutOfService, en: 'Out of Service', ar: 'خارج الخدمة' },
+] as const;
 
-// Alternative: Use a simple object without computed properties
-export const BusStatusLabels = {
-  1: { en: 'Available', ar: 'متاح' },
-  2: { en: 'In Service', ar: 'قيد الخدمة' },
-  3: { en: 'Under Maintenance', ar: 'تحت الصيانة' },
-  4: { en: 'Out of Service', ar: 'خارج الخدمة' },
+// A lookup map for fast access (used by StatusBadge).
+const busStatusLabelMap = Object.fromEntries(
+  busStatusInfo.map(info => [info.value, { en: info.en, ar: info.ar }])
+) as Record<BusStatus, { en: string; ar: string }>;
+
+// The getter function remains the same, but now uses the efficient map.
+export const getBusStatusLabel = (
+  status: BusStatus | undefined | null,
+  language: 'en' | 'ar'
+): string => {
+  if (status === null || status === undefined || !busStatusLabelMap[status]) {
+    return 'Unknown';
+  }
+  return busStatusLabelMap[status][language];
 };
 
 export const StopType = {
