@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
     ArrowLeft, Edit, Eye, Phone, Mail, Building, 
-    Route
-} from 'lucide-react';import { PageTitle } from '@/components/atoms/PageTitle';
+    Route, Pencil, PlusCircle, Clock 
+} from 'lucide-react';
+import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,11 @@ export default function EmployeeDetail() {
       loadEmployee(parseInt(id));
     }
   }, [id, loadEmployee]);
+
+  const formatDate = (dateString?: string | Date) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString();
+  };
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -139,15 +145,50 @@ export default function EmployeeDetail() {
                     {t('employee.actions.viewLine')}
                     </Link>
                 </Button>
+                <Button asChild variant="outline" size="sm">
+                    {/* Link to a page to edit the specific subscription record */}
+                    <Link to={`/subscriptions/${employee.lineSubscriptionId}/edit`}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {t('employee.actions.editSubscription')}
+                    </Link>
+                </Button>
                 </div>
             </div>
             ) : (
             // STATE 2: Employee is NOT subscribed
             <div className="text-center">
                 <p className="text-muted-foreground mb-4">{t('employee.noSubscription')}</p>
+                <Button asChild>
+                {/* Link to the subscription creation page, pre-filled with the employee's ID */}
+                <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    {t('employee.actions.createSubscription')}
+                </Link>
+                </Button>
             </div>
             )}
         </CardContent>
+        </Card>
+
+        {/* --- Audit Info Card --- */}
+        <Card>
+            <CardHeader>
+            <CardTitle>{t('common.auditInfo')}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>{t('common.createdAt')}:</span>
+                <span className="font-medium text-foreground">{formatDate(employee.createdAt)}</span>
+            </div>
+            {employee.updatedAt && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span>{t('common.updatedAt')}:</span>
+                <span className="font-medium text-foreground">{formatDate(employee.updatedAt)}</span>
+                </div>
+            )}
+            </CardContent>
         </Card>
       </div>
     </div>

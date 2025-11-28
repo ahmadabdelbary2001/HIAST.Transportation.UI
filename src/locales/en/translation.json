@@ -53,7 +53,9 @@
     "department": "Department",
     "selectDepartment": "Select a department",
     "actions": {
-      "viewLine": "View Line Details"
+      "viewLine": "View Line Details",
+      "editSubscription": "Edit Subscription",
+      "createSubscription": "Subscribe"
     }
   },
   "driver": {

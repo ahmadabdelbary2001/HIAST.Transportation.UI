@@ -20,6 +20,7 @@ export interface EmployeeDto extends BaseEntity {
   email: string;
   phoneNumber?: string;
   department?: Department;
+  lineSubscriptionId?: number;
   subscribedLineId?: number;
   subscribedLineName?: string;
 }

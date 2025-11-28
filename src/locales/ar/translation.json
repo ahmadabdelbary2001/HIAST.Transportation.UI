@@ -53,7 +53,9 @@
     "department": "القسم",
     "selectDepartment": "اختر قسمًا",
     "actions": {
-      "viewLine": "عرض تفاصيل الخط"
+      "viewLine": "عرض تفاصيل الخط",
+      "editSubscription": "تعديل الاشتراك",
+      "createSubscription": "اشتراك"
     }
   },
   "driver": {
