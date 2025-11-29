@@ -86,7 +86,10 @@
     "assignedBus": "Assigned Bus",
     "noLineAssigned": "This driver is not currently assigned to a line.",
     "viewLineDetails": "View Line Details",
-    "viewBusDetails": "View Bus Details"
+    "viewBusDetails": "View Bus Details",
+
+    "noDrivers": "No drivers have been added yet.",
+    "searchPlaceholder": "Search by name or driver number..."
   },
   "line": {
     "list": "Lines",

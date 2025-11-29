@@ -1,13 +1,14 @@
 // src/pages/drivers/DriverList.tsx
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,10 +27,13 @@ import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTab
 
 export default function DriverList() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const [searchTerm, setSearchTerm] = useState('');
 
   const loadDrivers = useCallback(async () => {
     try {
@@ -63,6 +67,19 @@ export default function DriverList() {
       setDeleteId(null);
     }
   };
+
+  const filteredDrivers = useMemo(() => {
+    let driversToFilter = [...drivers];
+    if (searchTerm) {
+      const lowercasedSearchTerm = searchTerm.toLowerCase();
+      driversToFilter = driversToFilter.filter(driver =>
+        `${driver.name}`.toLowerCase().includes(lowercasedSearchTerm) ||
+        driver.licenseNumber.toLowerCase().includes(lowercasedSearchTerm)
+      );
+    }
+
+    return driversToFilter;
+  }, [drivers, searchTerm]);
 
   const columns: ColumnDefinition<Driver>[] = [
     { key: 'name', header: t('driver.name') },
@@ -111,14 +128,24 @@ export default function DriverList() {
         </Button>
       </div>
 
-      {drivers.length === 0 ? (
+      <div className="flex flex-wrap items-center gap-4">
+        <Input
+          placeholder={t('driver.searchPlaceholder')}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+      </div>
+
+      {filteredDrivers.length === 0 ? (
         <EmptyState
-          title={t('common.messages.noData')}
+          title={t('common.messages.noResults')}
+          description={t('driver.noDrivers')}
           actionLabel={t('driver.create')}
-          onAction={() => (window.location.href = ROUTES.DRIVER_CREATE)}
+          onAction={() => navigate(ROUTES.DRIVER_CREATE)}
         />
       ) : (
-        <DataTable columns={columns} data={drivers} />
+        <DataTable columns={columns} data={filteredDrivers} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

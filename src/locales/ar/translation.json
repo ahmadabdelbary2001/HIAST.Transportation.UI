@@ -86,7 +86,9 @@
     "assignedBus": "الحافلة المُعيّنة",
     "noLineAssigned": "هذا السائق غير مُعيّن على أي خط حالياً.",
     "viewLineDetails": "عرض تفاصيل الخط",
-    "viewBusDetails": "عرض تفاصيل الحافلة"
+    "viewBusDetails": "عرض تفاصيل الحافلة",
+    "noDrivers": "لم يتم إضافة أي سائقين بعد.",
+    "searchPlaceholder": "ابحث بالاسم أو برقم السائق..."
   },
   "bus": {
     "list": "الحافلات",
