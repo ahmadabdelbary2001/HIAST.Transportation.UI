@@ -180,6 +180,8 @@
     "createdAt": "Created At",
     "updatedAt": "Updated At",
     "auditInfo": "Audit Information",
+    "all": "All",
+    "clearFilters": "Clear Filters",
     "actions": {
       "create": "Create",
       "edit": "Edit",

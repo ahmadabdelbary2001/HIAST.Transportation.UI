@@ -3,13 +3,20 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
-import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { Plus, Eye, Edit, Trash2, X } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +30,7 @@ import {
 import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { employeeApiService } from '@/services/employeeApiService';
 import type { EmployeeListDto } from '@/types/index';
+import { Department } from '@/types/enums';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
@@ -34,6 +42,7 @@ export default function EmployeeList() {
   const [error, setError] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState<string>('all');
 
   const loadEmployees = useCallback(async () => {
     try {
@@ -69,12 +78,16 @@ export default function EmployeeList() {
   };
 
   const filteredEmployees = useMemo(() => {
-    return employees.filter(
-      (emp) =>
+    return employees.filter((emp) => {
+      const matchesSearchTerm =
         `${emp.firstName} ${emp.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        emp.employeeNumber.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [employees, searchTerm]);
+        emp.employeeNumber.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesDepartment =
+        departmentFilter === 'all' || emp.department === departmentFilter;
+
+      return matchesSearchTerm && matchesDepartment;
+    });
+  }, [employees, searchTerm, departmentFilter]);
 
   const columns: ColumnDefinition<EmployeeListDto>[] = [
     {
@@ -136,12 +149,34 @@ export default function EmployeeList() {
         </Button>
       </div>
 
-      <Input
-        placeholder={t('employee.searchPlaceholder')}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="max-w-sm"
-      />
+      <div className="flex flex-wrap items-center gap-4">
+        <Input
+          placeholder={t('employee.searchPlaceholder')}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+          <SelectTrigger className="w-[220px]">
+            <SelectValue placeholder={t('employee.filterByDepartment')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('common.all')}</SelectItem>
+            {Object.values(Department).map((dept) => (
+              <SelectItem key={dept} value={dept}>
+                {dept}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        
+        {(searchTerm || departmentFilter !== 'all') && (
+            <Button variant="ghost" onClick={() => { setSearchTerm(''); setDepartmentFilter('all'); }}>
+                <X className="mr-2 h-4 w-4" />
+                {t('common.clearFilters')}
+            </Button>
+        )}
+      </div>
 
       {filteredEmployees.length === 0 ? (
         <EmptyState

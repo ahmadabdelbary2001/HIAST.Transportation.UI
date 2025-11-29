@@ -179,6 +179,8 @@
     "createdAt": "تاريخ الإنشاء",
     "updatedAt": "تاريخ التعديل",
     "auditInfo": "معلومات التدقيق",
+    "all": "الكل",
+    "clearFilters": "مسح الفلاتر",
     "actions": {
       "create": "إنشاء",
       "edit": "تعديل",
