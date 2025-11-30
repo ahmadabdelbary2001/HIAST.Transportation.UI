@@ -3,12 +3,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
@@ -55,23 +56,17 @@ export default function SubscriptionList() {
     }
   };
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return t('subscription.noEndDate');
-    return new Date(dateString).toLocaleDateString();
-  };
-
   const columns: ColumnDefinition<LineSubscriptionListDto>[] = [
     { key: 'employeeName', header: t('subscription.employeeName') },
     { key: 'lineName', header: t('subscription.lineName') },
     {
-      key: 'startDate',
-      header: t('subscription.startDate'),
-      cell: (sub) => formatDate(sub.startDate),
-    },
-    {
-      key: 'endDate',
-      header: t('subscription.endDate'),
-      cell: (sub) => formatDate(sub.endDate),
+      key: 'isActive',
+      header: t('subscription.status'),
+      cell: (sub) => (
+        <Badge variant={sub.isActive ? 'default' : 'destructive'}>
+          {sub.isActive ? t('subscription.active') : t('subscription.inactive')}
+        </Badge>
+      ),
     },
     {
       key: 'actions',
@@ -79,6 +74,11 @@ export default function SubscriptionList() {
       isAction: true,
       cell: (sub) => (
         <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/subscriptions/${sub.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
           <Button variant="ghost" size="icon" asChild>
             <Link to={`/subscriptions/${sub.id}/edit`}>
               <Edit className="h-4 w-4" />
@@ -110,7 +110,13 @@ export default function SubscriptionList() {
       {subscriptions.length === 0 ? (
         <EmptyState title={t('common.messages.noData')} description={t('subscription.noSubscriptions')} />
       ) : (
-        <DataTable columns={columns} data={subscriptions} />
+        <DataTable
+          columns={columns}
+          data={subscriptions}
+          rowClassName={(subscription) => 
+            !subscription.isActive ? 'bg-muted/50 opacity-70' : ''
+          }
+        />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>

@@ -23,6 +23,7 @@ export interface EmployeeDto extends BaseEntity {
   lineSubscriptionId?: number;
   subscribedLineId?: number;
   subscribedLineName?: string;
+  isSubscriptionActive: boolean;
 }
 
 export interface EmployeeListDto {
@@ -184,6 +185,7 @@ export interface LineSubscription extends BaseEntity {
   endDate?: string;
   employeeName: string;
   lineName: string;
+  isActive?: boolean;
 }
 
 // Represents the lighter object for list views from GET /api/LineSubscription
@@ -191,8 +193,7 @@ export interface LineSubscriptionListDto {
   id: number;
   employeeName: string;
   lineName: string;
-  startDate: string;
-  endDate?: string;
+  isActive?: boolean;
 }
 
 // DTO for creating a new subscription (POST /api/LineSubscription)
@@ -200,7 +201,7 @@ export interface CreateLineSubscriptionDto {
   employeeId: number;
   lineId: number;
   startDate: string;
-  endDate?: string;
+  isActive: boolean;
 }
 
 // DTO for updating an existing subscription (PUT /api/LineSubscription/{id})

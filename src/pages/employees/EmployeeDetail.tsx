@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
     ArrowLeft, Edit, Eye, Phone, Mail, Building, 
-    Route, Pencil, PlusCircle, Clock 
+    Route, Pencil, PlusCircle, Clock, CheckCircle, XCircle 
 } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { employeeApiService } from '@/services/employeeApiService';
 import type { EmployeeDto } from '@/types';
@@ -122,52 +123,68 @@ export default function EmployeeDetail() {
           </CardContent>
         </Card>
 
-        {/* --- REPLACEMENT FOR Subscription Info Card --- */}
         <Card>
-        <CardHeader>
+          <CardHeader>
             <CardTitle>{t('employee.subscriptionDetails')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-            {employee.subscribedLineId && employee.subscribedLineName ? (
-            // STATE 1: Employee IS subscribed
-            <div className="space-y-4">
+          </CardHeader>
+          <CardContent>
+            {employee.lineSubscriptionId && employee.subscribedLineName ? (
+              // STATE 1: Employee IS subscribed
+              <div className="space-y-6">
+                {/* Subscription Status */}
                 <div>
-                <p className="text-sm font-medium text-muted-foreground">{t('employee.subscribedLine')}</p>
-                <div className="flex items-center gap-3 mt-1">
+                  <p className="text-sm font-medium text-muted-foreground">{t('subscription.status')}</p>
+                  <Badge
+                    variant={employee.isSubscriptionActive ? 'default' : 'destructive'}
+                    className="mt-1 text-base"
+                  >
+                    {employee.isSubscriptionActive ? (
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                    ) : (
+                      <XCircle className="mr-2 h-4 w-4" />
+                    )}
+                    {employee.isSubscriptionActive ? t('subscription.active') : t('subscription.inactive')}
+                  </Badge>
+                </div>
+
+                {/* Line Info */}
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">{t('employee.subscribedLine')}</p>
+                  <div className="flex items-center gap-3 mt-1">
                     <Route className="h-5 w-5 text-primary" />
                     <p className="text-lg font-semibold">{employee.subscribedLineName}</p>
+                  </div>
                 </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                <Button asChild variant="outline" size="sm">
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button asChild variant="outline" size="sm">
                     <Link to={`/lines/${employee.subscribedLineId}`}>
-                    <Eye className="mr-2 h-4 w-4" />
-                    {t('employee.actions.viewLine')}
+                      <Eye className="mr-2 h-4 w-4" />
+                      {t('employee.actions.viewLine')}
                     </Link>
-                </Button>
-                <Button asChild variant="outline" size="sm">
-                    {/* Link to a page to edit the specific subscription record */}
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
                     <Link to={`/subscriptions/${employee.lineSubscriptionId}/edit`}>
-                    <Pencil className="mr-2 h-4 w-4" />
-                    {t('employee.actions.editSubscription')}
+                      <Pencil className="mr-2 h-4 w-4" />
+                      {t('employee.actions.editSubscription')}
                     </Link>
-                </Button>
+                  </Button>
                 </div>
-            </div>
+              </div>
             ) : (
-            // STATE 2: Employee is NOT subscribed
-            <div className="text-center">
+              // STATE 2: Employee is NOT subscribed
+              <div className="text-center">
                 <p className="text-muted-foreground mb-4">{t('employee.noSubscription')}</p>
                 <Button asChild>
-                {/* Link to the subscription creation page, pre-filled with the employee's ID */}
-                <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
+                  <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     {t('employee.actions.createSubscription')}
-                </Link>
+                  </Link>
                 </Button>
-            </div>
+              </div>
             )}
-        </CardContent>
+          </CardContent>
         </Card>
 
         {/* --- Audit Info Card --- */}

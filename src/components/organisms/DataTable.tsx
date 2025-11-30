@@ -16,9 +16,10 @@ export interface ColumnDefinition<T> {
 interface DataTableProps<T> {
   columns: ColumnDefinition<T>[];
   data: T[];
+  rowClassName?: (item: T) => string;
 }
 
-export function DataTable<T extends { id: React.Key }>({ columns, data }: DataTableProps<T>) {
+export function DataTable<T extends { id: React.Key }>({ columns, data, rowClassName }: DataTableProps<T>) {
   const { i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
 
@@ -44,7 +45,7 @@ export function DataTable<T extends { id: React.Key }>({ columns, data }: DataTa
         </TableHeader>
         <TableBody>
           {data.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item.id} className={rowClassName ? rowClassName(item) : ''}>
               {columns.map((col) => (
                 <TableCell
                   key={`${item.id}-${String(col.key)}`}

@@ -160,6 +160,14 @@
     }
   },
   "subscription": {
+    "detail": "Subscription Details",
+    "details": "Subscription Details",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "employee": "Employee",
+    "line": "Line",
+    "dates": "Subscription Dates",
     "list": "Subscriptions",
     "create": "Create Subscription",
     "edit": "Edit Subscription",

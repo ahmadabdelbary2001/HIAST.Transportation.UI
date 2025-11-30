@@ -23,6 +23,7 @@ import StopList from './pages/stops/StopList';
 import StopForm from './pages/stops/StopForm';
 import SubscriptionList from './pages/subscriptions/SubscriptionList';
 import SubscriptionForm from './pages/subscriptions/SubscriptionForm';
+import SubscriptionDetail from './pages/subscriptions/SubscriptionDetail';
 import '@/i18n';
 const App = () => (
   <ThemeProvider>
@@ -218,6 +219,14 @@ const App = () => (
             element={
               <MainLayout>
                 <SubscriptionForm />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={ROUTES.SUBSCRIPTION_DETAIL}
+            element={
+              <MainLayout>
+                <SubscriptionDetail />
               </MainLayout>
             }
           />

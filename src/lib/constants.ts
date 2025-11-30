@@ -29,6 +29,7 @@ export const ROUTES = {
   STOP_CREATE: '/stops/create',
   STOP_EDIT: '/stops/:id/edit',
   SUBSCRIPTIONS: '/subscriptions',
+  SUBSCRIPTION_DETAIL: '/subscriptions/:id',
   SUBSCRIPTION_CREATE: '/subscriptions/create',
   SUBSCRIPTION_EDIT: '/subscriptions/:id/edit',
   SUPERVISORS: '/supervisors',
