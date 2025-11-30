@@ -117,7 +117,9 @@
     "subscribers": "Subscribers",
     "noSubscribers": "There are no employees subscribed to this line yet.",
     "stop": "Stop",
-    "activeSubscribers": "Active"
+    "activeSubscribers": "Active",
+    "searchPlaceholder": "Search by name, description, or supervisor..."
+
   },
   "bus": {
     "list": "Buses",

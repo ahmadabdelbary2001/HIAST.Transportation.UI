@@ -130,7 +130,8 @@
     "subscribers": "المشتركون",
     "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد.",
     "stop": "محطة",
-    "activeSubscribers": "فعالون"
+    "activeSubscribers": "فعالون",
+    "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف..."
   },
   "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",

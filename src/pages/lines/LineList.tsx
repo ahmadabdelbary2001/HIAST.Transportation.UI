@@ -1,14 +1,15 @@
 // src/pages/lines/LineList.tsx
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Plus, Eye, Edit, Trash2, X } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { EmptyState } from '@/components/atoms/EmptyState';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
 import {
   AlertDialog,
@@ -27,10 +28,12 @@ import { toast } from 'sonner';
 
 export default function LineList() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [lines, setLines] = useState<LineListDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const loadLines = useCallback(async () => {
     try {
@@ -64,6 +67,19 @@ export default function LineList() {
       setDeleteId(null);
     }
   };
+
+  // --- Memoized filtering logic ---
+  const filteredLines = useMemo(() => {
+    if (!searchTerm) {
+      return lines; // Return all lines if search is empty
+    }
+    const lowercasedTerm = searchTerm.toLowerCase();
+    return lines.filter(line =>
+      line.name.toLowerCase().includes(lowercasedTerm) ||
+      (line.description?.toLowerCase().includes(lowercasedTerm) ?? false) ||
+      line.supervisorName.toLowerCase().includes(lowercasedTerm)
+    );
+  }, [lines, searchTerm]);
 
   const columns: ColumnDefinition<LineListDto>[] = [
     { key: 'name', header: t('line.name') },
@@ -117,15 +133,32 @@ export default function LineList() {
         </Button>
       </div>
 
-      {lines.length === 0 ? (
+      {/* --- Search Bar --- */}
+      <div className="flex items-center gap-4">
+        <Input
+          placeholder={t('line.searchPlaceholder')}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="max-w-sm"
+        />
+        {searchTerm && (
+          <Button variant="ghost" onClick={() => setSearchTerm('')}>
+            <X className="mr-2 h-4 w-4" />
+            {t('common.clearFilters')}
+          </Button>
+        )}
+      </div>
+
+      {/* --- Use filteredLines and navigate --- */}
+      {filteredLines.length === 0 ? (
         <EmptyState
-          title={t('common.messages.noData')}
+          title={searchTerm ? t('common.messages.noResults') : t('common.messages.noData')}
           description={t('line.noLines')}
           actionLabel={t('line.create')}
-          onAction={() => (window.location.href = ROUTES.LINE_CREATE)}
+          onAction={() => navigate(ROUTES.LINE_CREATE)} // Use navigate for smoother UX
         />
       ) : (
-        <DataTable columns={columns} data={lines} />
+        <DataTable columns={columns} data={filteredLines} />
       )}
 
       <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
