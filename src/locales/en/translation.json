@@ -103,6 +103,7 @@
     "driver": "Driver",
     "bus": "Bus",
     "noLines": "No lines have been created yet.",
+    "addSubscriber": "Add Subscriber",
     "errors": {
       "allFieldsRequired": "Please select a supervisor, driver, and bus."
     },
@@ -114,8 +115,9 @@
     "stops": "Stops",
     "noStops": "This line does not have any stops assigned to it yet.",
     "subscribers": "Subscribers",
-    "noSubscribers": "There are no employees subscribed to this line yet."
-
+    "noSubscribers": "There are no employees subscribed to this line yet.",
+    "stop": "Stop",
+    "activeSubscribers": "Active"
   },
   "bus": {
     "list": "Buses",

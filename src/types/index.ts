@@ -99,7 +99,8 @@ export interface Line extends BaseEntity {
   description?: string;
   // Assuming StopDto and LineSubscriptionDto will be defined for detail views
   stops: Stop[]; 
-  subscriptions: LineSubscriptionDto[];
+  subscriptions: LineSubscription[];
+  isActive?: boolean;
 }
 
 // This represents the lighter Line object for list views from GET /api/Line

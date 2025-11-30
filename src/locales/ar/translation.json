@@ -116,6 +116,7 @@
     "driver": "السائق",
     "bus": "الحافلة",
     "noLines": "لم يتم إنشاء أي خطوط بعد.",
+    "addSubscriber": "إضافة مشترك",
     "errors": {
       "allFieldsRequired": "يرجى اختيار مشرف وسائق وحافلة."
     },
@@ -127,7 +128,9 @@
     "stops": "المواقف",
     "noStops": "لا توجد مواقف معينة لهذا الخط بعد.",
     "subscribers": "المشتركون",
-    "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد."
+    "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد.",
+    "stop": "محطة",
+    "activeSubscribers": "فعالون"
   },
   "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",
