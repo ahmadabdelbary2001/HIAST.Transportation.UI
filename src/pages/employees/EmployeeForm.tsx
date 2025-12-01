@@ -113,6 +113,8 @@ export default function EmployeeForm() {
                   required
                   value={formData.employeeNumber}
                   onChange={(e) => setFormData({ ...formData, employeeNumber: e.target.value })}
+                  placeholder="00000"
+                  forceLtr
                 />
               </div>
               <div className="space-y-2">
@@ -141,6 +143,8 @@ export default function EmployeeForm() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="name@example.com"
+                  forceLtr
                 />
               </div>
               <div className="space-y-2">
@@ -149,6 +153,8 @@ export default function EmployeeForm() {
                   id="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  placeholder="+963 99 123 4567"
+                  forceLtr
                 />
               </div>
               <div className="space-y-2">

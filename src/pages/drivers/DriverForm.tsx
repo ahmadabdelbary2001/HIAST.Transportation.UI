@@ -118,12 +118,14 @@ export default function DriverForm() {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="contactInfo">{t('driver.contactInfo')}</Label>
+                <Label htmlFor="contactInfo">{t('driver.contactInfo')} *</Label>
                 <Input
                   id="contactInfo"
+                  required
                   value={formData.contactInfo}
                   onChange={(e) => setFormData({ ...formData, contactInfo: e.target.value })}
                   placeholder="+963 99 123 4567"
+                  forceLtr
                 />
               </div>
             </div>
