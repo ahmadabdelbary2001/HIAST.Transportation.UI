@@ -5,6 +5,7 @@
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
+import { useTranslation } from 'react-i18next';
 
 import { cn } from "@/lib/utils"
 
@@ -17,22 +18,43 @@ const SelectValue = SelectPrimitive.Value
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-))
-SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
+>(({ className, children, ...props }, ref) => {
+  // 1. Get the i18n instance to check the language direction
+  const { i18n } = useTranslation();
+  const isRtl = i18n.dir() === 'rtl';
+
+  return (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        // Base styles, removing justify-between
+        "flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        // 2. Explicitly set text alignment
+        isRtl ? 'text-right' : 'text-left',
+        className
+      )}
+      {...props}
+    >
+      {/* 3. Conditionally render the icon first in RTL */}
+      {isRtl && (
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown className="me-2 h-4 w-4 opacity-50" />
+        </SelectPrimitive.Icon>
+      )}
+
+      {/* The text will now correctly take up the remaining space */}
+      <div className="flex-grow">{children}</div>
+
+      {/* Conditionally render the icon last in LTR */}
+      {!isRtl && (
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown className="ms-2 h-4 w-4 opacity-50" />
+        </SelectPrimitive.Icon>
+      )}
+    </SelectPrimitive.Trigger>
+  );
+});
+SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectScrollUpButton = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
