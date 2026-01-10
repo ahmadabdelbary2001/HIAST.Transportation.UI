@@ -103,7 +103,7 @@ export default function EmployeeList() {
     {
       key: 'department',
       header: t('employee.department'),
-      cell: (item) => item.department || '-',
+      cell: (item) => item.department ? t(`employee.departments.${item.department}`) : '-',
     },
     {
       key: 'actions',
@@ -164,7 +164,7 @@ export default function EmployeeList() {
             <SelectItem value="all">{t('common.all')}</SelectItem>
             {Object.values(Department).map((dept) => (
               <SelectItem key={dept} value={dept}>
-                {dept}
+                {t(`employee.departments.${dept}`)}
               </SelectItem>
             ))}
           </SelectContent>

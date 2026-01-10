@@ -11,7 +11,7 @@ import {
 import useTheme from '@/hooks/useTheme';
 import { THEME_OPTIONS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
-import { useLanguage } from '@/hooks/useLanguage';
+import { useTranslation } from 'react-i18next';
 
 interface ThemeSelectorProps {
   className?: string;
@@ -19,7 +19,7 @@ interface ThemeSelectorProps {
 
 export function ThemeSelector({ className }: ThemeSelectorProps) {
   const { theme, setTheme } = useTheme();
-  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -40,12 +40,12 @@ export function ThemeSelector({ className }: ThemeSelectorProps) {
               onClick={() => setTheme(themeOption.id)}
               className={cn(
                 'cursor-pointer transition-colors',
-                theme === themeOption.id 
-                  ? 'bg-[var(--theme-sidebar-active)] text-[var(--theme-sidebar-active-text)]' 
+                theme === themeOption.id
+                  ? 'bg-[var(--theme-sidebar-active)] text-[var(--theme-sidebar-active-text)]'
                   : 'hover:bg-[var(--theme-sidebar-hover)] hover:text-[var(--theme-sidebar-hover-text)]'
               )}
             >
-              {themeOption.name[language as 'en' | 'ar']}
+              {t(`theme.${themeOption.id}`)}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLanguage } from '@/hooks/useLanguage';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
@@ -22,8 +21,6 @@ import { toast } from 'sonner';
 
 export default function BusForm() {
   const { t } = useTranslation();
-  const { language } = useLanguage();
-  const lang = language as 'en' | 'ar';
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isEdit = !!id;
@@ -157,7 +154,7 @@ export default function BusForm() {
                         <SelectContent>
                           {busStatusInfo.map((statusInfo) => (
                             <SelectItem key={statusInfo.value} value={statusInfo.value}>
-                              {statusInfo[lang]}
+                              {t(statusInfo.key)}
                             </SelectItem>
                           ))}
                         </SelectContent>

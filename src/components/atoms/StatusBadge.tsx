@@ -1,8 +1,8 @@
 // src/components/atoms/StatusBadge.tsx
 
 import { Badge } from '@/components/ui/badge';
-import { BusStatus, getBusStatusLabel } from '@/types/enums';
-import { useLanguage } from '@/hooks/useLanguage';
+import { BusStatus, busStatusInfo } from '@/types/enums';
+import { useTranslation } from 'react-i18next';
 
 interface StatusBadgeProps {
   status: BusStatus | undefined | null;
@@ -10,8 +10,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, type }: StatusBadgeProps) {
-  const { language } = useLanguage();
-  const lang = language as 'en' | 'ar';
+  const { t } = useTranslation();
 
   const getVariant = () => {
     if (type === 'bus') {
@@ -32,10 +31,10 @@ export function StatusBadge({ status, type }: StatusBadgeProps) {
 
   const getLabel = () => {
     if (type === 'bus') {
-      return getBusStatusLabel(status, lang);
-    } else {
-      return;
+      const info = busStatusInfo.find(i => i.value === status);
+      return info ? t(info.key) : t('common.messages.noData');
     }
+    return '';
   };
 
   return <Badge variant={getVariant()}>{getLabel()}</Badge>;

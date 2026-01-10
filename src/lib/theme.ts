@@ -42,7 +42,6 @@ export interface ThemeColors {
 
 export interface ThemeConfig {
   id: string;
-  name: { en: string; ar: string };
   colors: ThemeColors;
   shadcn: {
     primary: string;
@@ -54,10 +53,9 @@ export interface ThemeConfig {
   };
 }
 
-export const THEME_OPTIONS: ThemeConfig[] = [
+export const THEME_OPTIONS: readonly ThemeConfig[] = [
   {
     id: 'syrian',
-    name: { en: 'Syrian Identity', ar: 'الهوية السورية' },
     colors: {
       primary: { DEFAULT: '#428177', dark: '#054239', darker: '#002623', light: '#5a9d92' },
       accent: { DEFAULT: '#b9a779', light: '#edebe0', dark: '#988561' },
@@ -91,7 +89,6 @@ export const THEME_OPTIONS: ThemeConfig[] = [
   },
   {
     id: 'default',
-    name: { en: 'Default', ar: 'افتراضي' },
     colors: {
       primary: { DEFAULT: '#3b82f6', dark: '#1d4ed8', darker: '#1e3a8a', light: '#dbeafe' },
       accent: { DEFAULT: '#f59e0b', light: '#fef3c7', dark: '#d97706' },
@@ -125,7 +122,6 @@ export const THEME_OPTIONS: ThemeConfig[] = [
   },
   {
     id: 'pastel',
-    name: { en: 'Soft Pastel', ar: 'باستيل ناعم' },
     colors: {
       primary: { DEFAULT: '#a3b9e5', dark: '#7a9ad6', darker: '#5a7bc2', light: '#c7d4f0' },
       accent: { DEFAULT: '#f8b4d9', light: '#fcddec', dark: '#f48ec6' },

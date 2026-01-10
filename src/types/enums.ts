@@ -10,27 +10,11 @@ export const BusStatus = {
 export type BusStatus = typeof BusStatus[keyof typeof BusStatus];
 
 export const busStatusInfo = [
-  { value: BusStatus.Available, en: 'Available', ar: 'متاح' },
-  { value: BusStatus.InService, en: 'In Service', ar: 'قيد الخدمة' },
-  { value: BusStatus.UnderMaintenance, en: 'Under Maintenance', ar: 'تحت الصيانة' },
-  { value: BusStatus.OutOfService, en: 'Out of Service', ar: 'خارج الخدمة' },
+  { value: BusStatus.Available, key: 'bus.statuses.Available' },
+  { value: BusStatus.InService, key: 'bus.statuses.InService' },
+  { value: BusStatus.UnderMaintenance, key: 'bus.statuses.UnderMaintenance' },
+  { value: BusStatus.OutOfService, key: 'bus.statuses.OutOfService' },
 ] as const;
-
-// A lookup map for fast access (used by StatusBadge).
-const busStatusLabelMap = Object.fromEntries(
-  busStatusInfo.map(info => [info.value, { en: info.en, ar: info.ar }])
-) as Record<BusStatus, { en: string; ar: string }>;
-
-// The getter function remains the same, but now uses the efficient map.
-export const getBusStatusLabel = (
-  status: BusStatus | undefined | null,
-  language: 'en' | 'ar'
-): string => {
-  if (status === null || status === undefined || !busStatusLabelMap[status]) {
-    return 'Unknown';
-  }
-  return busStatusLabelMap[status][language];
-};
 
 export const StopType = {
   Intermediate: 1,

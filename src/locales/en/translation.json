@@ -52,6 +52,19 @@
     "phoneNumber": "Phone Number",
     "department": "Department",
     "selectDepartment": "Select a department",
+    "filterByDepartment": "Filter by Department",
+    "departments": {
+      "IT": "IT",
+      "AI": "AI",
+      "Network": "Network",
+      "Finance": "Finance",
+      "Mechatronics": "Mechatronics",
+      "Mathematics": "Mathematics",
+      "Communications": "Communications",
+      "Environment": "Environment",
+      "Administration": "Administration",
+      "Languages": "Languages"
+    },
     "actions": {
       "viewLine": "View Line Details",
       "editSubscription": "Edit Subscription",
@@ -118,8 +131,8 @@
     "noSubscribers": "There are no employees subscribed to this line yet.",
     "stop": "Stop",
     "activeSubscribers": "Active",
-    "searchPlaceholder": "Search by name, description, or supervisor..."
-
+    "searchPlaceholder": "Search by name, description, or supervisor...",
+    "viewStopDetails": "View stop details"
   },
   "bus": {
     "list": "Buses",
@@ -133,7 +146,13 @@
     "capacity": "Capacity",
     "status": "Status",
     "noBuses": "No buses found",
-    "selectStatus": "Select a status"
+    "selectStatus": "Select a status",
+    "statuses": {
+      "Available": "Available",
+      "InService": "In Service",
+      "UnderMaintenance": "Under Maintenance",
+      "OutOfService": "Out of Service"
+    }
   },
   "supervisor": {
     "reportTitle": "Line Supervisor Appointments",
@@ -187,10 +206,8 @@
       "allFieldsRequired": "Please select an employee and a line.",
       "capacityFull": "Sorry, the bus for this line is full. Maximum capacity is {{capacity}} passengers."
     },
-    "placeholders": {
-      "selectEmployee": "Select an employee",
-      "selectLine": "Select a line"
-    }
+    "selectEmployee": "Select Employee",
+    "selectLine": "Select Line"
   },
   "common": {
     "passengers": "Passengers",
@@ -210,6 +227,8 @@
       "filter": "Filter",
       "view": "View",
       "actions": "Actions",
+      "expandSidebar": "Expand Sidebar",
+      "collapseSidebar": "Collapse Sidebar",
       "back": "Back",
       "next": "Next",
       "submit": "Submit",
@@ -233,6 +252,15 @@
       "deleteSuccess": "Item deleted successfully",
       "createSuccess": "Item created successfully",
       "updateSuccess": "Item updated successfully",
+      "saving": "Saving...",
+      "errorLoadingRelated": "Error loading related data",
+      "confirmDeleteTitle": "Confirm Deletion",
+      "confirmDeleteStop": "Are you sure you want to delete this stop? This action cannot be undone.",
+      "confirmDeleteLine": "Are you sure you want to delete this line? This action cannot be undone.",
+      "confirmDeleteBus": "Are you sure you want to delete this bus? This action cannot be undone.",
+      "confirmDeleteDriver": "Are you sure you want to delete this driver? This action cannot be undone.",
+      "confirmDeleteEmployee": "Are you sure you want to delete this employee? This action cannot be undone.",
+      "confirmDeleteSubscription": "Are you sure you want to delete this subscription? This action cannot be undone.",
       "requiredField": "This field is required",
       "invalidEmail": "Please enter a valid email address"
     },

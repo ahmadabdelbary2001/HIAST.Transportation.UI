@@ -117,7 +117,7 @@ export default function EmployeeDetail() {
             {employee.department && (
               <div className="flex items-center gap-2">
                 <Building className="h-4 w-4 text-muted-foreground" />
-                <span>{employee.department}</span>
+                <span>{t(`employee.departments.${employee.department}`)}</span>
               </div>
             )}
           </CardContent>

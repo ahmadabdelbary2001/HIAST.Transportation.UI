@@ -52,6 +52,19 @@
     "phoneNumber": "رقم الهاتف",
     "department": "القسم",
     "selectDepartment": "اختر قسمًا",
+    "filterByDepartment": "تصفية حسب القسم",
+    "departments": {
+      "IT": "تكنولوجيا المعلومات",
+      "AI": "الذكاء الاصطناعي",
+      "Network": "الشبكات",
+      "Finance": "المالية",
+      "Mechatronics": "الميكاترونيكس",
+      "Mathematics": "الرياضيات",
+      "Communications": "الاتصالات",
+      "Environment": "البيئة",
+      "Administration": "الإدارة",
+      "Languages": "اللغات"
+    },
     "actions": {
       "viewLine": "عرض تفاصيل الخط",
       "editSubscription": "تعديل الاشتراك",
@@ -102,7 +115,13 @@
     "capacity": "السعة",
     "status": "الحالة",
     "noBuses": "لا توجد حافلات",
-    "selectStatus": "اختر حالة"
+    "selectStatus": "اختر حالة",
+    "statuses": {
+      "Available": "متاح",
+      "InService": "قيد الخدمة",
+      "UnderMaintenance": "تحت الصيانة",
+      "OutOfService": "خارج الخدمة"
+    }
   },
   "line": {
     "list": "الخطوط",
@@ -131,7 +150,8 @@
     "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد.",
     "stop": "محطة",
     "activeSubscribers": "فعالون",
-    "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف..."
+    "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف...",
+    "viewStopDetails": "عرض تفاصيل الموقف"
   },
   "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",
@@ -185,10 +205,8 @@
       "allFieldsRequired": "يرجى اختيار موظف وخط.",
       "capacityFull": "عذراً، الحافلة لهذا الخط ممتلئة. السعة القصوى هي {{capacity}} ركاب."
     },
-    "placeholders": {
-      "selectEmployee": "اختر موظفًا",
-      "selectLine": "اختر خطًا"
-    }
+    "selectEmployee": "اختر موظفاً",
+    "selectLine": "اختر خطاً"
   },
   "common": {
     "passengers": "ركاب",
@@ -208,6 +226,8 @@
       "filter": "تصفية",
       "view": "عرض",
       "actions": "الإجراءات",
+      "expandSidebar": "توسيع الشريط الجانبي",
+      "collapseSidebar": "طي الشريط الجانبي",
       "back": "رجوع",
       "next": "التالي",
       "submit": "إرسال",
@@ -231,6 +251,15 @@
       "deleteSuccess": "تم حذف العنصر بنجاح",
       "createSuccess": "تم إنشاء العنصر بنجاح",
       "updateSuccess": "تم تحديث العنصر بنجاح",
+      "saving": "جاري الحفظ...",
+      "errorLoadingRelated": "خطأ في تحميل البيانات المرتبطة",
+      "confirmDeleteTitle": "تأكيد الحذف",
+      "confirmDeleteStop": "هل أنت متأكد من حذف هذا الموقف؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteLine": "هل أنت متأكد من حذف هذا الخط؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteBus": "هل أنت متأكد من حذف هذه الحافلة؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteDriver": "هل أنت متأكد من حذف هذا السائق؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteEmployee": "هل أنت متأكد من حذف هذا الموظف؟ لا يمكن التراجع عن هذا الإجراء.",
+      "confirmDeleteSubscription": "هل أنت متأكد من حذف هذا الاشتراك؟ لا يمكن التراجع عن هذا الإجراء.",
       "requiredField": "هذا الحقل مطلوب",
       "invalidEmail": "يرجى إدخال بريد إلكتروني صالح"
     },

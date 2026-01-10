@@ -152,7 +152,7 @@ export default function DriverList() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t('common.actions.delete')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common.messages.confirmDelete')}</AlertDialogDescription>
+            <AlertDialogDescription>{t('common.messages.confirmDeleteDriver')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('common.actions.cancel')}</AlertDialogCancel>

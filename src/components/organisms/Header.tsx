@@ -1,5 +1,6 @@
 // src/components/organisms/Header.tsx
 
+import { useTranslation } from 'react-i18next';
 import { Menu, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/atoms/Logo';
@@ -22,6 +23,7 @@ export function Header({
   onToggleSidebar,
   showLanguage = true 
 }: HeaderProps) {
+  const { t } = useTranslation();
   const { language, setLanguage } = useLanguage();
   const isRTL = language === 'ar';
 
@@ -67,7 +69,7 @@ export function Header({
                 "text-[var(--theme-sidebar-text)] hover:text-white",
                 "shadow-sm hover:shadow-md"
               )}
-              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={sidebarCollapsed ? t('common.actions.expandSidebar') : t('common.actions.collapseSidebar')}
             >
               {sidebarCollapsed ? (
                 <ChevronLeft className={cn(

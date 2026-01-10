@@ -1,5 +1,4 @@
-// src/components/atoms/LanguageSelector.tsx
-
+import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +11,7 @@ import { cn } from '@/lib/utils';
 
 interface Language {
   code: string;
-  label: string;
+  labelKey: string;
   flag: string;
   dir: 'ltr' | 'rtl';
 }
@@ -24,8 +23,8 @@ interface LanguageSelectorProps {
 }
 
 const languages: Language[] = [
-  { code: 'en', label: 'English', flag: '🇺🇸', dir: 'ltr' },
-  { code: 'ar', label: 'العربية', flag: '🇸🇦', dir: 'rtl' },
+  { code: 'en', labelKey: 'language.en', flag: '🇺🇸', dir: 'ltr' },
+  { code: 'ar', labelKey: 'language.ar', flag: '🇸🇦', dir: 'rtl' },
 ];
 
 export function LanguageSelector({ 
@@ -33,6 +32,7 @@ export function LanguageSelector({
   onLanguageChange, 
   compact = false 
 }: LanguageSelectorProps) {
+  const { t } = useTranslation('common');
   const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
 
   // Compact version for mobile
@@ -44,7 +44,7 @@ export function LanguageSelector({
             variant="ghost" 
             size="icon" 
             className="h-9 w-9 rounded-full"
-            aria-label="Select language"
+            aria-label={t('language.select', 'Select Language')}
           >
             <span className="text-lg">{currentLang.flag}</span>
           </Button>
@@ -65,11 +65,11 @@ export function LanguageSelector({
               {lang.dir === 'ltr' ? (
                 <>
                   <span className="text-base">{lang.flag}</span>
-                  <span>{lang.label}</span>
+                  <span>{t(lang.labelKey)}</span>
                 </>
               ) : (
                 <>
-                  <span>{lang.label}</span>
+                  <span>{t(lang.labelKey)}</span>
                   <span className="text-base">{lang.flag}</span>
                 </>
               )}
@@ -87,10 +87,10 @@ export function LanguageSelector({
         <Button 
           variant="ghost" 
           className="h-9 px-3 flex items-center gap-2 hover:bg-[var(--theme-sidebar-hover)]"
-          aria-label="Select language"
+          aria-label={t('language.select', 'Select Language')}
         >
           <span className="text-lg">{currentLang.flag}</span>
-          <span className="text-sm font-medium hidden sm:block">{currentLang.label}</span>
+          <span className="text-sm font-medium hidden sm:block">{t(currentLang.labelKey)}</span>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
@@ -111,7 +111,7 @@ export function LanguageSelector({
               // LTR: Flag -> Label -> Checkmark
               <>
                 <span className="text-base">{lang.flag}</span>
-                <span className="flex-1">{lang.label}</span>
+                <span className="flex-1">{t(lang.labelKey)}</span>
                 {currentLanguage === lang.code && (
                   <span className="h-1.5 w-1.5 rounded-full bg-current" />
                 )}
@@ -122,7 +122,7 @@ export function LanguageSelector({
                 {currentLanguage === lang.code && (
                   <span className="h-1.5 w-1.5 rounded-full bg-current" />
                 )}
-                <span className="flex-1 text-right">{lang.label}</span>
+                <span className="flex-1 text-right">{t(lang.labelKey)}</span>
                 <span className="text-base">{lang.flag}</span>
               </>
             )}

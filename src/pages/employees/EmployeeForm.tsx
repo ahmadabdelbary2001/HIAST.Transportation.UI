@@ -169,7 +169,7 @@ export default function EmployeeForm() {
                   <SelectContent>
                     {Object.values(Department).map((dept) => (
                       <SelectItem key={dept} value={dept}>
-                        {dept}
+                        {t(`employee.departments.${dept}`)}
                       </SelectItem>
                     ))}
                   </SelectContent>
