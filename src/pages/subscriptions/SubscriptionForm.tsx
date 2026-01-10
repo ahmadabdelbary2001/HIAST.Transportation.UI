@@ -1,8 +1,9 @@
-// src/pages/subscriptions/SubscriptionForm.tsx
-
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { ArrowLeft } from 'lucide-react';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
@@ -11,7 +12,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch'; // For the IsActive toggle
+import { Switch } from '@/components/ui/switch';
+import { ValidationError } from '@/components/atoms/ValidationError';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import { employeeApiService } from '@/services/employeeApiService';
 import { lineApiService } from '@/services/lineApiService';
@@ -24,7 +26,6 @@ import type {
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 
-// Helper to format date for the input type="date"
 const toInputDate = (date: string | Date) => new Date(date).toISOString().split('T')[0];
 
 export default function SubscriptionForm() {
@@ -34,59 +35,68 @@ export default function SubscriptionForm() {
   const location = useLocation();
   const isEdit = !!id;
 
-  // State for form data
-  const [formData, setFormData] = useState({
-    employeeId: 0,
-    lineId: 0,
-    startDate: toInputDate(new Date()),
-    endDate: '',
-    isActive: true,
-  });
-
-  // State for dropdown options
   const [employees, setEmployees] = useState<EmployeeListDto[]>([]);
   const [lines, setLines] = useState<LineListDto[]>([]);
-
-  // Loading states
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
 
-  // Pre-fill employeeId from query params on create
+  const subscriptionSchema = z.object({
+    employeeId: z.number().min(1, t('subscription.errors.allFieldsRequired')),
+    lineId: z.number().min(1, t('subscription.errors.allFieldsRequired')),
+    startDate: z.string().min(1, t('common.validation.required')),
+    endDate: z.string().optional(),
+    isActive: z.boolean()
+  });
+
+  type SubscriptionFormData = z.infer<typeof subscriptionSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<SubscriptionFormData>({
+    resolver: zodResolver(subscriptionSchema),
+    defaultValues: {
+      employeeId: 0,
+      lineId: 0,
+      startDate: toInputDate(new Date()),
+      endDate: '',
+      isActive: true,
+    },
+  });
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const employeeId = params.get('employeeId');
     if (employeeId && !isEdit) {
-      setFormData((prev) => ({ ...prev, employeeId: parseInt(employeeId, 10) }));
+      setValue('employeeId', parseInt(employeeId, 10));
     }
-  }, [location.search, isEdit]);
+  }, [location.search, isEdit, setValue]);
 
-  // Load existing subscription data in edit mode
   const loadSubscription = useCallback(
     async (subscriptionId: number) => {
       try {
         setFormLoading(true);
         const sub = await lineSubscriptionApiService.getById(subscriptionId);
         if (sub) {
-          setFormData({
-            employeeId: sub.employeeId,
-            lineId: sub.lineId,
-            startDate: toInputDate(sub.startDate),
-            endDate: sub.endDate ? toInputDate(sub.endDate) : '',
-            // If sub.isActive is undefined for any reason, default to false.
-            isActive: sub.isActive ?? false,
-          });
+          setValue('employeeId', sub.employeeId);
+          setValue('lineId', sub.lineId);
+          setValue('startDate', toInputDate(sub.startDate));
+          setValue('endDate', sub.endDate ? toInputDate(sub.endDate) : '');
+          setValue('isActive', sub.isActive ?? false);
         }
       } catch (err) {
         toast.error(t('common.messages.error'));
-        console.error("Failed to load subscription:", err); // Log the actual error
+        console.error("Failed to load subscription:", err);
       } finally {
         setFormLoading(false);
       }
     },
-    [t]
+    [t, setValue]
   );
 
-  // Load employees and lines for dropdowns
   const loadDependencies = useCallback(async () => {
     try {
       const [employeeData, lineData] = await Promise.all([
@@ -108,35 +118,43 @@ export default function SubscriptionForm() {
     }
   }, [id, isEdit, loadSubscription, loadDependencies]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onFormSubmit = async (data: SubscriptionFormData) => {
     setLoading(true);
-
     try {
+      // Capacity check (Only for new active subscriptions)
+      if (!isEdit && data.isActive && data.lineId > 0) {
+        const line = await lineApiService.getById(data.lineId);
+        const activeCount = line.subscriptions?.filter(s => s.isActive).length ?? 0;
+        
+        const busResponse = await fetch(`/api/Bus/${line.busId}`);
+        const bus = await busResponse.json();
+        
+        if (activeCount >= bus.capacity) {
+          toast.error(t('subscription.errors.capacityFull', { capacity: bus.capacity }));
+          setLoading(false);
+          return;
+        }
+      }
+
       if (isEdit && id) {
         const updateDto: UpdateLineSubscriptionDto = {
+          ...data,
           id: parseInt(id, 10),
-          employeeId: formData.employeeId,
-          lineId: formData.lineId,
-          startDate: formData.startDate,
-          isActive: formData.isActive,
-        };
+        } as UpdateLineSubscriptionDto;
         await lineSubscriptionApiService.update(updateDto);
         toast.success(t('common.messages.updateSuccess'));
       } else {
         const createDto: CreateLineSubscriptionDto = {
-          employeeId: formData.employeeId,
-          lineId: formData.lineId,
-          startDate: formData.startDate,
-          isActive: formData.isActive,
-        };
+          ...data,
+        } as CreateLineSubscriptionDto;
         await lineSubscriptionApiService.create(createDto);
         toast.success(t('common.messages.createSuccess'));
       }
       navigate(ROUTES.SUBSCRIPTIONS);
-    } catch (err) {
-      toast.error(t('common.messages.error'));
-      console.error('Error saving subscription:', err);
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || t('common.messages.error'));
+      console.error('Error saving subscription:', error);
     } finally {
       setLoading(false);
     }
@@ -160,81 +178,107 @@ export default function SubscriptionForm() {
           <CardTitle>{isEdit ? t('subscription.edit') : t('subscription.create')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Employee Select */}
               <div className="space-y-2">
                 <Label htmlFor="employeeId">{t('subscription.employee')} *</Label>
-                <Select
-                  required
-                  value={formData.employeeId.toString()}
-                  onValueChange={(value) => setFormData({ ...formData, employeeId: parseInt(value) })}
-                  disabled={isEdit} // Usually can't change the employee on an existing sub
-                >
-                  <SelectTrigger><SelectValue placeholder={t('subscription.selectEmployee')} /></SelectTrigger>
-                  <SelectContent>
-                    {employees.map((emp) => (
-                      <SelectItem key={emp.id} value={emp.id.toString()}>
-                        {emp.firstName} {emp.lastName} ({emp.employeeNumber})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="employeeId"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <Select
+                        disabled={isEdit}
+                        onValueChange={(val) => field.onChange(parseInt(val))}
+                        value={field.value ? field.value.toString() : ''}
+                      >
+                        <SelectTrigger error={errors.employeeId?.message}>
+                          <SelectValue placeholder={t('subscription.selectEmployee')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {employees.map((emp) => (
+                            <SelectItem key={emp.id} value={emp.id.toString()}>
+                              {emp.firstName} {emp.lastName} ({emp.employeeNumber})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <ValidationError message={errors.employeeId?.message || ''} />
+                    </div>
+                  )}
+                />
               </div>
 
-              {/* Line Select */}
               <div className="space-y-2">
                 <Label htmlFor="lineId">{t('subscription.line')} *</Label>
-                <Select
-                  required
-                  value={formData.lineId.toString()}
-                  onValueChange={(value) => setFormData({ ...formData, lineId: parseInt(value) })}
-                >
-                  <SelectTrigger><SelectValue placeholder={t('subscription.selectLine')} /></SelectTrigger>
-                  <SelectContent>
-                    {lines.map((line) => (
-                      <SelectItem key={line.id} value={line.id.toString()}>{line.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="lineId"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <Select
+                        onValueChange={(val) => field.onChange(parseInt(val))}
+                        value={field.value ? field.value.toString() : ''}
+                      >
+                        <SelectTrigger error={errors.lineId?.message}>
+                          <SelectValue placeholder={t('subscription.selectLine')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {lines.map((line) => (
+                            <SelectItem key={line.id} value={line.id.toString()}>{line.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <ValidationError message={errors.lineId?.message || ''} />
+                    </div>
+                  )}
+                />
               </div>
 
-              {/* Start Date */}
               <div className="space-y-2">
                 <Label htmlFor="startDate">{t('subscription.startDate')} *</Label>
                 <Input
                   id="startDate"
                   type="date"
-                  required
-                  value={formData.startDate}
-                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  {...register('startDate')}
+                  error={errors.startDate?.message}
                 />
               </div>
 
-              {/* End Date (Only in Edit Mode) */}
               {isEdit && (
                 <div className="space-y-2">
                   <Label htmlFor="endDate">{t('subscription.endDate')}</Label>
                   <Input
                     id="endDate"
                     type="date"
-                    value={formData.endDate}
-                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                    {...register('endDate')}
+                    error={errors.endDate?.message}
                   />
                 </div>
               )}
 
-              {/* IsActive Switch */}
               <div className="flex items-center space-x-4 rounded-md border p-4 col-span-full md:col-span-1">
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-medium leading-none">{t('subscription.status')}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {formData.isActive ? t('subscription.active') : t('subscription.inactive')}
-                  </p>
+                  <Controller
+                    name="isActive"
+                    control={control}
+                    render={({ field }) => (
+                      <p className="text-sm text-muted-foreground">
+                        {field.value ? t('subscription.active') : t('subscription.inactive')}
+                      </p>
+                    )}
+                  />
                 </div>
-                <Switch
-                  checked={formData.isActive}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                <Controller
+                  name="isActive"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
             </div>

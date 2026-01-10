@@ -151,7 +151,8 @@
     "type": "نوع الموقف",
     "noStops": "لم يتم إنشاء أي مواقف بعد.",
     "errors": {
-      "lineRequired": "يرجى اختيار خط لهذا الموقف."
+      "lineRequired": "يرجى اختيار خط لهذا الموقف.",
+      "terminusAlreadyExists": "هذا الخط يحتوي بالفعل على موقف نهائي ({{line}})."
     },
     "placeholders": {
       "selectLine": "اختر خطًا"
@@ -181,7 +182,8 @@
     "noEndDate": "فعال",
     "noSubscriptions": "لم يتم إنشاء أي اشتراكات بعد.",
     "errors": {
-      "allFieldsRequired": "يرجى اختيار موظف وخط."
+      "allFieldsRequired": "يرجى اختيار موظف وخط.",
+      "capacityFull": "عذراً، الحافلة لهذا الخط ممتلئة. السعة القصوى هي {{capacity}} ركاب."
     },
     "placeholders": {
       "selectEmployee": "اختر موظفًا",

@@ -17,8 +17,8 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & { error?: string }
+>(({ className, children, error, ...props }, ref) => {
   // 1. Get the i18n instance to check the language direction
   const { i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
@@ -31,6 +31,8 @@ const SelectTrigger = React.forwardRef<
         "flex h-10 w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
         // 2. Explicitly set text alignment
         isRtl ? 'text-right' : 'text-left',
+        // 3. Error state
+        error ? 'border-destructive' : 'focus:border-primary',
         className
       )}
       {...props}

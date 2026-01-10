@@ -153,7 +153,8 @@
     "type": "Stop Type",
     "noStops": "No stops have been created yet.",
     "errors": {
-      "lineRequired": "Please select a line for this stop."
+      "lineRequired": "Please select a line for this stop.",
+      "terminusAlreadyExists": "This line already has a terminus stop ({{line}})."
     },
     "placeholders": {
       "selectLine": "Select a line"
@@ -183,7 +184,8 @@
     "noEndDate": "Active",
     "noSubscriptions": "No subscriptions have been created yet.",
     "errors": {
-      "allFieldsRequired": "Please select an employee and a line."
+      "allFieldsRequired": "Please select an employee and a line.",
+      "capacityFull": "Sorry, the bus for this line is full. Maximum capacity is {{capacity}} passengers."
     },
     "placeholders": {
       "selectEmployee": "Select an employee",
