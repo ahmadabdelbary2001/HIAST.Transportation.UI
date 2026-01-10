@@ -74,7 +74,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           className={cn(
             "flex-1 overflow-auto transition-all duration-300 bg-theme-primary",
             // Only apply margin when sidebar is actually visible and expanded
-            !sidebarCollapsed && (sidebarOpen ? "md:ml-64" : "md:ml-0")
+            !sidebarCollapsed && (sidebarOpen ? "md:ms-64" : "md:ms-0")
           )}
         >
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

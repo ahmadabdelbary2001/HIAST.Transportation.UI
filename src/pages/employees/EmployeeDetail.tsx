@@ -58,7 +58,7 @@ export default function EmployeeDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.EMPLOYEES)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -77,7 +77,7 @@ export default function EmployeeDetail() {
         </div>
         <Button asChild>
           <Link to={`/employees/${employee.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="me-2 h-4 w-4" />
             {t('common.actions.edit')}
           </Link>
         </Button>
@@ -139,9 +139,9 @@ export default function EmployeeDetail() {
                     className="mt-1 text-base"
                   >
                     {employee.isSubscriptionActive ? (
-                      <CheckCircle className="mr-2 h-4 w-4" />
+                      <CheckCircle className="me-2 h-4 w-4" />
                     ) : (
-                      <XCircle className="mr-2 h-4 w-4" />
+                      <XCircle className="me-2 h-4 w-4" />
                     )}
                     {employee.isSubscriptionActive ? t('subscription.active') : t('subscription.inactive')}
                   </Badge>
@@ -160,13 +160,13 @@ export default function EmployeeDetail() {
                 <div className="flex flex-wrap items-center gap-2">
                   <Button asChild variant="outline" size="sm">
                     <Link to={`/lines/${employee.subscribedLineId}`}>
-                      <Eye className="mr-2 h-4 w-4" />
+                      <Eye className="me-2 h-4 w-4" />
                       {t('employee.actions.viewLine')}
                     </Link>
                   </Button>
                   <Button asChild variant="outline" size="sm">
                     <Link to={`/subscriptions/${employee.lineSubscriptionId}/edit`}>
-                      <Pencil className="mr-2 h-4 w-4" />
+                      <Pencil className="me-2 h-4 w-4" />
                       {t('employee.actions.editSubscription')}
                     </Link>
                   </Button>
@@ -178,7 +178,7 @@ export default function EmployeeDetail() {
                 <p className="text-muted-foreground mb-4">{t('employee.noSubscription')}</p>
                 <Button asChild>
                   <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
-                    <PlusCircle className="mr-2 h-4 w-4" />
+                    <PlusCircle className="me-2 h-4 w-4" />
                     {t('employee.actions.createSubscription')}
                   </Link>
                 </Button>

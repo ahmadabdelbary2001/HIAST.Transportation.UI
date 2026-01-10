@@ -257,7 +257,7 @@ export default function SubscriptionForm() {
                 </div>
               )}
 
-              <div className="flex items-center space-x-4 rounded-md border p-4 col-span-full md:col-span-1">
+              <div className="flex items-center gap-4 rounded-md border p-4 col-span-full md:col-span-1">
                 <div className="flex-1 space-y-1">
                   <p className="text-sm font-medium leading-none">{t('subscription.status')}</p>
                   <Controller

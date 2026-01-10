@@ -70,7 +70,7 @@ export default function LineDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.LINES)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -89,7 +89,7 @@ export default function LineDetail() {
         </div>
         <Button asChild>
           <Link to={`/lines/${line.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="me-2 h-4 w-4" />
             {t('common.actions.edit')}
           </Link>
         </Button>
@@ -183,7 +183,7 @@ export default function LineDetail() {
               <CardTitle>{t('line.subscribers')}</CardTitle>
               <Button asChild size="sm">
                 <Link to={`/subscriptions/create?lineId=${line.id}`}>
-                  <PlusCircle className="mr-2 h-4 w-4" />
+                  <PlusCircle className="me-2 h-4 w-4" />
                   {/* --- Use the new, more specific translation key --- */}
                   {t('line.addSubscriber')}
                 </Link>
@@ -212,7 +212,7 @@ export default function LineDetail() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="default" className="hidden sm:flex">
-                      <CheckCircle className="mr-2 h-4 w-4" />
+                      <CheckCircle className="me-2 h-4 w-4" />
                       {t('subscription.active')}
                     </Badge>
                     <Button asChild variant="ghost" size="icon">
@@ -244,7 +244,7 @@ export default function LineDetail() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="destructive" className="hidden sm:flex">
-                      <XCircle className="mr-2 h-4 w-4" />
+                      <XCircle className="me-2 h-4 w-4" />
                       {t('subscription.inactive')}
                     </Badge>
                     <Button asChild variant="ghost" size="icon">

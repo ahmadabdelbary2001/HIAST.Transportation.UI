@@ -94,7 +94,38 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // RTL Support Plugin - Adds logical property utilities
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
+      const newUtilities: Record<string, Record<string, string>> = {};
+      
+      // Margin logical properties
+      for (let i = 0; i <= 96; i += 0.5) {
+        const key = i.toString().replace('.', '_');
+        newUtilities[`.ms-${key}`] = { 'margin-inline-start': `${i * 0.25}rem` };
+        newUtilities[`.me-${key}`] = { 'margin-inline-end': `${i * 0.25}rem` };
+      }
+      
+      // Padding logical properties
+      for (let i = 0; i <= 96; i += 0.5) {
+        const key = i.toString().replace('.', '_');
+        newUtilities[`.ps-${key}`] = { 'padding-inline-start': `${i * 0.25}rem` };
+        newUtilities[`.pe-${key}`] = { 'padding-inline-end': `${i * 0.25}rem` };
+      }
+      
+      // Position logical properties
+      newUtilities['.start-0'] = { 'inset-inline-start': '0' };
+      newUtilities['.end-0'] = { 'inset-inline-end': '0' };
+      newUtilities['.start-auto'] = { 'inset-inline-start': 'auto' };
+      newUtilities['.end-auto'] = { 'inset-inline-end': 'auto' };
+      
+      // Text alignment
+      newUtilities['.text-start'] = { 'text-align': 'start' };
+      newUtilities['.text-end'] = { 'text-align': 'end' };
+      
+      addUtilities(newUtilities);
+    },
+  ],
 };
 
 export default config;

@@ -1,7 +1,6 @@
 // src/components/organisms/DataTable.tsx
 
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'; // Your existing table components
 import { cn } from '@/lib/utils';
 
@@ -20,15 +19,9 @@ interface DataTableProps<T> {
 }
 
 export function DataTable<T extends { id: React.Key }>({ columns, data, rowClassName }: DataTableProps<T>) {
-  const { i18n } = useTranslation();
-  const isRtl = i18n.dir() === 'rtl';
-
-  // This function determines the correct alignment class based on language and column type
+  // Determine alignment based on column type - logical properties handle RTL automatically
   const getHeaderAlignment = (isActionColumn?: boolean) => {
-    if (isActionColumn) {
-      return isRtl ? 'text-left' : 'text-right'; // Actions are opposite to text direction
-    }
-    return isRtl ? 'text-right' : 'text-left'; // Data columns follow text direction
+    return isActionColumn ? 'text-end' : 'text-start';
   };
 
   return (

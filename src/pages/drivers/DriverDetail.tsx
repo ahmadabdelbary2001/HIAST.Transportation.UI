@@ -53,7 +53,7 @@ export default function DriverDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.DRIVERS)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -72,7 +72,7 @@ export default function DriverDetail() {
         </div>
         <Button asChild>
           <Link to={`/drivers/${driver.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="me-2 h-4 w-4" />
             {t('common.actions.edit')}
           </Link>
         </Button>

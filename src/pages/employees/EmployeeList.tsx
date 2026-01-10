@@ -143,7 +143,7 @@ export default function EmployeeList() {
         <PageTitle>{t('employee.list')}</PageTitle>
         <Button asChild>
           <Link to={ROUTES.EMPLOYEE_CREATE}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('employee.create')}
           </Link>
         </Button>
@@ -172,7 +172,7 @@ export default function EmployeeList() {
         
         {(searchTerm || departmentFilter !== 'all') && (
             <Button variant="ghost" onClick={() => { setSearchTerm(''); setDepartmentFilter('all'); }}>
-                <X className="mr-2 h-4 w-4" />
+                <X className="me-2 h-4 w-4" />
                 {t('common.clearFilters')}
             </Button>
         )}

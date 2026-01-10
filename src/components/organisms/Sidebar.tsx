@@ -54,9 +54,13 @@ export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarPro
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed left-0 top-0 z-40 h-screen border-r transition-all duration-300 md:sticky md:translate-x-0 md:shadow-xl',
+          'fixed start-0 top-0 z-40 h-screen border-e transition-all duration-300 md:sticky md:shadow-xl',
           'bg-[var(--theme-sidebar-bg)] border-[var(--theme-sidebar-border)]',
-          isOpen ? 'translate-x-0 w-64' : '-translate-x-full md:w-20'
+          isOpen ? 'w-64' : 'md:w-20',
+          // RTL-aware transforms
+          isOpen 
+            ? '[html[dir="ltr"]_&]:translate-x-0 [html[dir="rtl"]_&]:translate-x-0'
+            : '[html[dir="ltr"]_&]:-translate-x-full [html[dir="rtl"]_&]:translate-x-full md:translate-x-0'
         )}
       >
         <div className="flex h-full flex-col">
@@ -118,13 +122,13 @@ export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarPro
                     
                     {/* Active indicator dot */}
                     {isActive && (
-                      <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-green-400 ring-2 ring-[var(--theme-sidebar-active)]" />
+                      <div className="absolute -top-1 -end-1 h-2 w-2 rounded-full bg-green-400 ring-2 ring-[var(--theme-sidebar-active)]" />
                     )}
                   </div>
                   
                   {/* Label - only show when sidebar is expanded */}
                   {shouldShowSidebar && (
-                    <span className="truncate font-medium transition-all duration-300 ml-2">
+                    <span className="truncate font-medium transition-all duration-300 ms-2">
                       {item.label}
                     </span>
                   )}

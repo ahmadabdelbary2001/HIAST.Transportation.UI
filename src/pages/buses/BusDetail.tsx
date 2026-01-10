@@ -50,7 +50,7 @@ export default function BusDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.BUSES)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -69,7 +69,7 @@ export default function BusDetail() {
         </div>
         <Button asChild>
           <Link to={`/buses/${bus.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="me-2 h-4 w-4" />
             {t('common.actions.edit')}
           </Link>
         </Button>

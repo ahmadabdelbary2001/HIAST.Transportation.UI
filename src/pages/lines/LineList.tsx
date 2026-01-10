@@ -127,7 +127,7 @@ export default function LineList() {
         <PageTitle>{t('line.list')}</PageTitle>
         <Button asChild>
           <Link to={ROUTES.LINE_CREATE}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('line.create')}
           </Link>
         </Button>
@@ -143,7 +143,7 @@ export default function LineList() {
         />
         {searchTerm && (
           <Button variant="ghost" onClick={() => setSearchTerm('')}>
-            <X className="mr-2 h-4 w-4" />
+            <X className="me-2 h-4 w-4" />
             {t('common.clearFilters')}
           </Button>
         )}

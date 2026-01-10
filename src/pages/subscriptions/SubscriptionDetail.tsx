@@ -67,7 +67,7 @@ export default function SubscriptionDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.SUBSCRIPTIONS)}>
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -86,7 +86,7 @@ export default function SubscriptionDetail() {
         </div>
         <Button asChild>
           <Link to={`/subscriptions/${subscription.id}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
+            <Edit className="me-2 h-4 w-4" />
             {t('common.actions.edit')}
           </Link>
         </Button>
@@ -107,9 +107,9 @@ export default function SubscriptionDetail() {
                 className="mt-1 text-base"
               >
                 {subscription.isActive ? (
-                  <CheckCircle className="mr-2 h-4 w-4" />
+                  <CheckCircle className="me-2 h-4 w-4" />
                 ) : (
-                  <XCircle className="mr-2 h-4 w-4" />
+                  <XCircle className="me-2 h-4 w-4" />
                 )}
                 {subscription.isActive ? t('subscription.active') : t('subscription.inactive')}
               </Badge>
