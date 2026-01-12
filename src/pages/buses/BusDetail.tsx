@@ -65,8 +65,15 @@ export default function BusDetail() {
             <p className="text-sm font-medium text-muted-foreground mb-2">{t('bus.status')}</p>
             <StatusBadge status={bus.status} type="bus" />
           </div>
+        </CardContent>
+      </Card>
 
-          {bus.lineId && (
+      {bus.lineId && (
+        <Card>
+          <CardHeader>
+             <CardTitle>{t('driver.assignmentDetails')}</CardTitle>
+          </CardHeader>
+          <CardContent>
              <DetailField
                label={t('line.name')}
                value={
@@ -79,11 +86,16 @@ export default function BusDetail() {
                  </Button>
                }
              />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
-      <AuditInfoCard createdAt={bus.createdAt} updatedAt={bus.updatedAt} />
+      <AuditInfoCard 
+        createdAt={bus.createdAt} 
+        updatedAt={bus.updatedAt} 
+        createdBy={bus.createdBy} 
+        updatedBy={bus.updatedBy} 
+      />
     </div>
   );
 }
