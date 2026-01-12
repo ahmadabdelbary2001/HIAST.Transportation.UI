@@ -1,70 +1,54 @@
 // src/pages/buses/BusList.tsx
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Eye, Edit, Trash2 } from 'lucide-react';
-import { PageTitle } from '@/components/atoms/PageTitle';
-import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
-import { EmptyState } from '@/components/atoms/EmptyState';
-import { ErrorMessage } from '@/components/atoms/ErrorMessage';
-import { StatusBadge } from '@/components/atoms/StatusBadge';
+import { Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable'; // Import the new component
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { ListLayout } from '@/components/templates/ListLayout';
+import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
+import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { useListPage } from '@/hooks/useListPage';
 import { busApiService } from '@/services/busApiService';
 import type { Bus } from '@/types';
+import { BusStatus } from '@/types/enums';
 import { ROUTES } from '@/lib/constants';
-import { toast } from 'sonner';
+import { type ColumnDefinition } from '@/components/organisms/DataTable';
+import { StatusBadge } from '@/components/atoms/StatusBadge';
 
 export default function BusList() {
   const { t } = useTranslation();
-  const [buses, setBuses] = useState<Bus[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const loadBuses = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await busApiService.getAll();
-      setBuses(data);
-    } catch (err) {
-      setError(t('common.messages.error'));
-      console.error('Error loading buses:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const {
+    filteredItems: filteredBuses,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    filterValue: statusFilter,
+    setFilterValue: setStatusFilter,
+    deleteId,
+    setDeleteId,
+    loadItems,
+    handleDelete,
+    clearFilters,
+    hasFilters,
+  } = useListPage<Bus>({
+    searchFields: ['licensePlate', 'capacity'],
+    filterField: 'status',
+    entityName: 'bus',
+    getAll: busApiService.getAll,
+    deleteItem: busApiService.delete,
+  });
 
   useEffect(() => {
-    loadBuses();
-  }, [loadBuses]);
+    loadItems();
+  }, [loadItems]);
 
-  const handleDelete = async () => {
-    if (!deleteId) return;
-
-    try {
-      await busApiService.delete(deleteId);
-      toast.success(t('common.messages.deleteSuccess'));
-      loadBuses();
-    } catch (err) {
-      toast.error(t('common.messages.error'));
-      console.error('Error deleting bus:', err);
-    } finally {
-      setDeleteId(null);
-    }
-  };
+  const statusFilterOptions = Object.values(BusStatus).map((status) => ({
+    value: status,
+    label: t(`bus.statuses.${status}`),
+  }));
 
   const columns: ColumnDefinition<Bus>[] = [
     { key: 'licensePlate', header: t('bus.licensePlate') },
@@ -73,11 +57,6 @@ export default function BusList() {
       key: 'status',
       header: t('bus.status'),
       cell: (bus) => <StatusBadge status={bus.status} type="bus" />,
-    },
-    {
-      key: 'createdAt',
-      header: t('common.createdAt'),
-      cell: (bus) => (bus.createdAt ? new Date(bus.createdAt).toLocaleDateString() : '-'),
     },
     {
       key: 'actions',
@@ -112,40 +91,33 @@ export default function BusList() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageTitle>{t('bus.list')}</PageTitle>
-        <Button asChild>
-          <Link to={ROUTES.BUS_CREATE}>
-            <Plus className="me-2 h-4 w-4" />
-            {t('bus.create')}
-          </Link>
-        </Button>
-      </div>
-
-      {buses.length === 0 ? (
-        <EmptyState
-          title={t('common.messages.noData')}
-          description={t('bus.noBuses')}
-          actionLabel={t('bus.create')}
-          onAction={() => (window.location.href = ROUTES.BUS_CREATE)}
-        />
-      ) : (
-        <DataTable columns={columns} data={buses} />
-      )}
-
-      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('common.actions.delete')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common.messages.confirmDeleteBus')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('common.actions.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>{t('common.actions.delete')}</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    <ListLayout
+      title={t('bus.list')}
+      createRoute={ROUTES.BUS_CREATE}
+      searchPlaceholder={t('bus.searchPlaceholder')}
+      noDataTitle={t('common.messages.noData')}
+      noDataDescription={t('bus.noBuses')}
+      noResultsTitle={t('common.messages.noResults')}
+      deleteTitle={t('common.actions.delete')}
+      deleteDescription={t('common.messages.confirmDeleteBus')}
+      items={[]}
+      filteredItems={filteredBuses}
+      loading={loading}
+      error={error}
+      columns={columns}
+      searchTerm={searchTerm}
+      onSearchChange={setSearchTerm}
+      filterValue={statusFilter}
+      onFilterChange={setStatusFilter}
+      filterOptions={statusFilterOptions}
+      onClearFilters={clearFilters}
+      hasFilters={hasFilters}
+      showFilter={true}
+      filterPlaceholder={t('bus.filterByStatus')}
+      deleteId={deleteId}
+      onDeleteClose={() => setDeleteId(null)}
+      onDeleteConfirm={() => deleteId && handleDelete(deleteId)}
+      countLabel={t('bus.buses')}
+    />
   );
 }

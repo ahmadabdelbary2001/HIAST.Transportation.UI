@@ -1,90 +1,92 @@
 // src/pages/subscriptions/SubscriptionList.tsx
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2, Eye } from 'lucide-react';
-import { PageTitle } from '@/components/atoms/PageTitle';
-import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
-import { EmptyState } from '@/components/atoms/EmptyState';
-import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { ListLayout } from '@/components/templates/ListLayout';
+import { useListPage } from '@/hooks/useListPage';
+import { type ColumnDefinition } from '@/components/organisms/DataTable';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import type { LineSubscriptionListDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
-import { toast } from 'sonner';
 
 export default function SubscriptionList() {
   const { t } = useTranslation();
-  const [subscriptions, setSubscriptions] = useState<LineSubscriptionListDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const loadSubscriptions = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await lineSubscriptionApiService.getAll();
-      setSubscriptions(data);
-    } catch (err) {
-      setError(t('common.messages.error'));
-      console.error('Error loading subscriptions:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const {
+    filteredItems: filteredSubscriptions,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    filterValue: statusFilter,
+    setFilterValue: setStatusFilter,
+    deleteId,
+    setDeleteId,
+    loadItems,
+    handleDelete,
+    clearFilters,
+    hasFilters,
+  } = useListPage<LineSubscriptionListDto>({
+    searchFields: ['employeeName', 'lineName'],
+    filterField: 'isActive',
+    entityName: 'subscription',
+    getAll: lineSubscriptionApiService.getAll,
+    deleteItem: lineSubscriptionApiService.delete,
+  });
 
   useEffect(() => {
-    loadSubscriptions();
-  }, [loadSubscriptions]);
+    loadItems();
+  }, [loadItems]);
 
-  const handleDelete = async () => {
-    if (!deleteId) return;
-    try {
-      await lineSubscriptionApiService.delete(deleteId);
-      toast.success(t('common.messages.deleteSuccess'));
-      loadSubscriptions();
-    } catch (err) {
-      toast.error(t('common.messages.error'));
-      console.error('Error deleting subscription:', err);
-    } finally {
-      setDeleteId(null);
-    }
-  };
+  const statusFilterOptions = [
+    { value: 'true', label: t('subscription.active') },
+    { value: 'false', label: t('subscription.inactive') },
+  ];
 
   const columns: ColumnDefinition<LineSubscriptionListDto>[] = [
-    { key: 'employeeName', header: t('subscription.employeeName') },
-    { key: 'lineName', header: t('subscription.lineName') },
+    {
+      key: 'employeeName',
+      header: t('subscription.employee'),
+      cell: (item) => <span className="font-medium">{item.employeeName}</span>,
+    },
+    {
+      key: 'lineName',
+      header: t('subscription.line'),
+      cell: (item) => item.lineName,
+    },
     {
       key: 'isActive',
       header: t('subscription.status'),
-      cell: (sub) => (
-        <Badge variant={sub.isActive ? 'default' : 'destructive'}>
-          {sub.isActive ? t('subscription.active') : t('subscription.inactive')}
-        </Badge>
+      cell: (item) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+          item.isActive
+            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+        }`}>
+          {item.isActive ? t('subscription.active') : t('subscription.inactive')}
+        </span>
       ),
     },
     {
       key: 'actions',
       header: t('common.actions.actions'),
       isAction: true,
-      cell: (sub) => (
+      cell: (item) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/subscriptions/${sub.id}`}>
+            <Link to={`/subscriptions/${item.id}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/subscriptions/${sub.id}/edit`}>
+            <Link to={`/subscriptions/${item.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteId(sub.id)}>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -92,45 +94,34 @@ export default function SubscriptionList() {
     },
   ];
 
-  if (loading) return <LoadingSpinner text={t('common.messages.loadingData')} />;
-  if (error) return <ErrorMessage message={error} />;
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageTitle>{t('subscription.list')}</PageTitle>
-        <Button asChild>
-          <Link to={ROUTES.SUBSCRIPTION_CREATE}>
-            <Plus className="me-2 h-4 w-4" />
-            {t('subscription.create')}
-          </Link>
-        </Button>
-      </div>
-
-      {subscriptions.length === 0 ? (
-        <EmptyState title={t('common.messages.noData')} description={t('subscription.noSubscriptions')} />
-      ) : (
-        <DataTable
-          columns={columns}
-          data={subscriptions}
-          rowClassName={(subscription) => 
-            !subscription.isActive ? 'bg-muted/50 opacity-70' : ''
-          }
-        />
-      )}
-
-      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('common.messages.confirmDeleteTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common.messages.confirmDeleteSubscription')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteId(null)}>{t('common.actions.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>{t('common.actions.delete')}</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    <ListLayout
+      title={t('subscription.list')}
+      createRoute={ROUTES.SUBSCRIPTION_CREATE}
+      searchPlaceholder={t('subscription.searchPlaceholder')}
+      noDataTitle={t('common.messages.noData')}
+      noDataDescription={t('subscription.noSubscriptions')}
+      noResultsTitle={t('common.messages.noResults')}
+      deleteTitle={t('common.messages.confirmDelete')}
+      deleteDescription={t('subscription.confirmDelete')}
+      items={[]}
+      filteredItems={filteredSubscriptions}
+      loading={loading}
+      error={error}
+      columns={columns}
+      searchTerm={searchTerm}
+      onSearchChange={setSearchTerm}
+      filterValue={statusFilter}
+      onFilterChange={setStatusFilter}
+      filterOptions={statusFilterOptions}
+      onClearFilters={clearFilters}
+      hasFilters={hasFilters}
+      showFilter={true}
+      filterPlaceholder={t('subscription.filterByStatus')}
+      deleteId={deleteId}
+      onDeleteClose={() => setDeleteId(null)}
+      onDeleteConfirm={() => deleteId && handleDelete(deleteId)}
+      countLabel={t('subscription.subscriptions')}
+    />
   );
 }

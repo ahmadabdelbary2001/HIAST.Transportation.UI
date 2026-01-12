@@ -1,60 +1,53 @@
 // src/pages/stops/StopList.tsx
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2 } from 'lucide-react';
-import { PageTitle } from '@/components/atoms/PageTitle';
-import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
-import { EmptyState } from '@/components/atoms/EmptyState';
-import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DataTable, type ColumnDefinition } from '@/components/organisms/DataTable';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { ListLayout } from '@/components/templates/ListLayout';
+import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
+import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { useListPage } from '@/hooks/useListPage';
 import { stopApiService } from '@/services/stopApiService';
 import type { StopListDto } from '@/types';
 import { StopType } from '@/types/enums';
 import { ROUTES } from '@/lib/constants';
-import { toast } from 'sonner';
+import { type ColumnDefinition } from '@/components/organisms/DataTable';
 
 export default function StopList() {
   const { t } = useTranslation();
-  const [stops, setStops] = useState<StopListDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const loadStops = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await stopApiService.getAll();
-      setStops(data);
-    } catch (err) {
-      setError(t('common.messages.error'));
-      console.error('Error loading stops:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const {
+    filteredItems: filteredStops,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    filterValue: typeFilter,
+    setFilterValue: setTypeFilter,
+    deleteId,
+    setDeleteId,
+    loadItems,
+    handleDelete,
+    clearFilters,
+    hasFilters,
+  } = useListPage<StopListDto>({
+    searchFields: ['address', 'lineName', 'sequenceOrder'],
+    filterField: 'stopType',
+    entityName: 'stop',
+    getAll: stopApiService.getAll,
+    deleteItem: stopApiService.delete,
+  });
 
   useEffect(() => {
-    loadStops();
-  }, [loadStops]);
+    loadItems();
+  }, [loadItems]);
 
-  const handleDelete = async () => {
-    if (!deleteId) return;
-    try {
-      await stopApiService.delete(deleteId);
-      toast.success(t('common.messages.deleteSuccess'));
-      loadStops();
-    } catch (err) {
-      toast.error(t('common.messages.error'));
-      console.error('Error deleting stop:', err);
-    } finally {
-      setDeleteId(null);
-    }
-  };
+  const typeFilterOptions = [
+    { value: StopType.Intermediate.toString(), label: t('stop.types.intermediate') },
+    { value: StopType.Terminus.toString(), label: t('stop.types.terminus') },
+  ];
 
   const columns: ColumnDefinition<StopListDto>[] = [
     { key: 'address', header: t('stop.address') },
@@ -88,35 +81,33 @@ export default function StopList() {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageTitle>{t('stop.list')}</PageTitle>
-        <Button asChild>
-          <Link to={ROUTES.STOP_CREATE}>
-            <Plus className="me-2 h-4 w-4" />
-            {t('stop.create')}
-          </Link>
-        </Button>
-      </div>
-
-      {stops.length === 0 ? (
-        <EmptyState title={t('common.messages.noData')} description={t('stop.noStops')} />
-      ) : (
-        <DataTable columns={columns} data={stops} />
-      )}
-
-      <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('common.messages.confirmDeleteTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('common.messages.confirmDeleteStop')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteId(null)}>{t('common.actions.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>{t('common.actions.delete')}</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+    <ListLayout
+      title={t('stop.list')}
+      createRoute={ROUTES.STOP_CREATE}
+      searchPlaceholder={t('stop.searchPlaceholder')}
+      noDataTitle={t('common.messages.noData')}
+      noDataDescription={t('stop.noStops')}
+      noResultsTitle={t('common.messages.noResults')}
+      deleteTitle={t('common.messages.confirmDeleteTitle')}
+      deleteDescription={t('common.messages.confirmDeleteStop')}
+      items={[]}
+      filteredItems={filteredStops}
+      loading={loading}
+      error={error}
+      columns={columns}
+      searchTerm={searchTerm}
+      onSearchChange={setSearchTerm}
+      filterValue={typeFilter}
+      onFilterChange={setTypeFilter}
+      filterOptions={typeFilterOptions}
+      onClearFilters={clearFilters}
+      hasFilters={hasFilters}
+      showFilter={true}
+      filterPlaceholder={t('stop.filterByType')}
+      deleteId={deleteId}
+      onDeleteClose={() => setDeleteId(null)}
+      onDeleteConfirm={() => deleteId && handleDelete(deleteId)}
+      countLabel={t('stop.stops')}
+    />
   );
 }

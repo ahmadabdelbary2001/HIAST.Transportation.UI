@@ -39,6 +39,7 @@
     "editEmployee": "تعديل بيانات الموظف",
     "searchPlaceholder": "ابحث بالاسم أو الرقم الذاتي...",
     "noEmployees": "لم يتم إضافة أي موظفين بعد.",
+    "employees": "موظفين",
     "confirmDelete": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف سجل الموظف بشكل دائم.",
     "personalInfo": "المعلومات الشخصية",
     "subscriptionDetails": "تفاصيل الاشتراك",
@@ -101,6 +102,7 @@
     "viewLineDetails": "عرض تفاصيل الخط",
     "viewBusDetails": "عرض تفاصيل الحافلة",
     "noDrivers": "لم يتم إضافة أي سائقين بعد.",
+    "drivers": "سائقين",
     "searchPlaceholder": "ابحث بالاسم أو برقم السائق..."
   },
   "bus": {
@@ -116,6 +118,9 @@
     "status": "الحالة",
     "noBuses": "لا توجد حافلات",
     "selectStatus": "اختر حالة",
+    "buses": "حافلات",
+    "searchPlaceholder": "ابحث بلوحة الرخصة أو السعة...",
+    "filterByStatus": "تصفية حسب الحالة",
     "statuses": {
       "Available": "متاح",
       "InService": "قيد الخدمة",
@@ -136,6 +141,8 @@
     "bus": "الحافلة",
     "noLines": "لم يتم إنشاء أي خطوط بعد.",
     "addSubscriber": "إضافة مشترك",
+    "lines": "خطوط",
+    "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف...",
     "errors": {
       "allFieldsRequired": "يرجى اختيار مشرف وسائق وحافلة."
     },
@@ -150,15 +157,16 @@
     "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد.",
     "stop": "محطة",
     "activeSubscribers": "فعالون",
-    "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف...",
     "viewStopDetails": "عرض تفاصيل الموقف"
   },
-  "supervisor": {
+    "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",
     "noAssignments": "لا توجد حاليًا أي خطوط معينة لأي مشرفين.",
     "lineName": "اسم الخط",
     "supervisorName": "اسم المشرف",
-    "employeeNumber": "الرقم الذاتي"
+    "employeeNumber": "الرقم الذاتي",
+    "assignments": "تعيينات",
+    "searchPlaceholder": "ابحث بالاسم أو رقم الموظف أو اسم الخط..."
   },
   "stop": {
     "list": "المواقف",
@@ -170,6 +178,9 @@
     "sequence": "ترتيب التسلسل",
     "type": "نوع الموقف",
     "noStops": "لم يتم إنشاء أي مواقف بعد.",
+    "stops": "مواقف",
+    "searchPlaceholder": "ابحث بالعنوان أو اسم الخط أو رقم التسلسل...",
+    "filterByType": "تصفية حسب النوع",
     "errors": {
       "lineRequired": "يرجى اختيار خط لهذا الموقف.",
       "terminusAlreadyExists": "هذا الخط يحتوي بالفعل على موقف نهائي ({{line}})."
@@ -201,6 +212,9 @@
     "endDate": "تاريخ الانتهاء",
     "noEndDate": "فعال",
     "noSubscriptions": "لم يتم إنشاء أي اشتراكات بعد.",
+    "subscriptions": "اشتراكات",
+    "searchPlaceholder": "ابحث باسم الموظف أو اسم الخط...",
+    "filterByStatus": "تصفية حسب الحالة",
     "errors": {
       "allFieldsRequired": "يرجى اختيار موظف وخط.",
       "capacityFull": "عذراً، الحافلة لهذا الخط ممتلئة. السعة القصوى هي {{capacity}} ركاب."
@@ -215,6 +229,8 @@
     "auditInfo": "معلومات التدقيق",
     "all": "الكل",
     "clearFilters": "مسح الفلاتر",
+    "search": "بحث",
+    "searchAndFilter": "البحث والتصفية",
     "actions": {
       "create": "إنشاء",
       "edit": "تعديل",

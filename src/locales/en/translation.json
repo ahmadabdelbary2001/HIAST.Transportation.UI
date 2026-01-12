@@ -39,6 +39,7 @@
     "editEmployee": "Edit Employee",
     "searchPlaceholder": "Search by name or employee number...",
     "noEmployees": "No employees have been added yet.",
+    "employees": "Employees",
     "confirmDelete": "This action cannot be undone. This will permanently delete the employee's record.",
     "personalInfo": "Personal Information",
     "subscriptionDetails": "Subscription Details",
@@ -102,6 +103,7 @@
     "viewBusDetails": "View Bus Details",
 
     "noDrivers": "No drivers have been added yet.",
+    "drivers": "Drivers",
     "searchPlaceholder": "Search by name or driver number..."
   },
   "line": {
@@ -117,6 +119,8 @@
     "bus": "Bus",
     "noLines": "No lines have been created yet.",
     "addSubscriber": "Add Subscriber",
+    "lines": "Lines",
+    "searchPlaceholder": "Search by name, description, or supervisor name...",
     "errors": {
       "allFieldsRequired": "Please select a supervisor, driver, and bus."
     },
@@ -131,7 +135,6 @@
     "noSubscribers": "There are no employees subscribed to this line yet.",
     "stop": "Stop",
     "activeSubscribers": "Active",
-    "searchPlaceholder": "Search by name, description, or supervisor...",
     "viewStopDetails": "View stop details"
   },
   "bus": {
@@ -147,6 +150,9 @@
     "status": "Status",
     "noBuses": "No buses found",
     "selectStatus": "Select a status",
+    "buses": "Buses",
+    "searchPlaceholder": "Search by license plate or capacity...",
+    "filterByStatus": "Filter by Status",
     "statuses": {
       "Available": "Available",
       "InService": "In Service",
@@ -159,7 +165,9 @@
     "noAssignments": "There are currently no lines assigned to any supervisors.",
     "lineName": "Line Name",
     "supervisorName": "Supervisor Name",
-    "employeeNumber": "Employee Number"
+    "employeeNumber": "Employee Number",
+    "assignments": "Assignments",
+    "searchPlaceholder": "Search by name, employee number, or line name..."
   },
   "stop": {
     "list": "Stops",
@@ -171,6 +179,9 @@
     "sequence": "Sequence Order",
     "type": "Stop Type",
     "noStops": "No stops have been created yet.",
+    "stops": "Stops",
+    "searchPlaceholder": "Search by address, line name, or sequence...",
+    "filterByType": "Filter by Type",
     "errors": {
       "lineRequired": "Please select a line for this stop.",
       "terminusAlreadyExists": "This line already has a terminus stop ({{line}})."
@@ -202,6 +213,9 @@
     "endDate": "End Date",
     "noEndDate": "Active",
     "noSubscriptions": "No subscriptions have been created yet.",
+    "subscriptions": "Subscriptions",
+    "searchPlaceholder": "Search by employee name or line name...",
+    "filterByStatus": "Filter by Status",
     "errors": {
       "allFieldsRequired": "Please select an employee and a line.",
       "capacityFull": "Sorry, the bus for this line is full. Maximum capacity is {{capacity}} passengers."
@@ -216,6 +230,8 @@
     "auditInfo": "Audit Information",
     "all": "All",
     "clearFilters": "Clear Filters",
+    "search": "Search",
+    "searchAndFilter": "Search and Filter",
     "actions": {
       "create": "Create",
       "edit": "Edit",
