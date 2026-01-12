@@ -1,58 +1,40 @@
 // src/pages/lines/LineDetail.tsx
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
-  ArrowLeft, Edit, Users, CheckCircle, XCircle,
+  Users, CheckCircle, XCircle,
   UserCog, UserSquare, Bus, MapPin, Pencil, PlusCircle 
 } from 'lucide-react';
-import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { DetailHeader } from '@/components/atoms/DetailHeader';
+import { DetailField } from '@/components/atoms/DetailField';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { lineApiService } from '@/services/lineApiService';
+import { useDetailPage } from '@/hooks/useDetailPage';
 import type { Line } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { Separator } from '@/components/ui/separator';
 
 export default function LineDetail() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [line, setLine] = useState<Line | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadLine = useCallback(async (lineId: number) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await lineApiService.getById(lineId);
-      setLine(data);
-    } catch (err) {
-      setError(t('common.messages.error'));
-      console.error('Error loading line:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
-
-  useEffect(() => {
-    if (id) {
-      loadLine(parseInt(id));
-    }
-  }, [id, loadLine]);
+  const { data: line, loading, error, navigate } = useDetailPage<Line>({
+    fetchFn: lineApiService.getById,
+    listRoute: ROUTES.LINES,
+  });
 
   const { activeSubscribers, inactiveSubscribers } = useMemo(() => {
     if (!line?.subscriptions) {
       return { activeSubscribers: [], inactiveSubscribers: [] };
     }
+    const subscriptions = line.subscriptions;
     const active: Line['subscriptions'] = [];
     const inactive: Line['subscriptions'] = [];
-    line.subscriptions.forEach(sub => {
+    subscriptions.forEach(sub => {
       if (sub.isActive) {
         active.push(sub);
       } else {
@@ -70,7 +52,6 @@ export default function LineDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.LINES)}>
-          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -80,20 +61,11 @@ export default function LineDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(ROUTES.LINES)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <PageTitle>{t('line.detail')}</PageTitle>
-        </div>
-        <Button asChild>
-          <Link to={`/lines/${line.id}/edit`}>
-            <Edit className="me-2 h-4 w-4" />
-            {t('common.actions.edit')}
-          </Link>
-        </Button>
-      </div>
+      <DetailHeader
+        title={t('line.detail')}
+        backRoute={ROUTES.LINES}
+        editRoute={`/lines/${line.id}/edit`}
+      />
 
       <Card>
         <CardHeader>
@@ -103,38 +75,38 @@ export default function LineDetail() {
           )}
         </CardHeader>
         <CardContent className="grid gap-y-6 gap-x-4 md:grid-cols-3">
-          {/* Supervisor Info */}
-          <div className="flex items-start gap-3">
-            <UserCog className="h-5 w-5 flex-shrink-0 text-muted-foreground mt-1" />
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('line.supervisor')}</p>
+          <DetailField
+            label={t('line.supervisor')}
+            value={
               <Link to={`/employees/${line.supervisorId}`} className="font-semibold text-primary hover:underline">
                 {line.supervisorName}
               </Link>
-            </div>
-          </div>
+            }
+            icon={UserCog}
+            className="items-start"
+          />
 
-          {/* Driver Info */}
-          <div className="flex items-start gap-3">
-            <UserSquare className="h-5 w-5 flex-shrink-0 text-muted-foreground mt-1" />
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('line.driver')}</p>
+          <DetailField
+            label={t('line.driver')}
+            value={
               <Link to={`/drivers/${line.driverId}`} className="font-semibold text-primary hover:underline">
                 {line.driverName}
               </Link>
-            </div>
-          </div>
+            }
+            icon={UserSquare}
+            className="items-start"
+          />
 
-          {/* Bus Info */}
-          <div className="flex items-start gap-3">
-            <Bus className="h-5 w-5 flex-shrink-0 text-muted-foreground mt-1" />
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('line.bus')}</p>
+          <DetailField
+            label={t('line.bus')}
+            value={
               <Link to={`/buses/${line.busId}`} className="font-semibold text-primary hover:underline">
                 {line.busLicensePlate}
               </Link>
-            </div>
-          </div>
+            }
+            icon={Bus}
+            className="items-start"
+          />
         </CardContent>
       </Card>
 

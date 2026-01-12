@@ -1,54 +1,27 @@
 // src/pages/employees/EmployeeDetail.tsx
 
-import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
-    ArrowLeft, Edit, Eye, Phone, Mail, Building, 
-    Route, Pencil, PlusCircle, Clock, CheckCircle, XCircle 
-} from 'lucide-react';
-import { PageTitle } from '@/components/atoms/PageTitle';
+import { Link } from 'react-router-dom';
+import { Phone, Mail, Building, Route, Pencil, PlusCircle, CheckCircle, XCircle } from 'lucide-react';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
+import { DetailHeader } from '@/components/atoms/DetailHeader';
+import { DetailField } from '@/components/atoms/DetailField';
+import { AuditInfoCard } from '@/components/atoms/AuditInfoCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { employeeApiService } from '@/services/employeeApiService';
+import { useDetailPage } from '@/hooks/useDetailPage';
 import type { EmployeeDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
 
 export default function EmployeeDetail() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [employee, setEmployee] = useState<EmployeeDto | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadEmployee = useCallback(async (employeeId: number) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await employeeApiService.getById(employeeId);
-      setEmployee(data);
-    } catch (err) {
-      setError(t('common.messages.error'));
-      console.error('Error loading employee:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
-
-  useEffect(() => {
-    if (id) {
-      loadEmployee(parseInt(id));
-    }
-  }, [id, loadEmployee]);
-
-  const formatDate = (dateString?: string | Date) => {
-    if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString();
-  };
+  const { data: employee, loading, error, navigate } = useDetailPage<EmployeeDto>({
+    fetchFn: employeeApiService.getById,
+    listRoute: ROUTES.EMPLOYEES,
+  });
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -58,7 +31,6 @@ export default function EmployeeDetail() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate(ROUTES.EMPLOYEES)}>
-          <ArrowLeft className="me-2 h-4 w-4" />
           {t('common.actions.back')}
         </Button>
         <ErrorMessage message={error || t('common.messages.noData')} />
@@ -68,146 +40,111 @@ export default function EmployeeDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(ROUTES.EMPLOYEES)}>
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <PageTitle>{t('employee.detail')}</PageTitle>
-        </div>
-        <Button asChild>
-          <Link to={`/employees/${employee.id}/edit`}>
-            <Edit className="me-2 h-4 w-4" />
-            {t('common.actions.edit')}
-          </Link>
-        </Button>
-      </div>
+      <DetailHeader
+        title={t('employee.detail')}
+        backRoute={ROUTES.EMPLOYEES}
+        editRoute={`/employees/${employee.id}/edit`}
+      />
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Personal Info Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('employee.personalInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('employee.fullName')}</p>
-              <p className="text-lg font-semibold">
-                {employee.firstName} {employee.lastName}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">{t('employee.employeeNumber')}</p>
-              <p className="text-lg">{employee.employeeNumber}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-muted-foreground" />
+      <Card>
+        <CardHeader>
+          <CardTitle>{employee.firstName} {employee.lastName}</CardTitle>
+          <p className="text-sm text-muted-foreground pt-1">
+            {t('employee.employeeNumber')}: {employee.employeeNumber}
+          </p>
+        </CardHeader>
+        <CardContent className="grid gap-y-6 gap-x-4 md:grid-cols-3">
+          <DetailField
+            label={t('employee.email')}
+            value={
               <a href={`mailto:${employee.email}`} className="text-primary hover:underline">
                 {employee.email}
               </a>
-            </div>
-            {employee.phoneNumber && (
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
+            }
+            icon={Mail}
+            className="items-start"
+          />
+
+          {employee.phoneNumber && (
+            <DetailField
+              label={t('employee.phoneNumber')}
+              value={
                 <a href={`tel:${employee.phoneNumber}`} className="text-primary hover:underline">
                   {employee.phoneNumber}
                 </a>
-              </div>
-            )}
-            {employee.department && (
-              <div className="flex items-center gap-2">
-                <Building className="h-4 w-4 text-muted-foreground" />
-                <span>{t(`employee.departments.${employee.department}`)}</span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              }
+              icon={Phone}
+              className="items-start"
+            />
+          )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('employee.subscriptionDetails')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {employee.lineSubscriptionId && employee.subscribedLineName ? (
-              // STATE 1: Employee IS subscribed
-              <div className="space-y-6">
-                {/* Subscription Status */}
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{t('subscription.status')}</p>
-                  <Badge
-                    variant={employee.isSubscriptionActive ? 'default' : 'destructive'}
-                    className="mt-1 text-base"
-                  >
-                    {employee.isSubscriptionActive ? (
-                      <CheckCircle className="me-2 h-4 w-4" />
-                    ) : (
-                      <XCircle className="me-2 h-4 w-4" />
-                    )}
-                    {employee.isSubscriptionActive ? t('subscription.active') : t('subscription.inactive')}
-                  </Badge>
-                </div>
+          {employee.department && (
+            <DetailField
+              label={t('employee.department')}
+              value={<span>{t(`employee.departments.${employee.department}`)}</span>}
+              icon={Building}
+              className="items-start"
+            />
+          )}
+        </CardContent>
+      </Card>
 
-                {/* Line Info */}
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{t('employee.subscribedLine')}</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <Route className="h-5 w-5 text-primary" />
-                    <p className="text-lg font-semibold">{employee.subscribedLineName}</p>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button asChild variant="outline" size="sm">
-                    <Link to={`/lines/${employee.subscribedLineId}`}>
-                      <Eye className="me-2 h-4 w-4" />
-                      {t('employee.actions.viewLine')}
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link to={`/subscriptions/${employee.lineSubscriptionId}/edit`}>
-                      <Pencil className="me-2 h-4 w-4" />
-                      {t('employee.actions.editSubscription')}
-                    </Link>
-                  </Button>
-                </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('employee.subscriptionDetails')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {employee.lineSubscriptionId && employee.subscribedLineName ? (
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">{t('subscription.status')}</p>
+                <Badge
+                  variant={employee.isSubscriptionActive ? 'default' : 'destructive'}
+                  className="mt-1 text-base"
+                >
+                  {employee.isSubscriptionActive ? (
+                    <CheckCircle className="me-2 h-4 w-4" />
+                  ) : (
+                    <XCircle className="me-2 h-4 w-4" />
+                  )}
+                  {employee.isSubscriptionActive ? t('subscription.active') : t('subscription.inactive')}
+                </Badge>
               </div>
-            ) : (
-              // STATE 2: Employee is NOT subscribed
-              <div className="text-center">
-                <p className="text-muted-foreground mb-4">{t('employee.noSubscription')}</p>
-                <Button asChild>
-                  <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
-                    <PlusCircle className="me-2 h-4 w-4" />
-                    {t('employee.actions.createSubscription')}
+
+              <DetailField
+                label={t('employee.subscribedLine')}
+                value={
+                  <Link to={`/lines/${employee.subscribedLineId}`} className="text-lg font-semibold text-primary hover:underline">
+                    {employee.subscribedLineName}
+                  </Link>
+                }
+                icon={Route}
+              />
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button asChild variant="outline" size="sm">
+                  <Link to={`/subscriptions/${employee.lineSubscriptionId}/edit`}>
+                    <Pencil className="me-2 h-4 w-4" />
+                    {t('employee.actions.editSubscription')}
                   </Link>
                 </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* --- Audit Info Card --- */}
-        <Card>
-            <CardHeader>
-            <CardTitle>{t('common.auditInfo')}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>{t('common.createdAt')}:</span>
-                <span className="font-medium text-foreground">{formatDate(employee.createdAt)}</span>
             </div>
-            {employee.updatedAt && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Clock className="h-4 w-4" />
-                <span>{t('common.updatedAt')}:</span>
-                <span className="font-medium text-foreground">{formatDate(employee.updatedAt)}</span>
-                </div>
-            )}
-            </CardContent>
-        </Card>
-      </div>
+          ) : (
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">{t('employee.noSubscription')}</p>
+              <Button asChild>
+                <Link to={`/subscriptions/create?employeeId=${employee.id}`}>
+                  <PlusCircle className="me-2 h-4 w-4" />
+                  {t('employee.actions.createSubscription')}
+                </Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <AuditInfoCard createdAt={employee.createdAt} updatedAt={employee.updatedAt} />
     </div>
   );
 }
