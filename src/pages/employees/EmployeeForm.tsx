@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { PageTitle } from '@/components/atoms/PageTitle';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { Button } from '@/components/ui/button';
@@ -11,11 +14,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ValidationError } from '@/components/atoms/ValidationError';
 import { employeeApiService } from '@/services/employeeApiService';
 import type { CreateEmployeeDto, UpdateEmployeeDto } from '@/types';
-import { Department } from '@/types/enums'; // Import the enum
+import { Department } from '@/types/enums';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
+import { ApiValidationError } from '@/services/apiHelper';
 
 export default function EmployeeForm() {
   const { t } = useTranslation();
@@ -25,13 +30,35 @@ export default function EmployeeForm() {
 
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  const [formData, setFormData] = useState<CreateEmployeeDto>({
-    employeeNumber: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    department: undefined,
+
+  // Define Validation Schema
+  const employeeSchema = z.object({
+    employeeNumber: z.string().min(1, t('common.validation.required')),
+    firstName: z.string().min(1, t('common.validation.required')),
+    lastName: z.string().min(1, t('common.validation.required')),
+    email: z.string().email(t('common.validation.email')),
+    phoneNumber: z.string().optional(),
+    department: z.nativeEnum(Department).optional(),
+  });
+
+  type EmployeeFormData = z.infer<typeof employeeSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<EmployeeFormData>({
+    resolver: zodResolver(employeeSchema),
+    defaultValues: {
+      employeeNumber: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+    },
   });
 
   const loadEmployee = useCallback(async (employeeId: number) => {
@@ -39,14 +66,14 @@ export default function EmployeeForm() {
       setFormLoading(true);
       const employee = await employeeApiService.getById(employeeId);
       if (employee) {
-        setFormData({
-          employeeNumber: employee.employeeNumber,
-          firstName: employee.firstName,
-          lastName: employee.lastName,
-          email: employee.email,
-          phoneNumber: employee.phoneNumber || '',
-          department: employee.department,
-        });
+        setValue('employeeNumber', employee.employeeNumber);
+        setValue('firstName', employee.firstName);
+        setValue('lastName', employee.lastName);
+        setValue('email', employee.email);
+        setValue('phoneNumber', employee.phoneNumber || '');
+        if (employee.department) {
+            setValue('department', employee.department);
+        }
       }
     } catch (err) {
       toast.error(t('common.messages.error'));
@@ -54,7 +81,7 @@ export default function EmployeeForm() {
     } finally {
       setFormLoading(false);
     }
-  }, [t]);
+  }, [t, setValue]);
 
   useEffect(() => {
     if (isEdit && id) {
@@ -62,25 +89,56 @@ export default function EmployeeForm() {
     }
   }, [id, isEdit, loadEmployee]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onFormSubmit = async (data: EmployeeFormData) => {
     setLoading(true);
-
     try {
+        // Validation Check
+        const allEmployees = await employeeApiService.getAll();
+        const duplicate = allEmployees.find(e => 
+            e.employeeNumber === data.employeeNumber &&
+            (!isEdit || e.id !== parseInt(id!))
+        );
+
+        if (duplicate) {
+            setError("employeeNumber", {
+                type: "manual",
+                message: t('common.validation.employeeNumberExists')
+            });
+            setLoading(false);
+            return;
+        }
+
       if (isEdit && id) {
         await employeeApiService.update({
-          ...formData,
+          ...data,
           id: parseInt(id),
         } as UpdateEmployeeDto);
         toast.success(t('common.messages.updateSuccess'));
       } else {
-        await employeeApiService.create(formData);
+        await employeeApiService.create(data as CreateEmployeeDto);
         toast.success(t('common.messages.createSuccess'));
       }
       navigate(ROUTES.EMPLOYEES);
-    } catch (err) {
-      toast.error(t('common.messages.error'));
-      console.error('Error saving employee:', err);
+    } catch (err: unknown) {
+        if (err instanceof ApiValidationError) {
+            Object.entries(err.errors).forEach(([key, messages]) => {
+                // Map backend field names (TitleCase) to frontend (camelCase)
+                const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
+                 // Check if field exists in form
+                if (['employeeNumber', 'firstName', 'lastName', 'email', 'phoneNumber', 'department'].includes(fieldName)) {
+                    setError(fieldName as keyof EmployeeFormData, {
+                        type: 'server',
+                        message: messages.join(', ')
+                    });
+                } else {
+                    toast.error(messages.join(', '));
+                }
+            });
+        } else {
+            const error = err as Error;
+            toast.error(error.message || t('common.messages.error'));
+            console.error('Error saving employee:', error);
+        }
     } finally {
       setLoading(false);
     }
@@ -104,15 +162,14 @@ export default function EmployeeForm() {
           <CardTitle>{isEdit ? t('employee.editEmployee') : t('employee.createNew')}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="employeeNumber">{t('employee.employeeNumber')} *</Label>
                 <Input
                   id="employeeNumber"
-                  required
-                  value={formData.employeeNumber}
-                  onChange={(e) => setFormData({ ...formData, employeeNumber: e.target.value })}
+                  {...register('employeeNumber')}
+                  error={errors.employeeNumber?.message}
                   placeholder="00000"
                   forceLtr
                 />
@@ -121,18 +178,16 @@ export default function EmployeeForm() {
                 <Label htmlFor="firstName">{t('employee.firstName')} *</Label>
                 <Input
                   id="firstName"
-                  required
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  {...register('firstName')}
+                  error={errors.firstName?.message}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">{t('employee.lastName')} *</Label>
                 <Input
                   id="lastName"
-                  required
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  {...register('lastName')}
+                  error={errors.lastName?.message}
                 />
               </div>
               <div className="space-y-2">
@@ -140,9 +195,8 @@ export default function EmployeeForm() {
                 <Input
                   id="email"
                   type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  {...register('email')}
+                  error={errors.email?.message}
                   placeholder="name@example.com"
                   forceLtr
                 />
@@ -151,29 +205,38 @@ export default function EmployeeForm() {
                 <Label htmlFor="phoneNumber">{t('employee.phoneNumber')}</Label>
                 <Input
                   id="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                  {...register('phoneNumber')}
+                  error={errors.phoneNumber?.message}
                   placeholder="+963 99 123 4567"
                   forceLtr
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="department">{t('employee.department')}</Label>
-                <Select
-                  value={formData.department}
-                  onValueChange={(value: Department) => setFormData({ ...formData, department: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('employee.selectDepartment')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(Department).map((dept) => (
-                      <SelectItem key={dept} value={dept}>
-                        {t(`employee.departments.${dept}`)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="department"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                        <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        >
+                        <SelectTrigger error={errors.department?.message}>
+                            <SelectValue placeholder={t('employee.selectDepartment')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {Object.values(Department).map((dept) => (
+                            <SelectItem key={dept} value={dept}>
+                                {t(`employee.departments.${dept}`)}
+                            </SelectItem>
+                            ))}
+                        </SelectContent>
+                        </Select>
+                        <ValidationError message={errors.department?.message || ''} />
+                    </div>
+                  )}
+                />
               </div>
             </div>
 

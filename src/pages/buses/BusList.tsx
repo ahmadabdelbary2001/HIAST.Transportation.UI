@@ -98,8 +98,8 @@ export default function BusList() {
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('bus.noBuses')}
       noResultsTitle={t('common.messages.noResults')}
-      deleteTitle={t('common.actions.delete')}
-      deleteDescription={t('common.messages.confirmDeleteBus')}
+      deleteTitle={t('common.messages.confirmDeleteTitle')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('bus.singular') })}
       items={[]}
       filteredItems={filteredBuses}
       loading={loading}

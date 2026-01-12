@@ -3,7 +3,6 @@
 export const BusStatus = {
   Available: 'Available',
   InService: 'InService',
-  UnderMaintenance: 'UnderMaintenance',
   OutOfService: 'OutOfService',
 } as const;
 
@@ -12,7 +11,6 @@ export type BusStatus = typeof BusStatus[keyof typeof BusStatus];
 export const busStatusInfo = [
   { value: BusStatus.Available, key: 'bus.statuses.Available' },
   { value: BusStatus.InService, key: 'bus.statuses.InService' },
-  { value: BusStatus.UnderMaintenance, key: 'bus.statuses.UnderMaintenance' },
   { value: BusStatus.OutOfService, key: 'bus.statuses.OutOfService' },
 ] as const;
 

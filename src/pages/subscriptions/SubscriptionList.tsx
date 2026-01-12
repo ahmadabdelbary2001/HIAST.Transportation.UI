@@ -102,8 +102,8 @@ export default function SubscriptionList() {
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('subscription.noSubscriptions')}
       noResultsTitle={t('common.messages.noResults')}
-      deleteTitle={t('common.messages.confirmDelete')}
-      deleteDescription={t('subscription.confirmDelete')}
+      deleteTitle={t('common.messages.confirmDeleteTitle')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('subscription.singular') })}
       items={[]}
       filteredItems={filteredSubscriptions}
       loading={loading}

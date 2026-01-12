@@ -19,8 +19,6 @@ export function StatusBadge({ status, type }: StatusBadgeProps) {
           return 'default';
         case BusStatus.InService:
           return 'secondary';
-        case BusStatus.UnderMaintenance:
-          return 'outline';
         case BusStatus.OutOfService:
           return 'destructive';
         default:

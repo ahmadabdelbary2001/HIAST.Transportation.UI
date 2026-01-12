@@ -82,8 +82,8 @@ export default function DriverList() {
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('driver.noDrivers')}
       noResultsTitle={t('common.messages.noResults')}
-      deleteTitle={t('common.actions.delete')}
-      deleteDescription={t('common.messages.confirmDeleteDriver')}
+      deleteTitle={t('common.messages.confirmDeleteTitle')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('driver.singular') })}
       items={[]}
       filteredItems={filteredDrivers}
       loading={loading}

@@ -89,7 +89,7 @@ export default function StopList() {
       noDataDescription={t('stop.noStops')}
       noResultsTitle={t('common.messages.noResults')}
       deleteTitle={t('common.messages.confirmDeleteTitle')}
-      deleteDescription={t('common.messages.confirmDeleteStop')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('stop.singular') })}
       items={[]}
       filteredItems={filteredStops}
       loading={loading}

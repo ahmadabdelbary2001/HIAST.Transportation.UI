@@ -36,7 +36,18 @@ export interface EmployeeListDto {
   hasSubscription?: boolean;
 }
 
-// ...
+export interface CreateEmployeeDto {
+  employeeNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  department?: Department;
+}
+
+export interface UpdateEmployeeDto extends CreateEmployeeDto {
+  id: number;
+}
 
 // Driver
 export interface Driver extends BaseEntity {

@@ -95,8 +95,8 @@ export default function EmployeeList() {
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('employee.noEmployees')}
       noResultsTitle={t('common.messages.noResults')}
-      deleteTitle={t('common.messages.confirmDelete')}
-      deleteDescription={t('employee.confirmDelete')}
+      deleteTitle={t('common.messages.confirmDeleteTitle')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('employee.singular') })}
       items={[]}
       filteredItems={filteredEmployees}
       loading={loading}

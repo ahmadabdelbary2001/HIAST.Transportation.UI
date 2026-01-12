@@ -89,7 +89,7 @@ export default function LineList() {
       noDataDescription={t('line.noLines')}
       noResultsTitle={t('common.messages.noResults')}
       deleteTitle={t('common.messages.confirmDeleteTitle')}
-      deleteDescription={t('common.messages.confirmDeleteLine')}
+      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('line.singular') })}
       items={[]}
       filteredItems={filteredLines}
       loading={loading}
