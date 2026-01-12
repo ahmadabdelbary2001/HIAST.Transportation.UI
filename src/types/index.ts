@@ -32,21 +32,11 @@ export interface EmployeeListDto {
   firstName: string;
   lastName: string;
   department?: Department;
+  isAssigned?: boolean;
+  hasSubscription?: boolean;
 }
 
-export interface CreateEmployeeDto {
-  employeeNumber: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string;
-  department?: Department;
-  isActive?: boolean;
-}
-
-export interface UpdateEmployeeDto extends CreateEmployeeDto {
-  id: number;
-}
+// ...
 
 // Driver
 export interface Driver extends BaseEntity {
@@ -57,6 +47,7 @@ export interface Driver extends BaseEntity {
   lineName?: string;
   busId?: number;
   busLicensePlate?: string;
+  isAssigned?: boolean;
 }
 
 export interface CreateDriverDto {
@@ -74,6 +65,8 @@ export interface Bus extends BaseEntity {
   licensePlate: string;
   capacity: number;
   status: BusStatus;
+  lineId?: number;
+  lineName?: string;
 }
 
 export interface CreateBusDto {

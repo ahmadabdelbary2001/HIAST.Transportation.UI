@@ -196,7 +196,9 @@ export default function SubscriptionForm() {
                           <SelectValue placeholder={t('subscription.selectEmployee')} />
                         </SelectTrigger>
                         <SelectContent>
-                          {employees.map((emp) => (
+                          {employees
+                            .filter(emp => (!emp.isAssigned && !emp.hasSubscription) || (isEdit && emp.id === employees.find(e => e.id === field.value)?.id))
+                            .map((emp) => (
                             <SelectItem key={emp.id} value={emp.id.toString()}>
                               {emp.firstName} {emp.lastName} ({emp.employeeNumber})
                             </SelectItem>

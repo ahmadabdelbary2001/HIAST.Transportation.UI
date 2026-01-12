@@ -73,7 +73,7 @@ export function SearchAndFilter({
                 <SelectValue placeholder={filterPlaceholder} className={`text-sm font-medium ${isRTL ? 'text-right' : 'text-left'}`} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all" className={isRTL ? 'text-right' : 'text-left'}>All</SelectItem>
+                <SelectItem value="all" className={isRTL ? 'text-right' : 'text-left'}>{t('common.all')}</SelectItem>
                 {filterOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value} className={isRTL ? 'text-right' : 'text-left'}>
                     {option.label}

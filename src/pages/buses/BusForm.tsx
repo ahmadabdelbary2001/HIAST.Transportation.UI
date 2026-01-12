@@ -147,17 +147,23 @@ export default function BusForm() {
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
+                        disabled={field.value === BusStatus.InService}
                       >
                         <SelectTrigger error={errors.status?.message}>
                           <SelectValue placeholder={t('bus.selectStatus')} />
                         </SelectTrigger>
-                        <SelectContent>
-                          {busStatusInfo.map((statusInfo) => (
-                            <SelectItem key={statusInfo.value} value={statusInfo.value}>
-                              {t(statusInfo.key)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
+                          <SelectContent>
+                            {busStatusInfo
+                              .filter(status => 
+                                status.value !== BusStatus.InService && // Hide 'In Service' as it's auto-managed
+                                status.value !== BusStatus.UnderMaintenance // Hide 'Under Maintenance' as it's obsolete
+                              )
+                              .map((statusInfo) => (
+                                <SelectItem key={statusInfo.value} value={statusInfo.value}>
+                                  {t(statusInfo.key)}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
                       </Select>
                       <ValidationError message={errors.status?.message || ''} />
                     </div>

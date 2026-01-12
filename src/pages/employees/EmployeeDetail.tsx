@@ -12,9 +12,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { employeeApiService } from '@/services/employeeApiService';
+import { lineApiService } from '@/services/lineApiService';
 import { useDetailPage } from '@/hooks/useDetailPage';
 import type { EmployeeDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
+import { useState, useEffect } from 'react';
 
 export default function EmployeeDetail() {
   const { t } = useTranslation();
@@ -22,6 +24,22 @@ export default function EmployeeDetail() {
     fetchFn: employeeApiService.getById,
     listRoute: ROUTES.EMPLOYEES,
   });
+
+  const [isSupervisor, setIsSupervisor] = useState(false);
+
+  useEffect(() => {
+    const checkSupervisor = async () => {
+      if (employee?.subscribedLineId) {
+        try {
+          const line = await lineApiService.getById(employee.subscribedLineId);
+          setIsSupervisor(line.supervisorId === employee.id);
+        } catch (error) {
+          console.error('Failed to fetch line details', error);
+        }
+      }
+    };
+    checkSupervisor();
+  }, [employee]);
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -89,9 +107,14 @@ export default function EmployeeDetail() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className={isSupervisor ? "border-primary/50 bg-primary/5" : ""}>
         <CardHeader>
-          <CardTitle>{t('employee.subscriptionDetails')}</CardTitle>
+          <div className="flex justify-between items-center">
+             <CardTitle className="flex items-center gap-2">
+                {t('employee.subscriptionDetails')}
+                {isSupervisor && <Badge variant="secondary">{t('line.supervisor')}</Badge>}
+             </CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
           {employee.lineSubscriptionId && employee.subscribedLineName ? (
@@ -112,7 +135,7 @@ export default function EmployeeDetail() {
               </div>
 
               <DetailField
-                label={t('employee.subscribedLine')}
+                label={isSupervisor ? t('line.supervisorOnLine') : t('employee.subscribedLine')}
                 value={
                   <Link to={`/lines/${employee.subscribedLineId}`} className="text-lg font-semibold text-primary hover:underline">
                     {employee.subscribedLineName}

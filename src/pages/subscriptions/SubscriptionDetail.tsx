@@ -12,9 +12,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
+import { lineApiService } from '@/services/lineApiService';
 import { useDetailPage } from '@/hooks/useDetailPage';
 import type { LineSubscription } from '@/types';
 import { ROUTES } from '@/lib/constants';
+import { useState, useEffect } from 'react';
 
 export default function SubscriptionDetail() {
   const { t } = useTranslation();
@@ -22,6 +24,22 @@ export default function SubscriptionDetail() {
     fetchFn: lineSubscriptionApiService.getById,
     listRoute: ROUTES.SUBSCRIPTIONS,
   });
+
+  const [isSupervisor, setIsSupervisor] = useState(false);
+
+  useEffect(() => {
+    const checkSupervisor = async () => {
+      if (subscription?.lineId && subscription?.employeeId) {
+        try {
+          const line = await lineApiService.getById(subscription.lineId);
+          setIsSupervisor(line.supervisorId === subscription.employeeId);
+        } catch (error) {
+          console.error('Failed to fetch line details', error);
+        }
+      }
+    };
+    checkSupervisor();
+  }, [subscription]);
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -46,12 +64,19 @@ export default function SubscriptionDetail() {
         editRoute={`/subscriptions/${subscription.id}/edit`}
       />
 
-      <Card>
+      <Card className={isSupervisor ? "border-primary/50 bg-primary/5" : ""}>
         <CardHeader>
-          <CardTitle>{subscription.employeeName}</CardTitle>
-          <p className="text-sm text-muted-foreground pt-1">
-            {t('subscription.line')}: {subscription.lineName}
-          </p>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                {subscription.employeeName}
+                {isSupervisor && <Badge variant="secondary">{t('line.supervisor')}</Badge>}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground pt-1">
+                {t('subscription.line')}: {subscription.lineName}
+              </p>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="grid gap-y-6 gap-x-4 md:grid-cols-3">
           <div>
@@ -70,11 +95,11 @@ export default function SubscriptionDetail() {
           </div>
 
           <DetailField
-            label={t('subscription.employee')}
+            label={isSupervisor ? t('line.supervisor') : t('subscription.employee')}
             value={
               <Link
                 to={`/employees/${subscription.employeeId}`}
-                className="text-primary hover:underline"
+                className="text-primary hover:underline font-medium"
               >
                 {subscription.employeeName}
               </Link>

@@ -157,7 +157,8 @@
     "noSubscribers": "لا يوجد موظفون مشتركون في هذا الخط بعد.",
     "stop": "محطة",
     "activeSubscribers": "فعالون",
-    "viewStopDetails": "عرض تفاصيل الموقف"
+    "viewStopDetails": "عرض تفاصيل الموقف",
+    "supervisorOnLine": "المشرف على الخط"
   },
     "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",

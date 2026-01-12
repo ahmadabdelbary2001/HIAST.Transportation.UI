@@ -145,7 +145,9 @@ export default function LineForm() {
                 <Select value={formData.supervisorId.toString()} onValueChange={(v) => setFormData({ ...formData, supervisorId: parseInt(v) })}>
                   <SelectTrigger><SelectValue placeholder={t('line.placeholders.selectSupervisor')} /></SelectTrigger>
                   <SelectContent>
-                    {supervisors.map(s => <SelectItem key={s.id} value={s.id.toString()}>{s.firstName} {s.lastName}</SelectItem>)}
+                    {supervisors
+                      .filter(s => !s.isAssigned || s.id === formData.supervisorId || (isEdit && s.id === formData.supervisorId))
+                      .map(s => <SelectItem key={s.id} value={s.id.toString()}>{s.firstName} {s.lastName}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -154,7 +156,9 @@ export default function LineForm() {
                 <Select value={formData.driverId.toString()} onValueChange={(v) => setFormData({ ...formData, driverId: parseInt(v) })}>
                   <SelectTrigger><SelectValue placeholder={t('line.placeholders.selectDriver')} /></SelectTrigger>
                   <SelectContent>
-                    {drivers.map(d => <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>)}
+                    {drivers
+                      .filter(d => !d.isAssigned || d.id === formData.driverId || (isEdit && d.id === formData.driverId)) // Show if not assigned OR (if editing) it's the current one
+                      .map(d => <SelectItem key={d.id} value={d.id.toString()}>{d.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -163,7 +167,9 @@ export default function LineForm() {
                 <Select value={formData.busId.toString()} onValueChange={(v) => setFormData({ ...formData, busId: parseInt(v) })}>
                   <SelectTrigger><SelectValue placeholder={t('line.placeholders.selectBus')} /></SelectTrigger>
                   <SelectContent>
-                    {buses.map(b => <SelectItem key={b.id} value={b.id.toString()}>{b.licensePlate}</SelectItem>)}
+                    {buses
+                      .filter(b => b.status === 'Available' || b.id === formData.busId)
+                      .map(b => <SelectItem key={b.id} value={b.id.toString()}>{b.licensePlate}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>

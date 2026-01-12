@@ -65,6 +65,21 @@ export default function BusDetail() {
             <p className="text-sm font-medium text-muted-foreground mb-2">{t('bus.status')}</p>
             <StatusBadge status={bus.status} type="bus" />
           </div>
+
+          {bus.lineId && (
+             <DetailField
+               label={t('line.name')}
+               value={
+                 <Button
+                   variant="link"
+                   className="p-0 h-auto text-lg font-semibold"
+                   onClick={() => navigate(`${ROUTES.LINES}/${bus.lineId}`)}
+                 >
+                   {bus.lineName}
+                 </Button>
+               }
+             />
+          )}
         </CardContent>
       </Card>
 

@@ -173,8 +173,40 @@ export default function LineDetail() {
             <p className="text-sm text-muted-foreground">{t('line.noSubscribers')}</p>
           ) : (
             <ul className="space-y-3">
-              {/* Render Active Subscribers */}
-              {activeSubscribers.map((sub) => (
+              {/* Render Supervisor if active */}
+              {activeSubscribers.filter(sub => sub.employeeId === line.supervisorId).map((sub) => (
+                <li key={sub.id} className="flex items-center justify-between p-3 rounded-md bg-primary/10 border border-primary/20 hover:bg-primary/20 mb-3">
+                  <div className="flex items-center gap-3">
+                     <div className="p-2 bg-background rounded-full">
+                        <UserCog className="h-4 w-4 text-primary" />
+                     </div>
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <Link to={`/employees/${sub.employeeId}`} className="font-semibold text-primary hover:underline">
+                            {sub.employeeName}
+                            </Link>
+                            <Badge variant="default" className="text-xs">{t('line.supervisor')}</Badge>
+                        </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button asChild variant="ghost" size="icon">
+                      <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
+                        <Pencil className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </li>
+              ))}
+
+               {activeSubscribers.some(sub => sub.employeeId === line.supervisorId) && activeSubscribers.length > 1 && (
+                  <li className="py-1">
+                     <Separator className="my-2"/>
+                  </li>
+               )}
+
+              {/* Render other Active Subscribers */}
+              {activeSubscribers.filter(sub => sub.employeeId !== line.supervisorId).map((sub) => (
                 <li key={sub.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
                   <div className="flex items-center gap-3">
                     <Users className="h-4 w-4 text-muted-foreground" />
