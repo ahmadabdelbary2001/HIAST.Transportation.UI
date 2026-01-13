@@ -188,11 +188,16 @@
     "filterByType": "Filter by Type",
     "errors": {
       "lineRequired": "Please select a line for this stop.",
-      "terminusAlreadyExists": "This line already has a terminus stop ({{line}})."
+      "terminusAlreadyExists": "This line already has a terminus stop ({{line}}).",
+      "noStops": "Please add at least one stop."
     },
     "placeholders": {
       "selectLine": "Select a line"
     },
+    "stopsOrder": "Stops Order",
+    "totalStops": "Total Stops",
+    "noStopsYet": "No stops added yet. Add your first stop below.",
+    "addNewStop": "Add New Stop",
     "types": {
       "intermediate": "Intermediate",
       "terminus": "Terminus"
@@ -242,6 +247,7 @@
       "edit": "Edit",
       "delete": "Delete",
       "save": "Save",
+      "add": "Add",
       "cancel": "Cancel",
       "confirm": "Confirm",
       "search": "Search",

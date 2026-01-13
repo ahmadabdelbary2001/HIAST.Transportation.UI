@@ -31,10 +31,16 @@ export const stopApiService = {
    * Creates a new stop.
    */
   create: async (stop: CreateStopDto): Promise<number> => {
+    // تحويل stopType من number إلى string للإرسال إلى الـ API
+    const payload = {
+      ...stop,
+      stopType: stop.stopType === 2 ? 'Terminus' : 'Intermediate'
+    };
+    
     const response = await handleResponse(await fetch('/api/Stop', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(stop),
+      body: JSON.stringify(payload),
     }));
     return response.json();
   },
@@ -43,15 +49,47 @@ export const stopApiService = {
    * Updates an existing stop.
    */
   update: async (stop: UpdateStopDto): Promise<void> => {
+    // تحويل stopType من number إلى string للإرسال إلى الـ API
+    const payload = {
+      ...stop,
+      stopType: stop.stopType === 2 ? 'Terminus' : 'Intermediate'
+    };
+    
     const response = await fetch(`/api/Stop/${stop.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(stop),
+      body: JSON.stringify(payload),
     });
     
     if (response.status !== 204) {
       const errorBody = await response.text();
       throw new Error(`Failed to update stop ${stop.id}: ${response.statusText}. Details: ${errorBody}`);
+    }
+  },
+
+  /**
+   * Reorders stops for a line.
+   */
+  reorderStops: async (lineId: number, stops: Array<{id: number, sequenceOrder: number, stopType: number}>): Promise<void> => {
+    // تحويل stopType من number إلى string للإرسال إلى الـ API
+    const payload = {
+      lineId,
+      stops: stops.map(stop => ({
+        id: stop.id,
+        sequenceOrder: stop.sequenceOrder,
+        stopType: stop.stopType === 2 ? 'Terminus' : 'Intermediate'
+      }))
+    };
+    
+    const response = await fetch('/api/Stop/reorder', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    
+    if (response.status !== 204) {
+      const errorBody = await response.text();
+      throw new Error(`Failed to reorder stops: ${response.statusText}. Details: ${errorBody}`);
     }
   },
 };

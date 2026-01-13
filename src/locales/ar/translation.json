@@ -188,11 +188,16 @@
     "filterByType": "تصفية حسب النوع",
     "errors": {
       "lineRequired": "يرجى اختيار خط لهذا الموقف.",
-      "terminusAlreadyExists": "هذا الخط يحتوي بالفعل على موقف نهائي ({{line}})."
+      "terminusAlreadyExists": "هذا الخط يحتوي بالفعل على موقف نهائي ({{line}}).",
+      "noStops": "يرجى إضافة موقف واحد على الأقل."
     },
     "placeholders": {
       "selectLine": "اختر خطًا"
     },
+    "stopsOrder": "ترتيب المواقف",
+    "totalStops": "إجمالي المواقف",
+    "noStopsYet": "لم تتم إضافة أي مواقف بعد. أضف موقفك الأول أدناه.",
+    "addNewStop": "إضافة موقف جديد",
     "types": {
       "intermediate": "موقف وسطي",
       "terminus": "موقف نهائي"
@@ -242,6 +247,7 @@
       "edit": "تعديل",
       "delete": "حذف",
       "save": "حفظ",
+      "add": "إضافة",
       "cancel": "إلغاء",
       "confirm": "تأكيد",
       "search": "بحث",
