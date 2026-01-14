@@ -9,7 +9,8 @@ import {
   Bus,
   Route,
   MapPin,
-  UserCheck,
+  ShieldCheck,
+  ClipboardList,
   X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,21 +27,23 @@ interface SidebarProps {
 export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const { isAdmin } = useAuth();
+  const { user } = useAuth();
 
   const allNavItems = [
     { icon: LayoutDashboard, label: t('nav.dashboard'), path: ROUTES.DASHBOARD, roles: ['Administrator', 'Employee'] },
     { icon: Users, label: t('nav.employees'), path: ROUTES.EMPLOYEES, roles: ['Administrator'] },
     { icon: UserCog, label: t('nav.drivers'), path: ROUTES.DRIVERS, roles: ['Administrator'] },
-    { icon: UserCheck, label: t('nav.supervisors'), path: ROUTES.SUPERVISORS, roles: ['Administrator'] },
+    { icon: ShieldCheck, label: t('nav.supervisors'), path: ROUTES.SUPERVISORS, roles: ['Administrator'] },
     { icon: Bus, label: t('nav.buses'), path: ROUTES.BUSES, roles: ['Administrator'] },
     { icon: Route, label: t('nav.lines'), path: ROUTES.LINES, roles: ['Administrator', 'Employee'] },
     { icon: MapPin, label: t('nav.stops'), path: ROUTES.STOPS, roles: ['Administrator', 'Employee'] },
-    { icon: UserCheck, label: t('nav.subscriptions'), path: ROUTES.SUBSCRIPTIONS, roles: ['Administrator'] },
+    { icon: ClipboardList, label: t('nav.subscriptions'), path: ROUTES.SUBSCRIPTIONS, roles: ['Administrator'] },
   ];
 
+  const userRoles = user?.roles || [];
+
   const navItems = allNavItems.filter(item => 
-    item.roles.includes('Administrator') ? isAdmin : item.roles.includes('Employee')
+    item.roles.some(role => userRoles.some(ur => ur.toLowerCase() === role.toLowerCase()))
   );
 
   // Determine the actual display state

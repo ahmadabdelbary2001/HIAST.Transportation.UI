@@ -322,7 +322,12 @@
   "confirmPassword": "Confirm Password",
   "signUp": "Sign Up",
   "auth": {
-    "username": "Username"
+    "username": "Username",
+    "errors": {
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "passwordTooWeak": "Password must contain uppercase letters, lowercase letters, and numbers",
+      "passwordsDoNotMatch": "Passwords do not match"
+    }
   },
   "alreadyHaveAccount": "Already have an account?",
   "registrationSuccess": "Account created successfully",

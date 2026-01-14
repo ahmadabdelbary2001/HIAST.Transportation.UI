@@ -6,7 +6,7 @@ import { ROUTES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
-import { User, Mail, Lock, Loader2, UserCircle, Hash, Building2 } from 'lucide-react';
+import { User, Mail, Lock, Loader2, UserCircle, Hash, Building2, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Header } from '@/components/organisms/Header';
@@ -31,10 +31,11 @@ const Register: React.FC = () => {
     email: '',
     userName: '',
     employeeNumber: '',
+    phoneNumber: '',
     department: undefined,
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,26 +49,22 @@ const Register: React.FC = () => {
     setFormData(prev => ({ ...prev, department: index }));
   };
 
-  const calculateStrength = (pass: string) => {
-    let s = 0;
-    if (pass.length >= 8) s++;
-    if (/[A-Z]/.test(pass)) s++;
-    if (/[a-z]/.test(pass)) s++;
-    if (/[0-9]/.test(pass)) s++;
-    if (/[^A-Za-z0-9]/.test(pass)) s++;
-    return s;
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (calculateStrength(formData.password) < 4) {
-      toast.error(t('passwordTooWeak'));
+    // Explicit checks matching backend Identity rules
+    if (formData.password.length < 8) {
+      toast.error(t('auth.errors.passwordTooShort'));
+      return;
+    }
+    if (!/[A-Z]/.test(formData.password) || !/[a-z]/.test(formData.password) || !/[0-9]/.test(formData.password)) {
+      toast.error(t('auth.errors.passwordTooWeak'));
       return;
     }
 
-    if (formData.password !== confirmPassword) {
-      toast.error(t('passwordsDoNotMatch'));
+    if (formData.password !== formData.confirmPassword) {
+      toast.error(t('auth.errors.passwordsDoNotMatch'));
       return;
     }
 
@@ -144,6 +141,23 @@ const Register: React.FC = () => {
               </div>
             </div>
 
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="email">{t('common.fields.email')}</Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="email@example.com"
+                  className="pl-10"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="employeeNumber">{t('employee.employeeNumber')}</Label>
               <div className="relative">
@@ -180,18 +194,16 @@ const Register: React.FC = () => {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="email">{t('common.fields.email')}</Label>
+              <Label htmlFor="phoneNumber">{t('employee.phoneNumber')}</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="email@example.com"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  placeholder="+963 000 000 000"
                   className="pl-10"
-                  value={formData.email}
+                  value={formData.phoneNumber}
                   onChange={handleChange}
-                  required
                 />
               </div>
             </div>
@@ -219,11 +231,12 @@ const Register: React.FC = () => {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   placeholder="••••••••"
                   className="pl-10"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   required
                 />
               </div>

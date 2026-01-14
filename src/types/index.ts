@@ -19,6 +19,7 @@ export interface EmployeeDto {
   employeeNumber: string;
   firstName: string;
   lastName: string;
+  fullName?: string;
   userName?: string;
   email: string;
   phoneNumber?: string;
@@ -40,8 +41,10 @@ export interface EmployeeListDto {
   employeeNumber: string;
   firstName: string;
   lastName: string;
+  fullName?: string;
   department?: Department;
   userName?: string;
+  phoneNumber?: string;
   
   isAssigned?: boolean;
   isSubscriptionActive?: boolean;

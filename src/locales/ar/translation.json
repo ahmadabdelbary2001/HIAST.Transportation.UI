@@ -322,7 +322,12 @@
   "confirmPassword": "تأكيد كلمة المرور",
   "signUp": "إنشاء الحساب",
   "auth": {
-    "username": "اسم المستخدم"
+    "username": "اسم المستخدم",
+    "errors": {
+      "passwordTooShort": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "passwordTooWeak": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وأحرف صغيرة وأرقام",
+      "passwordsDoNotMatch": "كلمات المرور غير متطابقة"
+    }
   },
   "alreadyHaveAccount": "لديك حساب بالفعل؟",
   "registrationSuccess": "تم إنشاء الحساب بنجاح",

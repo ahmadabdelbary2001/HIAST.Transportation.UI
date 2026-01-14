@@ -13,8 +13,10 @@ export interface RegisterRequest {
   email: string;
   userName: string;
   employeeNumber: string;
+  phoneNumber?: string;
   department?: number;
   password: string;
+  confirmPassword: string;
 }
 
 export const authApiService = {

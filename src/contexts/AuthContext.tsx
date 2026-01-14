@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
   };
 
-  const isAdmin = user?.roles.includes('Administrator') || false;
+  const isAdmin = user?.roles.some(r => r.toLowerCase() === 'administrator') || false;
 
   return (
     <AuthContext.Provider value={{ user, token, isAuthenticated: !!token, login, logout, isAdmin }}>
