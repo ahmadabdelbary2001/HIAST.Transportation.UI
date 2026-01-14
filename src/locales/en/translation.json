@@ -48,9 +48,6 @@
     "noSubscription": "This employee does not have an active subscription.",
     "employeeNumber": "Employee Number",
     "fullName": "Full Name",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
     "phoneNumber": "Phone Number",
     "department": "Department",
     "selectDepartment": "Select a department",
@@ -234,6 +231,14 @@
     "selectLine": "Select Line"
   },
   "common": {
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "emailOrUserName": "Email or Username",
+      "password": "Password",
+      "userName": "Username"
+    },
     "passengers": "Passengers",
     "createdAt": "Created At",
     "updatedAt": "Updated At",
@@ -302,5 +307,36 @@
     "close": "Close sidebar",
     "collapse": "Collapse sidebar",
     "expand": "Expand sidebar"
+  },
+  "login": "Login",
+  "loginSubtask": "Please enter your credentials to access the system",
+  "signIn": "Sign In",
+  "noAccount": "Don't have an account?",
+  "registerNow": "Register now",
+  "loginSuccess": "Logged in successfully",
+  "loginFailed": "Login failed, please check your credentials",
+  "register": "Register",
+  "registerSubtask": "Join us today for a better transportation experience",
+  "confirmPassword": "Confirm Password",
+  "signUp": "Sign Up",
+  "alreadyHaveAccount": "Already have an account?",
+  "registrationSuccess": "Account created successfully",
+  "registrationFailed": "Registration failed",
+  "passwordTooWeak": "Password is too weak. Please meet at least 4 requirements.",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "rememberMe": "Remember Me",
+  "passwordStrength": {
+    "label": "Password Strength",
+    "weak": "Weak",
+    "fair": "Fair",
+    "good": "Good",
+    "strong": "Strong",
+    "requirements": {
+      "length": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
+    }
   }
 }

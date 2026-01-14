@@ -5,6 +5,8 @@ export const LOCAL_STORAGE_KEYS = {
   DARK_MODE: '2af_work_dark_mode',
   LANGUAGE: '2af_work_language',
   SIDEBAR_COLLAPSED: '2af_work_sidebar_collapsed',
+  AUTH_TOKEN: 'hiast_transport_auth_token',
+  USER_DATA: 'hiast_transport_user_data',
 } as const;
 
 export const ROUTES = {
@@ -33,6 +35,8 @@ export const ROUTES = {
   SUBSCRIPTION_CREATE: '/subscriptions/create',
   SUBSCRIPTION_EDIT: '/subscriptions/:id/edit',
   SUPERVISORS: '/supervisors',
+  LOGIN: '/login',
+  REGISTER: '/register',
 };
 
 export const APP_CONFIG = {
@@ -60,4 +64,8 @@ export const API_ENDPOINTS = {
   SUBSCRIPTIONS: '/api/subscriptions',
   SUPERVISORS: '/api/supervisors',
   DASHBOARD: '/api/dashboard/stats',
+  AUTH: {
+    LOGIN: '/api/auth/login',
+    REGISTER: '/api/auth/register',
+  }
 };

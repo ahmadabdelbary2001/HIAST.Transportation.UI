@@ -1,12 +1,12 @@
 import type { Stop, StopListDto, CreateStopDto, UpdateStopDto } from '@/types/index';
-import { handleResponse } from './apiHelper';
+import { fetchWithAuth } from './apiHelper';
 
 export const stopApiService = {
   /**
    * Fetches a list of all stops.
    */
   getAll: async (): Promise<StopListDto[]> => {
-    const response = await handleResponse(await fetch('/api/Stop'));
+    const response = await fetchWithAuth('/api/Stop');
     return response.json();
   },
 
@@ -14,7 +14,7 @@ export const stopApiService = {
    * Fetches the detailed information for a single stop.
    */
   getById: async (id: number): Promise<Stop> => {
-    const response = await handleResponse(await fetch(`/api/Stop/${id}`));
+    const response = await fetchWithAuth(`/api/Stop/${id}`);
     return response.json();
   },
 
@@ -22,9 +22,9 @@ export const stopApiService = {
    * Deletes a stop by its ID.
    */
   delete: async (id: number): Promise<void> => {
-    await handleResponse(await fetch(`/api/Stop/${id}`, {
+    await fetchWithAuth(`/api/Stop/${id}`, {
       method: 'DELETE',
-    }));
+    });
   },
 
   /**
@@ -37,11 +37,11 @@ export const stopApiService = {
       stopType: stop.stopType === 2 ? 'Terminus' : 'Intermediate'
     };
     
-    const response = await handleResponse(await fetch('/api/Stop', {
+    const response = await fetchWithAuth('/api/Stop', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-    }));
+    });
     return response.json();
   },
 
@@ -55,7 +55,7 @@ export const stopApiService = {
       stopType: stop.stopType === 2 ? 'Terminus' : 'Intermediate'
     };
     
-    const response = await fetch(`/api/Stop/${stop.id}`, {
+    const response = await fetchWithAuth(`/api/Stop/${stop.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -81,7 +81,7 @@ export const stopApiService = {
       }))
     };
     
-    const response = await fetch('/api/Stop/reorder', {
+    const response = await fetchWithAuth('/api/Stop/reorder', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -93,3 +93,7 @@ export const stopApiService = {
     }
   },
 };
+
+
+
+

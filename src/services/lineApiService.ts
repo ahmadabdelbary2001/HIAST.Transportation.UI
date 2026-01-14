@@ -6,7 +6,7 @@ import type {
   CreateLineDto, 
   UpdateLineDto 
 } from '@/types/index';
-import { handleResponse } from './apiHelper';
+import { fetchWithAuth } from './apiHelper';
 
 export const lineApiService = {
   /**
@@ -14,7 +14,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.getAll
    */
   getAll: async (): Promise<LineListDto[]> => {
-    const response = await handleResponse(await fetch('/api/Line'));
+    const response = await fetchWithAuth('/api/Line');
     return response.json();
   },
 
@@ -23,7 +23,7 @@ export const lineApiService = {
    * Consistent with: driverApiService.getById
    */
   getById: async (id: number): Promise<Line> => {
-    const response = await handleResponse(await fetch(`/api/Line/${id}`));
+    const response = await fetchWithAuth(`/api/Line/${id}`);
     return response.json();
   },
 
@@ -32,9 +32,9 @@ export const lineApiService = {
    * Consistent with: driverApiService.delete
    */
   delete: async (id: number): Promise<void> => {
-    await handleResponse(await fetch(`/api/Line/${id}`, {
+    await fetchWithAuth(`/api/Line/${id}`, {
       method: 'DELETE',
-    }));
+    });
   },
 
   /**
@@ -42,11 +42,11 @@ export const lineApiService = {
    * Consistent with: driverApiService.create
    */
   create: async (line: CreateLineDto): Promise<number> => {
-    const response = await handleResponse(await fetch('/api/Line', {
+    const response = await fetchWithAuth('/api/Line', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(line),
-    }));
+    });
     
     // Explicit check for 201 Created status, matching the driver service
     if (response.status !== 201) {
@@ -61,8 +61,8 @@ export const lineApiService = {
    * Consistent with: driverApiService.update
    */
   update: async (line: UpdateLineDto): Promise<void> => {
-    // Does not use handleResponse, matching the driver service's update method
-    const response = await fetch(`/api/Line/${line.id}`, {
+    // Does not use fetchWithAuth, matching the driver service's update method
+    const response = await fetchWithAuth(`/api/Line/${line.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(line),
@@ -75,3 +75,7 @@ export const lineApiService = {
     }
   },
 };
+
+
+
+

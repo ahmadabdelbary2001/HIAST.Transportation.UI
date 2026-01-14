@@ -1,14 +1,14 @@
 // src/services/lineSubscriptionApiService.ts
 
 import type { LineSubscription, LineSubscriptionListDto, CreateLineSubscriptionDto, UpdateLineSubscriptionDto } from '@/types/index';
-import { handleResponse } from './apiHelper';
+import { fetchWithAuth } from './apiHelper';
 
 export const lineSubscriptionApiService = {
   /**
    * Fetches a list of all line subscriptions.
    */
   getAll: async (): Promise<LineSubscriptionListDto[]> => {
-    const response = await handleResponse(await fetch('/api/LineSubscription'));
+    const response = await fetchWithAuth('/api/LineSubscription');
     return response.json();
   },
 
@@ -16,7 +16,7 @@ export const lineSubscriptionApiService = {
    * Fetches the detailed information for a single subscription.
    */
   getById: async (id: number): Promise<LineSubscription> => {
-    const response = await handleResponse(await fetch(`/api/LineSubscription/${id}`));
+    const response = await fetchWithAuth(`/api/LineSubscription/${id}`);
     return response.json();
   },
 
@@ -24,20 +24,20 @@ export const lineSubscriptionApiService = {
    * Deletes a subscription by its ID.
    */
   delete: async (id: number): Promise<void> => {
-    await handleResponse(await fetch(`/api/LineSubscription/${id}`, {
+    await fetchWithAuth(`/api/LineSubscription/${id}`, {
       method: 'DELETE',
-    }));
+    });
   },
 
   /**
    * Creates a new line subscription.
    */
   create: async (subscription: CreateLineSubscriptionDto): Promise<number> => {
-    const response = await handleResponse(await fetch('/api/LineSubscription', {
+    const response = await fetchWithAuth('/api/LineSubscription', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(subscription),
-    }));
+    });
     return response.json();
   },
 
@@ -45,7 +45,7 @@ export const lineSubscriptionApiService = {
    * Updates an existing line subscription.
    */
   update: async (subscription: UpdateLineSubscriptionDto): Promise<void> => {
-    const response = await fetch(`/api/LineSubscription/${subscription.id}`, {
+    const response = await fetchWithAuth(`/api/LineSubscription/${subscription.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(subscription),
@@ -57,3 +57,7 @@ export const lineSubscriptionApiService = {
     }
   },
 };
+
+
+
+

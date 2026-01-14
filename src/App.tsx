@@ -1,11 +1,15 @@
 // src/App.tsx
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MainLayout } from '@/components/templates/MainLayout';
 import Dashboard from '@/pages/Index';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { AuthProvider } from '@/contexts/AuthContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { ROUTES } from '@/lib/constants';
+import Login from '@/pages/auth/Login';
+import Register from '@/pages/auth/Register';
 import DriverList from '@/pages/drivers/DriverList';
 import DriverForm from '@/pages/drivers/DriverForm';
 import DriverDetail from '@/pages/drivers/DriverDetail';
@@ -25,213 +29,274 @@ import SubscriptionList from './pages/subscriptions/SubscriptionList';
 import SubscriptionForm from './pages/subscriptions/SubscriptionForm';
 import SubscriptionDetail from './pages/subscriptions/SubscriptionDetail';
 import '@/i18n';
+
 const App = () => (
   <ThemeProvider>
     <LanguageProvider>
-      <BrowserRouter basename="/HIAST.Transportation.UI">
-        <Routes>
-          <Route
-            path={ROUTES.DASHBOARD}
-            element={
-              <MainLayout>
-                <Dashboard />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.EMPLOYEES}
-            element={
-              <MainLayout>
-                <EmployeeList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.EMPLOYEE_CREATE}
-            element={
-              <MainLayout>
-                <EmployeeForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.EMPLOYEE_EDIT}
-            element={
-              <MainLayout>
-                <EmployeeForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.EMPLOYEE_DETAIL}
-            element={
-              <MainLayout>
-                <EmployeeDetail />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.DRIVERS}
-            element={
-              <MainLayout>
-                <DriverList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.DRIVER_CREATE}
-            element={
-              <MainLayout>
-                <DriverForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.DRIVER_EDIT}
-            element={
-              <MainLayout>
-                <DriverForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.DRIVER_DETAIL}
-            element={
-              <MainLayout>
-                <DriverDetail />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.BUSES}
-            element={
-              <MainLayout>
-                <BusList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.BUS_CREATE}
-            element={
-              <MainLayout>
-                <BusForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.BUS_EDIT}
-            element={
-              <MainLayout>
-                <BusForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.BUS_DETAIL}
-            element={
-              <MainLayout>
-                <BusDetail />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.LINES}
-            element={
-              <MainLayout>
-                <LineList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.LINE_CREATE}
-            element={
-              <MainLayout>
-                <LineForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.LINE_EDIT}
-            element={
-              <MainLayout>
-                <LineForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.LINE_DETAIL}
-            element={
-              <MainLayout>
-                <LineDetail />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.STOPS}
-            element={
-              <MainLayout>
-                <StopList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.STOP_CREATE}
-            element={
-              <MainLayout>
-                <StopForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.STOP_EDIT}
-            element={
-              <MainLayout>
-                <StopForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.SUPERVISORS}
-            element={
-              <MainLayout>
-                <SupervisorReport />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.SUBSCRIPTIONS}
-            element={
-              <MainLayout>
-                <SubscriptionList />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.SUBSCRIPTION_CREATE}
-            element={
-              <MainLayout>
-                <SubscriptionForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.SUBSCRIPTION_EDIT}
-            element={
-              <MainLayout>
-                <SubscriptionForm />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={ROUTES.SUBSCRIPTION_DETAIL}
-            element={
-              <MainLayout>
-                <SubscriptionDetail />
-              </MainLayout>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter basename="/HIAST.Transportation.UI">
+          <Routes>
+            {/* Public Routes */}
+            <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTER} element={<Register />} />
+
+            {/* Protected Routes */}
+            <Route
+              path={ROUTES.DASHBOARD}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Dashboard />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMPLOYEES}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <EmployeeList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMPLOYEE_CREATE}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <EmployeeForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMPLOYEE_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <EmployeeForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMPLOYEE_DETAIL}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <EmployeeDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.DRIVERS}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <DriverList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.DRIVER_CREATE}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <DriverForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.DRIVER_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <DriverForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.DRIVER_DETAIL}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <DriverDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.BUSES}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <BusList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.BUS_CREATE}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <BusForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.BUS_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <BusForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.BUS_DETAIL}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <BusDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.LINES}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <LineList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.LINE_CREATE}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <LineForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.LINE_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <LineForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.LINE_DETAIL}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <LineDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.STOPS}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <StopList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.STOP_CREATE}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <StopForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.STOP_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <StopForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.SUPERVISORS}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SupervisorReport />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.SUBSCRIPTIONS}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SubscriptionList />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.SUBSCRIPTION_CREATE}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SubscriptionForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.SUBSCRIPTION_EDIT}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <SubscriptionForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.SUBSCRIPTION_DETAIL}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <SubscriptionDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </LanguageProvider>
   </ThemeProvider>
 );

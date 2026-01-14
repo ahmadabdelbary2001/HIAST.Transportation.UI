@@ -1,5 +1,5 @@
 import type { SupervisorLineDto } from '@/types/index';
-import { handleResponse } from './apiHelper';
+import { fetchWithAuth } from './apiHelper';
 
 export const supervisorApiService = {
   /**
@@ -7,7 +7,11 @@ export const supervisorApiService = {
    * Corresponds to: GET /api/Supervisor/LineAssignments
    */
   getLineAssignments: async (): Promise<SupervisorLineDto[]> => {
-    const response = await handleResponse(await fetch('/api/Supervisor/LineAssignments'));
+    const response = await fetchWithAuth('/api/Supervisor/LineAssignments');
     return response.json();
   },
 };
+
+
+
+

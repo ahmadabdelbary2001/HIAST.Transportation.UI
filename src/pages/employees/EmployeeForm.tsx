@@ -175,7 +175,7 @@ export default function EmployeeForm() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="firstName">{t('employee.firstName')} *</Label>
+                <Label htmlFor="firstName">{t('common.fields.firstName')} *</Label>
                 <Input
                   id="firstName"
                   {...register('firstName')}
@@ -183,7 +183,7 @@ export default function EmployeeForm() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">{t('employee.lastName')} *</Label>
+                <Label htmlFor="lastName">{t('common.fields.lastName')} *</Label>
                 <Input
                   id="lastName"
                   {...register('lastName')}
@@ -191,7 +191,7 @@ export default function EmployeeForm() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">{t('employee.email')} *</Label>
+                <Label htmlFor="email">{t('common.fields.email')} *</Label>
                 <Input
                   id="email"
                   type="email"

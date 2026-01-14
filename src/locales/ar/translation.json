@@ -48,9 +48,6 @@
     "noSubscription": "هذا الموظف ليس لديه اشتراك فعال.",
     "employeeNumber": "الرقم الذاتي",
     "fullName": "الاسم الكامل",
-    "firstName": "الاسم الأول",
-    "lastName": "اسم العائلة",
-    "email": "البريد الإلكتروني",
     "phoneNumber": "رقم الهاتف",
     "department": "القسم",
     "selectDepartment": "اختر قسمًا",
@@ -234,6 +231,14 @@
     "selectLine": "اختر خطاً"
   },
   "common": {
+    "fields": {
+      "firstName": "الاسم الأول",
+      "lastName": "الاسم الأخير",
+      "email": "البريد الإلكتروني",
+      "emailOrUserName": "البريد الإلكتروني أو اسم المستخدم",
+      "password": "كلمة المرور",
+      "userName": "اسم المستخدم"
+    },
     "passengers": "ركاب",
     "createdAt": "تاريخ الإنشاء",
     "updatedAt": "تاريخ التعديل",
@@ -302,5 +307,36 @@
     "close": "إغلاق الشريط الجانبي",
     "collapse": "طي الشريط الجانبي",
     "expand": "توسيع الشريط الجانبي"
+  },
+  "login": "تسجيل الدخول",
+  "loginSubtask": "الرجاء إدخال بياناتك للوصول إلى النظام",
+  "signIn": "تسجيل الدخول",
+  "noAccount": "ليس لديك حساب؟",
+  "registerNow": "سجل الآن",
+  "loginSuccess": "تم تسجيل الدخول بنجاح",
+  "loginFailed": "فشل تسجيل الدخول، يرجى التحقق من البيانات",
+  "register": "إنشاء حساب",
+  "registerSubtask": "انضم إلينا اليوم للحصول على تجربة نقل أفضل",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "signUp": "إنشاء الحساب",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "registrationSuccess": "تم إنشاء الحساب بنجاح",
+  "registrationFailed": "فشل إنشاء الحساب",
+  "passwordTooWeak": "كلمة المرور ضعيفة جداً. يرجى استيفاء 4 متطلبات على الأقل.",
+  "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+  "rememberMe": "تذكرني",
+  "passwordStrength": {
+    "label": "قوة كلمة المرور",
+    "weak": "ضعيفة",
+    "fair": "متوسطة",
+    "good": "جيدة",
+    "strong": "قوية",
+    "requirements": {
+      "length": "8 أحرف على الأقل",
+      "uppercase": "حرف كبير واحد",
+      "lowercase": "حرف صغير واحد",
+      "number": "رقم واحد",
+      "special": "رمز خاص واحد"
+    }
   }
 }

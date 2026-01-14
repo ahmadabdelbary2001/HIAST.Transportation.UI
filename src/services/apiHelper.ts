@@ -1,4 +1,6 @@
 // src/services/apiHelper.ts
+import { LOCAL_STORAGE_KEYS } from "@/lib/constants";
+
 export class ApiValidationError extends Error {
   errors: Record<string, string[]>;
 
@@ -9,7 +11,20 @@ export class ApiValidationError extends Error {
   }
 }
 
+const getAuthToken = () => {
+  return localStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN) || sessionStorage.getItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+};
+
 const handleResponse = async (response: Response) => {
+  if (response.status === 401) {
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    sessionStorage.removeItem(LOCAL_STORAGE_KEYS.AUTH_TOKEN);
+    sessionStorage.removeItem(LOCAL_STORAGE_KEYS.USER_DATA);
+    window.location.href = '/login'; // Force redirect to login on 401
+    throw new Error("Unauthorized");
+  }
+
   if (!response.ok) {
     let errorMessage = response.statusText;
     let validationErrors: Record<string, string[]> | null = null;
@@ -46,4 +61,16 @@ const handleResponse = async (response: Response) => {
   return response;
 };
 
-export { handleResponse };
+const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+  const token = getAuthToken();
+  
+  const headers = {
+    ...options.headers,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  const response = await fetch(url, { ...options, headers });
+  return handleResponse(response);
+};
+
+export { handleResponse, fetchWithAuth };
