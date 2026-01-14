@@ -70,16 +70,16 @@ export default function EmployeeList() {
       cell: (item) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/employees/${item.id}`}>
+            <Link to={item.id > 0 ? `/employees/${item.id}` : `/employees/detail/${item.userId}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link to={`/employees/${item.id}/edit`}>
+            <Link to={item.id > 0 ? `/employees/${item.id}/edit` : `/employees/detail/${item.userId}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id)}>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id || item.userId || null)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
@@ -111,9 +111,9 @@ export default function EmployeeList() {
       hasFilters={hasFilters}
       showFilter={true}
       filterPlaceholder={t('employee.filterByDepartment')}
-      deleteId={deleteId}
+      deleteId={deleteId as string | number | null}
       onDeleteClose={() => setDeleteId(null)}
-      onDeleteConfirm={() => deleteId && handleDelete(deleteId)}
+      onDeleteConfirm={() => deleteId && handleDelete(deleteId as string | number)}
       countLabel={t('employee.employees')}
     />
   );

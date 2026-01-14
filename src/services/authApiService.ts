@@ -12,6 +12,8 @@ export interface RegisterRequest {
   lastName: string;
   email: string;
   userName: string;
+  employeeNumber: string;
+  department?: number;
   password: string;
 }
 

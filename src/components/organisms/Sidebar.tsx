@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/lib/constants';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -25,17 +26,22 @@ interface SidebarProps {
 export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarProps) {
   const { t } = useTranslation();
   const location = useLocation();
+  const { isAdmin } = useAuth();
 
-  const navItems = [
-    { icon: LayoutDashboard, label: t('nav.dashboard'), path: ROUTES.DASHBOARD },
-    { icon: Users, label: t('nav.employees'), path: ROUTES.EMPLOYEES },
-    { icon: UserCog, label: t('nav.drivers'), path: ROUTES.DRIVERS },
-    { icon: UserCheck, label: t('nav.supervisors'), path: ROUTES.SUPERVISORS },
-    { icon: Bus, label: t('nav.buses'), path: ROUTES.BUSES },
-    { icon: Route, label: t('nav.lines'), path: ROUTES.LINES },
-    { icon: MapPin, label: t('nav.stops'), path: ROUTES.STOPS },
-    { icon: UserCheck, label: t('nav.subscriptions'), path: ROUTES.SUBSCRIPTIONS },
+  const allNavItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), path: ROUTES.DASHBOARD, roles: ['Administrator', 'Employee'] },
+    { icon: Users, label: t('nav.employees'), path: ROUTES.EMPLOYEES, roles: ['Administrator'] },
+    { icon: UserCog, label: t('nav.drivers'), path: ROUTES.DRIVERS, roles: ['Administrator'] },
+    { icon: UserCheck, label: t('nav.supervisors'), path: ROUTES.SUPERVISORS, roles: ['Administrator'] },
+    { icon: Bus, label: t('nav.buses'), path: ROUTES.BUSES, roles: ['Administrator'] },
+    { icon: Route, label: t('nav.lines'), path: ROUTES.LINES, roles: ['Administrator', 'Employee'] },
+    { icon: MapPin, label: t('nav.stops'), path: ROUTES.STOPS, roles: ['Administrator', 'Employee'] },
+    { icon: UserCheck, label: t('nav.subscriptions'), path: ROUTES.SUBSCRIPTIONS, roles: ['Administrator'] },
   ];
+
+  const navItems = allNavItems.filter(item => 
+    item.roles.includes('Administrator') ? isAdmin : item.roles.includes('Employee')
+  );
 
   // Determine the actual display state
   const shouldShowSidebar = isOpen && !sidebarCollapsed;

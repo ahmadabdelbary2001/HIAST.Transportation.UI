@@ -14,6 +14,7 @@ export interface BaseEntity {
 // Employee
 export interface EmployeeDto extends BaseEntity {
   id: number;
+  userId?: string;
   employeeNumber: string;
   firstName: string;
   lastName: string;
@@ -28,6 +29,7 @@ export interface EmployeeDto extends BaseEntity {
 
 export interface EmployeeListDto {
   id: number;
+  userId?: string;
   employeeNumber: string;
   firstName: string;
   lastName: string;
@@ -47,6 +49,7 @@ export interface CreateEmployeeDto {
 
 export interface UpdateEmployeeDto extends CreateEmployeeDto {
   id: number;
+  userId?: string;
 }
 
 // Driver

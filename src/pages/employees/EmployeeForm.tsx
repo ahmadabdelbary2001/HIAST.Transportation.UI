@@ -24,9 +24,9 @@ import { ApiValidationError } from '@/services/apiHelper';
 
 export default function EmployeeForm() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
+  const { id, userId } = useParams<{ id?: string; userId?: string }>();
   const navigate = useNavigate();
-  const isEdit = !!id;
+  const isEdit = !!id || !!userId;
 
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
@@ -61,7 +61,7 @@ export default function EmployeeForm() {
     },
   });
 
-  const loadEmployee = useCallback(async (employeeId: number) => {
+  const loadEmployee = useCallback(async (employeeId: number | string) => {
     try {
       setFormLoading(true);
       const employee = await employeeApiService.getById(employeeId);
@@ -84,19 +84,24 @@ export default function EmployeeForm() {
   }, [t, setValue]);
 
   useEffect(() => {
-    if (isEdit && id) {
-      loadEmployee(parseInt(id));
+    if (isEdit) {
+      if (userId) {
+        loadEmployee(userId);
+      } else if (id) {
+        loadEmployee(parseInt(id, 10));
+      }
     }
-  }, [id, isEdit, loadEmployee]);
+  }, [id, userId, isEdit, loadEmployee]);
 
   const onFormSubmit = async (data: EmployeeFormData) => {
     setLoading(true);
     try {
         // Validation Check
+        const currentId = id ? parseInt(id, 10) : userId;
         const allEmployees = await employeeApiService.getAll();
         const duplicate = allEmployees.find(e => 
             e.employeeNumber === data.employeeNumber &&
-            (!isEdit || e.id !== parseInt(id!))
+            (!isEdit || (e.id !== currentId && e.userId !== currentId))
         );
 
         if (duplicate) {
@@ -108,10 +113,11 @@ export default function EmployeeForm() {
             return;
         }
 
-      if (isEdit && id) {
+      if (isEdit) {
         await employeeApiService.update({
           ...data,
-          id: parseInt(id),
+          id: id ? parseInt(id, 10) : 0,
+          userId: userId || undefined
         } as UpdateEmployeeDto);
         toast.success(t('common.messages.updateSuccess'));
       } else {

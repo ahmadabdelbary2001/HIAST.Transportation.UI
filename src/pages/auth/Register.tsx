@@ -6,12 +6,20 @@ import { ROUTES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
-import { User, Mail, Lock, Loader2, UserCircle } from 'lucide-react';
+import { User, Mail, Lock, Loader2, UserCircle, Hash, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Header } from '@/components/organisms/Header';
 import { Label } from '@/components/ui/label';
 import PasswordStrengthMeter from '@/components/molecules/PasswordStrengthMeter';
+import { Department } from '@/types/enums';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const Register: React.FC = () => {
   const { t } = useTranslation();
@@ -22,6 +30,8 @@ const Register: React.FC = () => {
     lastName: '',
     email: '',
     userName: '',
+    employeeNumber: '',
+    department: undefined,
     password: ''
   });
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,6 +39,13 @@ const Register: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleDepartmentChange = (value: string) => {
+    // Map string enum value to its integer index for the backend
+    const deptKeys = Object.keys(Department);
+    const index = deptKeys.indexOf(value) + 1; // Backend IT=1, AI=2...
+    setFormData(prev => ({ ...prev, department: index }));
   };
 
   const calculateStrength = (pass: string) => {
@@ -124,6 +141,41 @@ const Register: React.FC = () => {
                   onChange={handleChange}
                   required
                 />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="employeeNumber">{t('employee.employeeNumber')}</Label>
+              <div className="relative">
+                <Hash className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="employeeNumber"
+                  name="employeeNumber"
+                  placeholder="123456"
+                  className="pl-10"
+                  value={formData.employeeNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="department">{t('employee.department')}</Label>
+              <div className="relative">
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                <Select onValueChange={handleDepartmentChange}>
+                  <SelectTrigger className="pl-10">
+                    <SelectValue placeholder={t('employee.selectDepartment')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(Department).map((dept) => (
+                      <SelectItem key={dept} value={dept}>
+                        {t(`employee.departments.${dept}`)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 

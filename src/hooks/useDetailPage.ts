@@ -5,20 +5,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 interface UseDetailPageOptions<T> {
-  fetchFn: (id: number) => Promise<T>;
+  fetchFn: (id: number | string) => Promise<T>;
   listRoute: string;
 }
 
 export function useDetailPage<T>({ fetchFn, listRoute }: UseDetailPageOptions<T>) {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
+  const { id, userId } = useParams<{ id?: string; userId?: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const loadData = useCallback(
-    async (itemId: number) => {
+    async (itemId: number | string) => {
       try {
         setLoading(true);
         setError(null);
@@ -35,10 +35,15 @@ export function useDetailPage<T>({ fetchFn, listRoute }: UseDetailPageOptions<T>
   );
 
   useEffect(() => {
-    if (id) {
-      loadData(parseInt(id, 10));
+    if (userId) {
+      loadData(userId);
+    } else if (id) {
+      const numericId = parseInt(id, 10);
+      if (!isNaN(numericId)) {
+        loadData(numericId);
+      }
     }
-  }, [id, loadData]);
+  }, [id, userId, loadData]);
 
   const formatDate = useCallback((dateString?: string | Date) => {
     if (!dateString) return '-';
@@ -50,6 +55,7 @@ export function useDetailPage<T>({ fetchFn, listRoute }: UseDetailPageOptions<T>
     loading,
     error,
     id: id ? parseInt(id, 10) : null,
+    userId,
     navigate,
     listRoute,
     formatDate,

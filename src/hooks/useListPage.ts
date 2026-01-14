@@ -7,7 +7,7 @@ export interface UseListPageOptions<T> {
   filterField?: keyof T;
   entityName: string;
   getAll: () => Promise<T[]>;
-  deleteItem?: (id: number) => Promise<void>;
+  deleteItem?: (id: number | string) => Promise<void>;
 }
 
 export interface UseListPageReturn<T> {
@@ -24,19 +24,19 @@ export interface UseListPageReturn<T> {
   setFilterValue: (value: string) => void;
 
   // Delete
-  deleteId: number | null;
-  setDeleteId: (id: number | null) => void;
+  deleteId: number | string | null;
+  setDeleteId: (id: number | string | null) => void;
 
   // Actions
   loadItems: () => Promise<void>;
-  handleDelete: (id: number) => Promise<void>;
+  handleDelete: (id: number | string) => Promise<void>;
   clearFilters: () => void;
 
   // Computed
   hasFilters: boolean;
 }
 
-export function useListPage<T extends { id: number }>({
+export function useListPage<T extends { id: number | string }>({
   searchFields = [],
   filterField,
   entityName,
@@ -49,7 +49,7 @@ export function useListPage<T extends { id: number }>({
   const [items, setItems] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterValue, setFilterValue] = useState('all');
 
@@ -69,7 +69,7 @@ export function useListPage<T extends { id: number }>({
   }, [getAll, entityName, t]);
 
   // Handle delete
-  const handleDelete = useCallback(async (id: number) => {
+  const handleDelete = useCallback(async (id: number | string) => {
     if (!deleteItem) return;
 
     try {

@@ -43,7 +43,7 @@ interface ListLayoutProps<T> {
   filterPlaceholder?: string;
 
   // Delete
-  deleteId: number | null;
+  deleteId: number | string | null;
   onDeleteClose: () => void;
   onDeleteConfirm: () => void;
 
@@ -52,7 +52,7 @@ interface ListLayoutProps<T> {
   children?: ReactNode;
 }
 
-export function ListLayout<T extends { id: number }>({
+export function ListLayout<T extends { id: number | string }>({
   title,
   createRoute,
   searchPlaceholder,

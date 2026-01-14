@@ -7,13 +7,15 @@ export const employeeApiService = {
     return response.json();
   },
 
-  getById: async (id: number): Promise<EmployeeDto> => {
-    const response = await fetchWithAuth(`/api/Employee/${id}`);
+  getById: async (id: number | string): Promise<EmployeeDto> => {
+    const url = typeof id === 'string' ? `/api/Employee/detail?userId=${id}` : `/api/Employee/${id}`;
+    const response = await fetchWithAuth(url);
     return response.json();
   },
 
-  delete: async (id: number): Promise<void> => {
-    await fetchWithAuth(`/api/Employee/${id}`, {
+  delete: async (id: number | string): Promise<void> => {
+    const url = typeof id === 'string' ? `/api/Employee/detail?userId=${id}` : `/api/Employee/${id}`;
+    await fetchWithAuth(url, {
       method: 'DELETE',
     });
   },

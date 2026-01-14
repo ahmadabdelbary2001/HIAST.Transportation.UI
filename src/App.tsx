@@ -54,7 +54,7 @@ const App = () => (
             <Route
               path={ROUTES.EMPLOYEES}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <EmployeeList />
                   </MainLayout>
@@ -84,6 +84,16 @@ const App = () => (
             <Route
               path={ROUTES.EMPLOYEE_DETAIL}
               element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <EmployeeDetail />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.EMPLOYEE_DETAIL_BY_USERID}
+              element={
                 <ProtectedRoute>
                   <MainLayout>
                     <EmployeeDetail />
@@ -92,9 +102,19 @@ const App = () => (
               }
             />
             <Route
+              path={ROUTES.EMPLOYEE_EDIT_BY_USERID}
+              element={
+                <ProtectedRoute requiredRole="Administrator">
+                  <MainLayout>
+                    <EmployeeForm />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path={ROUTES.DRIVERS}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <DriverList />
                   </MainLayout>
@@ -124,7 +144,7 @@ const App = () => (
             <Route
               path={ROUTES.DRIVER_DETAIL}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <DriverDetail />
                   </MainLayout>
@@ -134,7 +154,7 @@ const App = () => (
             <Route
               path={ROUTES.BUSES}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <BusList />
                   </MainLayout>
@@ -164,7 +184,7 @@ const App = () => (
             <Route
               path={ROUTES.BUS_DETAIL}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <BusDetail />
                   </MainLayout>
@@ -244,7 +264,7 @@ const App = () => (
             <Route
               path={ROUTES.SUPERVISORS}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <SupervisorReport />
                   </MainLayout>
@@ -254,7 +274,7 @@ const App = () => (
             <Route
               path={ROUTES.SUBSCRIPTIONS}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <SubscriptionList />
                   </MainLayout>
@@ -284,7 +304,7 @@ const App = () => (
             <Route
               path={ROUTES.SUBSCRIPTION_DETAIL}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute requiredRole="Administrator">
                   <MainLayout>
                     <SubscriptionDetail />
                   </MainLayout>
