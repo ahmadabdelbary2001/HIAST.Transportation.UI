@@ -17,6 +17,7 @@ import { ValidationError } from '@/components/atoms/ValidationError';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import { employeeApiService } from '@/services/employeeApiService';
 import { lineApiService } from '@/services/lineApiService';
+import { busApiService } from '@/services/busApiService';
 import type {
   CreateLineSubscriptionDto,
   UpdateLineSubscriptionDto,
@@ -41,7 +42,7 @@ export default function SubscriptionForm() {
   const [formLoading, setFormLoading] = useState(false);
 
   const subscriptionSchema = z.object({
-    employeeId: z.number().min(1, t('subscription.errors.allFieldsRequired')),
+    employeeId: z.string().min(1, t('subscription.errors.allFieldsRequired')),
     lineId: z.number().min(1, t('subscription.errors.allFieldsRequired')),
     startDate: z.string().min(1, t('common.validation.required')),
     endDate: z.string().optional(),
@@ -59,7 +60,7 @@ export default function SubscriptionForm() {
   } = useForm<SubscriptionFormData>({
     resolver: zodResolver(subscriptionSchema),
     defaultValues: {
-      employeeId: 0,
+      employeeId: '',
       lineId: 0,
       startDate: toInputDate(new Date()),
       endDate: '',
@@ -71,7 +72,7 @@ export default function SubscriptionForm() {
     const params = new URLSearchParams(location.search);
     const employeeId = params.get('employeeId');
     if (employeeId && !isEdit) {
-      setValue('employeeId', parseInt(employeeId, 10));
+      setValue('employeeId', employeeId);
     }
   }, [location.search, isEdit, setValue]);
 
@@ -126,8 +127,7 @@ export default function SubscriptionForm() {
         const line = await lineApiService.getById(data.lineId);
         const activeCount = line.subscriptions?.filter(s => s.isActive).length ?? 0;
         
-        const busResponse = await fetch(`/api/Bus/${line.busId}`);
-        const bus = await busResponse.json();
+        const bus = await busApiService.getById(line.busId);
         
         if (activeCount >= bus.capacity) {
           toast.error(t('subscription.errors.capacityFull', { capacity: bus.capacity }));
@@ -189,17 +189,17 @@ export default function SubscriptionForm() {
                     <div>
                       <Select
                         disabled={isEdit}
-                        onValueChange={(val) => field.onChange(parseInt(val))}
-                        value={field.value ? field.value.toString() : ''}
+                        onValueChange={field.onChange}
+                        value={field.value}
                       >
                         <SelectTrigger error={errors.employeeId?.message}>
                           <SelectValue placeholder={t('subscription.selectEmployee')} />
                         </SelectTrigger>
                         <SelectContent>
                           {employees
-                            .filter(emp => (!emp.isAssigned && !emp.hasSubscription) || (isEdit && emp.id === employees.find(e => e.id === field.value)?.id))
+                            .filter(emp => (!emp.isAssigned && !emp.isSubscriptionActive) || (isEdit && emp.userId === employees.find(e => e.userId === field.value)?.userId) || emp.id === field.value)
                             .map((emp) => (
-                            <SelectItem key={emp.id} value={emp.id.toString()}>
+                            <SelectItem key={emp.id} value={emp.id}>
                               {emp.firstName} {emp.lastName} ({emp.employeeNumber})
                             </SelectItem>
                           ))}

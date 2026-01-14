@@ -15,7 +15,7 @@ export const lineSubscriptionApiService = {
   /**
    * Fetches the detailed information for a single subscription.
    */
-  getById: async (id: number): Promise<LineSubscription> => {
+  getById: async (id: number | string): Promise<LineSubscription> => {
     const response = await fetchWithAuth(`/api/LineSubscription/${id}`);
     return response.json();
   },
@@ -23,7 +23,7 @@ export const lineSubscriptionApiService = {
   /**
    * Deletes a subscription by its ID.
    */
-  delete: async (id: number): Promise<void> => {
+  delete: async (id: number | string): Promise<void> => {
     await fetchWithAuth(`/api/LineSubscription/${id}`, {
       method: 'DELETE',
     });

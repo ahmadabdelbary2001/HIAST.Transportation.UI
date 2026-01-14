@@ -48,6 +48,7 @@
     "noSubscription": "هذا الموظف ليس لديه اشتراك فعال.",
     "employeeNumber": "الرقم الذاتي",
     "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
     "phoneNumber": "رقم الهاتف",
     "department": "القسم",
     "selectDepartment": "اختر قسمًا",
@@ -206,6 +207,7 @@
     "status": "الحالة",
     "active": "فعال",
     "inactive": "غير فعال",
+    "subscriber": "المشترك",
     "employee": "الموظف",
     "line": "الخط",
     "dates": "تواريخ الاشتراك",
@@ -319,6 +321,9 @@
   "registerSubtask": "انضم إلينا اليوم للحصول على تجربة نقل أفضل",
   "confirmPassword": "تأكيد كلمة المرور",
   "signUp": "إنشاء الحساب",
+  "auth": {
+    "username": "اسم المستخدم"
+  },
   "alreadyHaveAccount": "لديك حساب بالفعل؟",
   "registrationSuccess": "تم إنشاء الحساب بنجاح",
   "registrationFailed": "فشل إنشاء الحساب",

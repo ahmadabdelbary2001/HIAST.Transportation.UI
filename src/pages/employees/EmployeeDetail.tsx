@@ -61,7 +61,7 @@ export default function EmployeeDetail() {
       <DetailHeader
         title={t('employee.detail')}
         backRoute={ROUTES.EMPLOYEES}
-        editRoute={employee.id > 0 ? `/employees/${employee.id}/edit` : `/employees/detail/${employee.userId}/edit`}
+        editRoute={`/employees/${employee.id}/edit`}
       />
 
       <Card>

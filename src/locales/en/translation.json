@@ -48,6 +48,7 @@
     "noSubscription": "This employee does not have an active subscription.",
     "employeeNumber": "Employee Number",
     "fullName": "Full Name",
+    "email": "Email",
     "phoneNumber": "Phone Number",
     "department": "Department",
     "selectDepartment": "Select a department",
@@ -206,6 +207,7 @@
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
+    "subscriber": "Subscriber",
     "employee": "Employee",
     "line": "Line",
     "dates": "Subscription Dates",
@@ -319,6 +321,9 @@
   "registerSubtask": "Join us today for a better transportation experience",
   "confirmPassword": "Confirm Password",
   "signUp": "Sign Up",
+  "auth": {
+    "username": "Username"
+  },
   "alreadyHaveAccount": "Already have an account?",
   "registrationSuccess": "Account created successfully",
   "registrationFailed": "Registration failed",

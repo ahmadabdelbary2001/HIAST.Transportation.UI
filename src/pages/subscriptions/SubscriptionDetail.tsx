@@ -72,9 +72,6 @@ export default function SubscriptionDetail() {
                 {subscription.employeeName}
                 {isSupervisor && <Badge variant="secondary">{t('line.supervisor')}</Badge>}
               </CardTitle>
-              <p className="text-sm text-muted-foreground pt-1">
-                {t('subscription.line')}: {subscription.lineName}
-              </p>
             </div>
           </div>
         </CardHeader>

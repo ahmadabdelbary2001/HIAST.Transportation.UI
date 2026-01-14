@@ -59,6 +59,11 @@ export default function EmployeeList() {
       cell: (employee) => `${employee.firstName} ${employee.lastName}`,
     },
     {
+       key: 'userName',
+       header: t('auth.username'), // Ensure translation key exists or use hardcoded string if needed 'Username'
+       cell: (item) => item.userName || '-',
+    },
+    {
       key: 'department',
       header: t('employee.department'),
       cell: (item) => item.department ? t(`employee.departments.${item.department}`) : '-',
@@ -70,16 +75,16 @@ export default function EmployeeList() {
       cell: (item) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" asChild>
-            <Link to={item.id > 0 ? `/employees/${item.id}` : `/employees/detail/${item.userId}`}>
+            <Link to={`/employees/detail/${item.id}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" asChild>
-            <Link to={item.id > 0 ? `/employees/${item.id}/edit` : `/employees/detail/${item.userId}/edit`}>
+            <Link to={`/employees/${item.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id || item.userId || null)}>
+          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>

@@ -12,30 +12,39 @@ export interface BaseEntity {
 }
 
 // Employee
-export interface EmployeeDto extends BaseEntity {
-  id: number;
-  userId?: string;
+// Identity-based employee does not strictly follow BaseEntity (id is string)
+export interface EmployeeDto {
+  id: string; // Identity User Id
+  userId?: string; // Alias for id
   employeeNumber: string;
   firstName: string;
   lastName: string;
+  userName?: string;
   email: string;
   phoneNumber?: string;
   department?: Department;
+  
+  // Subscription fields (flatted)
   lineSubscriptionId?: number;
   subscribedLineId?: number;
   subscribedLineName?: string;
   isSubscriptionActive: boolean;
+
+  createdAt?: Date; // Optional now
+  updatedAt?: Date;
 }
 
 export interface EmployeeListDto {
-  id: number;
+  id: string; // Identity User Id
   userId?: string;
   employeeNumber: string;
   firstName: string;
   lastName: string;
   department?: Department;
+  userName?: string;
+  
   isAssigned?: boolean;
-  hasSubscription?: boolean;
+  isSubscriptionActive?: boolean;
 }
 
 export interface CreateEmployeeDto {
@@ -48,7 +57,7 @@ export interface CreateEmployeeDto {
 }
 
 export interface UpdateEmployeeDto extends CreateEmployeeDto {
-  id: number;
+  id: string; // User Id (string)
   userId?: string;
 }
 
@@ -95,8 +104,10 @@ export interface UpdateBusDto extends CreateBusDto {
 
 // Line
 // This represents the detailed Line object returned from GET /api/Line/{id}
+// Line
+// This represents the detailed Line object returned from GET /api/Line/{id}
 export interface Line extends BaseEntity {
-  supervisorId: number;
+  supervisorId: string; // Identity string ID
   supervisorName: string;
   busId: number;
   busLicensePlate: string;
@@ -120,7 +131,7 @@ export interface LineListDto {
 
 // DTO for creating a new line (POST /api/Line)
 export interface CreateLineDto {
-  supervisorId: number;
+  supervisorId: string;
   busId: number;
   driverId: number;
   name: string;
@@ -134,7 +145,7 @@ export interface UpdateLineDto extends CreateLineDto {
 
 export interface LineSubscriptionDto {
   id: number;
-  employeeId: number;
+  employeeId: string;
   employeeName: string; // Example property
   startDate: Date;
   endDate?: Date;
@@ -142,7 +153,7 @@ export interface LineSubscriptionDto {
 
 // Represents the read-only report data from GET /api/Supervisor/LineAssignments
 export interface SupervisorLineDto {
-  employeeId: number;
+  employeeId: string;
   employeeNumber: string;
   employeeName: string;
   lineId: number;
@@ -187,7 +198,7 @@ export interface UpdateStopDto extends CreateStopDto {
 
 // Represents the detailed object from GET /api/LineSubscription/{id}
 export interface LineSubscription extends BaseEntity {
-  employeeId: number;
+  employeeId: string;
   lineId: number;
   startDate: string; // Use string for dates from API
   endDate?: string;
@@ -206,7 +217,7 @@ export interface LineSubscriptionListDto {
 
 // DTO for creating a new subscription (POST /api/LineSubscription)
 export interface CreateLineSubscriptionDto {
-  employeeId: number;
+  employeeId: string;
   lineId: number;
   startDate: string;
   isActive: boolean;

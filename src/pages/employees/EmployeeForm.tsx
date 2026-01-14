@@ -61,7 +61,7 @@ export default function EmployeeForm() {
     },
   });
 
-  const loadEmployee = useCallback(async (employeeId: number | string) => {
+  const loadEmployee = useCallback(async (employeeId: string) => {
     try {
       setFormLoading(true);
       const employee = await employeeApiService.getById(employeeId);
@@ -85,10 +85,10 @@ export default function EmployeeForm() {
 
   useEffect(() => {
     if (isEdit) {
-      if (userId) {
-        loadEmployee(userId);
-      } else if (id) {
-        loadEmployee(parseInt(id, 10));
+      // Use id or userId, both refer to Identity string ID
+      const targetId = id || userId;
+      if (targetId) {
+        loadEmployee(targetId);
       }
     }
   }, [id, userId, isEdit, loadEmployee]);
@@ -97,7 +97,7 @@ export default function EmployeeForm() {
     setLoading(true);
     try {
         // Validation Check
-        const currentId = id ? parseInt(id, 10) : userId;
+        const currentId = id || userId;
         const allEmployees = await employeeApiService.getAll();
         const duplicate = allEmployees.find(e => 
             e.employeeNumber === data.employeeNumber &&
@@ -113,11 +113,11 @@ export default function EmployeeForm() {
             return;
         }
 
-      if (isEdit) {
+      if (isEdit && currentId) {
         await employeeApiService.update({
           ...data,
-          id: id ? parseInt(id, 10) : 0,
-          userId: userId || undefined
+          id: currentId,
+          userId: currentId
         } as UpdateEmployeeDto);
         toast.success(t('common.messages.updateSuccess'));
       } else {

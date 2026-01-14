@@ -41,7 +41,7 @@ export default function LineForm() {
   const lineSchema = z.object({
     name: z.string().min(1, t('common.validation.required')),
     description: z.string().optional(),
-    supervisorId: z.number().min(1, t('line.errors.supervisorRequired')),
+    supervisorId: z.string().min(1, t('line.errors.supervisorRequired')),
     driverId: z.number().min(1, t('line.errors.driverRequired')),
     busId: z.number().min(1, t('line.errors.busRequired')),
   });
@@ -61,7 +61,7 @@ export default function LineForm() {
     defaultValues: {
       name: '',
       description: '',
-      supervisorId: 0,
+      supervisorId: '',
       driverId: 0,
       busId: 0,
     },
@@ -212,16 +212,16 @@ export default function LineForm() {
                   render={({ field }) => (
                     <div>
                       <Select 
-                        value={field.value.toString()} 
-                        onValueChange={(v) => field.onChange(parseInt(v))}
+                        value={field.value} 
+                        onValueChange={field.onChange}
                       >
                         <SelectTrigger error={errors.supervisorId?.message}>
                             <SelectValue placeholder={t('line.placeholders.selectSupervisor')} />
                         </SelectTrigger>
                         <SelectContent>
                           {supervisors
-                            .filter(s => !s.isAssigned || s.id === currentSupervisorId || (isEdit && s.id === currentSupervisorId))
-                            .map(s => <SelectItem key={s.id} value={s.id.toString()}>{s.firstName} {s.lastName}</SelectItem>)}
+                            .filter(s => (!s.isAssigned && !s.isSubscriptionActive) || s.userId === currentSupervisorId || (isEdit && s.userId === currentSupervisorId) || s.id === currentSupervisorId)
+                            .map(s => <SelectItem key={s.id} value={s.id}>{s.firstName} {s.lastName}</SelectItem>)}
                         </SelectContent>
                       </Select>
                       <ValidationError message={errors.supervisorId?.message || ''} />
