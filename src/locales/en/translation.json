@@ -1,13 +1,4 @@
 {
-  "welcome": "Welcome to 2AF Work",
-  "description": "Manage the HIAST's transportation system for employees to and from work.",
-  "totalEmployees": "Total Employees",
-  "availableBuses": "Available Buses",
-  "upcomingSchedules": "Upcoming Schedules",
-  "quickActions": "Quick Actions",
-  "manageEmployees": "Manage Employees",
-  "viewSchedule": "View Schedule",
-  "busMaintenance": "Bus Maintenance",
   "logo": {
     "title": "2AF Work",
     "subtitle": "Transportation System"
@@ -30,6 +21,31 @@
     "stops": "Stops",
     "subscriptions": "Subscriptions",
     "supervisors": "Supervisors"
+  },
+  "dashboard": {
+    "welcome": "Welcome to 2AF Work",
+    "subtitle": "Manage the HIAST's transportation system for employees to and from work.",
+    "systemStatus": "System Online",
+    "quickAccess": "Quick Access",
+    "fetchError": "Failed to load dashboard statistics.",
+    "stats": {
+      "activeBuses": "Active Buses",
+      "activeRoutes": "Active Routes",
+      "totalEmployees": "Employees",
+      "subscriptions": "Subscriptions"
+    },
+    "actions": {
+      "manageLines": "Manage Lines",
+      "manageLinesDesc": "View and modify bus routes and stops.",
+      "fleetManagement": "Fleet Management",
+      "fleetManagementDesc": "Track buses, maintenance, and assignments.",
+      "employeeDirectory": "Employee Directory",
+      "employeeDirectoryDesc": "Manage staff records and access.",
+      "subscriptions": "Subscriptions",
+      "subscriptionsDesc": "Handle monthly passes and renewals.",
+      "driverReports": "Driver Reports",
+      "driverReportsDesc": "View logs and performance metrics."
+    }
   },
   "employee": {
     "list": "Employees",

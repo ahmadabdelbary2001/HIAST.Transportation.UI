@@ -1,4 +1,3 @@
-// src/services/apiHelper.ts
 import { LOCAL_STORAGE_KEYS } from "@/lib/constants";
 
 export class ApiValidationError extends Error {
@@ -58,6 +57,7 @@ const handleResponse = async (response: Response) => {
 
     throw new Error(errorMessage);
   }
+  // Return raw response for compatibility with services using fetchWithAuth directly
   return response;
 };
 
@@ -65,12 +65,29 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = getAuthToken();
   
   const headers = {
+    'Content-Type': 'application/json',
     ...options.headers,
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   const response = await fetch(url, { ...options, headers });
   return handleResponse(response);
+};
+
+// Helper to safely parse JSON or text
+const parseResponse = async (response: Response) => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+        return response.json();
+    }
+    return response.text();
+};
+
+export const apiHelper = {
+  get: <T>(url: string): Promise<T> => fetchWithAuth(url, { method: 'GET' }).then(parseResponse) as Promise<T>,
+  post: <T>(url: string, body: unknown): Promise<T> => fetchWithAuth(url, { method: 'POST', body: JSON.stringify(body) }).then(parseResponse) as Promise<T>,
+  put: <T>(url: string, body: unknown): Promise<T> => fetchWithAuth(url, { method: 'PUT', body: JSON.stringify(body) }).then(parseResponse) as Promise<T>,
+  delete: <T>(url: string): Promise<T> => fetchWithAuth(url, { method: 'DELETE' }).then(parseResponse) as Promise<T>,
 };
 
 export { handleResponse, fetchWithAuth };
