@@ -5,6 +5,7 @@ interface UserData {
   id: string;
   userName: string;
   email: string;
+  employeeNumber?: string;
   roles: string[];
 }
 

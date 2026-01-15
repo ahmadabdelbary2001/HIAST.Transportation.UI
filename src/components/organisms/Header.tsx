@@ -9,6 +9,7 @@ import { ModeToggler } from '@/components/atoms/ModeToggler';
 import { ThemeSelector } from '@/components/atoms/ThemeSelector';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/useLanguage';
+import { UserProfile } from '@/components/molecules/UserProfile';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -41,10 +42,7 @@ export function Header({
     >
       <div className="container flex h-16 items-center justify-between px-4">
         {/* Left side - Logo and menu buttons */}
-        <div className={cn(
-          "flex items-center gap-3",
-          isRTL ? "flex-row-reverse" : "flex-row"
-        )}>
+        <div className="flex items-center gap-3">
           {/* Mobile menu button */}
           {onMenuClick && (
             <Button 
@@ -89,10 +87,7 @@ export function Header({
         </div>
 
         {/* Right-side Actions */}
-        <div className={cn(
-          "flex items-center gap-3",
-          isRTL ? "flex-row-reverse" : "flex-row"
-        )}>
+        <div className="flex items-center gap-3">
           {showLanguage && (
             <>
               <div className="hidden sm:block">
@@ -112,6 +107,7 @@ export function Header({
           )}
           <ThemeSelector />
           <ModeToggler />
+          <UserProfile />
         </div>
       </div>
     </header>

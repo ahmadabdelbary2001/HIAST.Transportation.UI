@@ -19,8 +19,17 @@ export interface RegisterRequest {
   confirmPassword: string;
 }
 
+export interface AuthResponse {
+  id: string;
+  userName: string;
+  email: string;
+  token: string;
+  employeeNumber?: string;
+  roles: string[];
+}
+
 export const authApiService = {
-  login: async (credentials: LoginRequest) => {
+  login: async (credentials: LoginRequest): Promise<AuthResponse> => {
     const response = await fetchWithAuth(API_ENDPOINTS.AUTH.LOGIN, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

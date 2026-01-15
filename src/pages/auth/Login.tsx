@@ -35,6 +35,7 @@ const Login: React.FC = () => {
           id: response.id,
           userName: response.userName,
           email: response.email,
+          employeeNumber: response.employeeNumber,
           roles: response.roles
       }, rememberMe);
       toast.success(t('loginSuccess'));
