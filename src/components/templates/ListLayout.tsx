@@ -16,7 +16,7 @@ interface FilterOption {
 interface ListLayoutProps<T> {
   // Configuration
   title: string;
-  createRoute: string;
+  createRoute?: string;
   searchPlaceholder: string;
   noDataTitle: string;
   noDataDescription: string;
@@ -99,7 +99,7 @@ export function ListLayout<T extends { id: number | string }>({
         count={filteredItems.length}
         countLabel={countLabel}
         createRoute={createRoute}
-        createLabel={t('common.actions.create')}
+        createLabel={createRoute ? t('common.actions.create') : undefined}
       >
         {children}
       </ListHeader>
@@ -124,8 +124,8 @@ export function ListLayout<T extends { id: number | string }>({
         <EmptyState
           title={hasFilters ? noResultsTitle : noDataTitle}
           description={noDataDescription}
-          actionLabel={t('common.actions.create')}
-          onAction={() => window.location.href = createRoute}
+          actionLabel={createRoute ? t('common.actions.create') : undefined}
+          onAction={createRoute ? () => window.location.href = createRoute! : undefined}
         />
       ) : (
         <DataTable columns={columns} data={filteredItems} />

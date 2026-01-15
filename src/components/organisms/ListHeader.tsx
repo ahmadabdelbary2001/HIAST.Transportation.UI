@@ -8,9 +8,9 @@ import { Badge } from '@/components/ui/badge';
 interface ListHeaderProps {
   title: string;
   count: number;
-  countLabel: string;
-  createRoute: string;
-  createLabel: string;
+  countLabel?: string;
+  createRoute?: string;
+  createLabel?: string;
   children?: ReactNode;
 }
 
@@ -31,12 +31,14 @@ export function ListHeader({
         </Badge>
         {children}
       </div>
-      <Button asChild>
-        <Link to={createRoute}>
-          <Plus className="me-2 h-4 w-4" />
-          {createLabel}
-        </Link>
-      </Button>
+      {createRoute && createLabel && (
+        <Button asChild>
+          <Link to={createRoute}>
+            <Plus className="me-2 h-4 w-4" />
+            {createLabel}
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }

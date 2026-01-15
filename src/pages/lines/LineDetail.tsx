@@ -1,6 +1,6 @@
 // src/pages/lines/LineDetail.tsx
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { 
@@ -20,10 +20,18 @@ import type { Line } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { Separator } from '@/components/ui/separator';
 
+import { useAuth } from '@/hooks/useAuth';
+
 export default function LineDetail() {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const isAdmin = user?.roles.includes('Administrator');
+
+  // Wrap fetchFn in useCallback to prevent infinite loop in useDetailPage
+  const fetchFn = useCallback((id: number | string) => lineApiService.getById(Number(id)), []);
+
   const { data: line, loading, error, navigate } = useDetailPage<Line>({
-    fetchFn: lineApiService.getById,
+    fetchFn,
     listRoute: ROUTES.LINES,
   });
 
@@ -64,7 +72,7 @@ export default function LineDetail() {
       <DetailHeader
         title={t('line.detail')}
         backRoute={ROUTES.LINES}
-        editRoute={`/lines/${line.id}/edit`}
+        editRoute={isAdmin ? `/lines/${line.id}/edit` : undefined}
       />
 
       <Card>
@@ -78,9 +86,15 @@ export default function LineDetail() {
           <DetailField
             label={t('line.supervisor')}
             value={
-              <Link to={`/employees/${line.supervisorId}`} className="font-semibold text-primary hover:underline">
-                {line.supervisorName}
-              </Link>
+              isAdmin ? (
+                <Link to={`/employees/${line.supervisorId}`} className="font-semibold text-primary hover:underline">
+                  {line.supervisorName}
+                </Link>
+              ) : (
+                <span className="font-semibold text-primary cursor-default">
+                  {line.supervisorName}
+                </span>
+              )
             }
             icon={UserCog}
             className="items-start"
@@ -89,9 +103,15 @@ export default function LineDetail() {
           <DetailField
             label={t('line.driver')}
             value={
-              <Link to={`/drivers/${line.driverId}`} className="font-semibold text-primary hover:underline">
-                {line.driverName}
-              </Link>
+               isAdmin ? (
+                <Link to={`/drivers/${line.driverId}`} className="font-semibold text-primary hover:underline">
+                  {line.driverName}
+                </Link>
+               ) : (
+                <span className="font-semibold text-primary cursor-default">
+                  {line.driverName}
+                </span>
+               )
             }
             icon={UserSquare}
             className="items-start"
@@ -100,9 +120,15 @@ export default function LineDetail() {
           <DetailField
             label={t('line.bus')}
             value={
-              <Link to={`/buses/${line.busId}`} className="font-semibold text-primary hover:underline">
-                {line.busLicensePlate}
-              </Link>
+               isAdmin ? (
+                <Link to={`/buses/${line.busId}`} className="font-semibold text-primary hover:underline">
+                  {line.busLicensePlate}
+                </Link>
+               ) : (
+                 <span className="font-semibold text-primary cursor-default">
+                  {line.busLicensePlate}
+                </span>
+               )
             }
             icon={Bus}
             className="items-start"
@@ -131,13 +157,19 @@ export default function LineDetail() {
                       <p className="text-sm font-medium text-muted-foreground">
                         {t('line.stop')} #{stop.sequenceOrder}
                       </p>
-                      <Link
-                        to={`/stops/${stop.id}`}
-                        className="font-semibold text-primary hover:underline"
-                        title={t('line.viewStopDetails')}
-                      >
-                        {stop.address}
-                      </Link>
+                      {isAdmin ? (
+                        <Link
+                          to={`/stops/${stop.id}`}
+                          className="font-semibold text-primary hover:underline"
+                          title={t('line.viewStopDetails')}
+                        >
+                          {stop.address}
+                        </Link>
+                      ) : (
+                        <span className="font-semibold text-primary cursor-default">
+                          {stop.address}
+                        </span>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -153,13 +185,15 @@ export default function LineDetail() {
             {/* --- Group for Title and Button on the left --- */}
             <div className="flex items-center gap-4">
               <CardTitle>{t('line.subscribers')}</CardTitle>
-              <Button asChild size="sm">
-                <Link to={`/subscriptions/create?lineId=${line.id}`}>
-                  <PlusCircle className="me-2 h-4 w-4" />
-                  {/* --- Use the new, more specific translation key --- */}
-                  {t('line.addSubscriber')}
-                </Link>
-              </Button>
+              {isAdmin && (
+                <Button asChild size="sm">
+                  <Link to={`/subscriptions/create?lineId=${line.id}`}>
+                    <PlusCircle className="me-2 h-4 w-4" />
+                    {/* --- Use the new, more specific translation key --- */}
+                    {t('line.addSubscriber')}
+                  </Link>
+                </Button>
+              )}
             </div>
             
             {/* --- Badge remains on the right --- */}
@@ -182,19 +216,27 @@ export default function LineDetail() {
                      </div>
                     <div>
                         <div className="flex items-center gap-2">
+                           {isAdmin ? (
                             <Link to={`/employees/${sub.employeeId}`} className="font-semibold text-primary hover:underline">
                             {sub.employeeName}
                             </Link>
+                           ) : (
+                            <span className="font-semibold text-primary cursor-default">
+                              {sub.employeeName}
+                            </span>
+                           )}
                             <Badge variant="default" className="text-xs">{t('line.supervisor')}</Badge>
                         </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button asChild variant="ghost" size="icon">
-                      <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                        <Pencil className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                    {isAdmin && (
+                        <Button asChild variant="ghost" size="icon">
+                        <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
+                            <Pencil className="h-4 w-4" />
+                        </Link>
+                        </Button>
+                    )}
                   </div>
                 </li>
               ))}
@@ -210,20 +252,28 @@ export default function LineDetail() {
                 <li key={sub.id} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
                   <div className="flex items-center gap-3">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    <Link to={`/employees/${sub.employeeId}`} className="font-medium text-primary hover:underline">
-                      {sub.employeeName}
-                    </Link>
+                    {isAdmin ? (
+                      <Link to={`/employees/${sub.employeeId}`} className="font-medium text-primary hover:underline">
+                        {sub.employeeName}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-primary cursor-default">
+                        {sub.employeeName}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="default" className="hidden sm:flex">
                       <CheckCircle className="me-2 h-4 w-4" />
                       {t('subscription.active')}
                     </Badge>
-                    <Button asChild variant="ghost" size="icon">
-                      <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                        <Pencil className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                    {isAdmin && (
+                        <Button asChild variant="ghost" size="icon">
+                        <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
+                            <Pencil className="h-4 w-4" />
+                        </Link>
+                        </Button>
+                    )}
                   </div>
                 </li>
               ))}
@@ -242,20 +292,28 @@ export default function LineDetail() {
                 >
                   <div className="flex items-center gap-3">
                     <Users className="h-4 w-4 text-muted-foreground" />
-                    <Link to={`/employees/${sub.employeeId}`} className="font-medium text-primary hover:underline">
-                      {sub.employeeName}
-                    </Link>
+                    {isAdmin ? (
+                      <Link to={`/employees/${sub.employeeId}`} className="font-medium text-primary hover:underline">
+                        {sub.employeeName}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-primary cursor-default">
+                        {sub.employeeName}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="destructive" className="hidden sm:flex">
                       <XCircle className="me-2 h-4 w-4" />
                       {t('subscription.inactive')}
                     </Badge>
-                    <Button asChild variant="ghost" size="icon">
-                      <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                        <Pencil className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                    {isAdmin && (
+                        <Button asChild variant="ghost" size="icon">
+                        <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
+                            <Pencil className="h-4 w-4" />
+                        </Link>
+                        </Button>
+                    )}
                   </div>
                 </li>
               ))}

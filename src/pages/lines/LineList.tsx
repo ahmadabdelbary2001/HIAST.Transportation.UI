@@ -14,8 +14,12 @@ import type { LineListDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { type ColumnDefinition } from '@/components/organisms/DataTable';
 
+import { useAuth } from '@/hooks/useAuth';
+
 export default function LineList() {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const isAdmin = user?.roles.includes('Administrator');
 
   const {
     filteredItems: filteredLines,
@@ -33,7 +37,7 @@ export default function LineList() {
     searchFields: ['name', 'description', 'supervisorName'],
     entityName: 'line',
     getAll: lineApiService.getAll,
-    deleteItem: lineApiService.delete,
+    deleteItem: (id) => lineApiService.delete(Number(id)),
   });
 
   useEffect(() => {
@@ -48,11 +52,12 @@ export default function LineList() {
       cell: (line) => line.description || '-',
     },
     { key: 'supervisorName', header: t('line.supervisor') },
-    {
-      key: 'actions',
+    // Only show actions column for Administrators
+    ...(isAdmin ? [{
+      key: 'actions' as const,
       header: t('common.actions.actions'),
       isAction: true,
-      cell: (line) => (
+      cell: (line: LineListDto) => (
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="icon" asChild>
             <Link to={`/lines/${line.id}`}>
@@ -69,7 +74,20 @@ export default function LineList() {
           </Button>
         </div>
       ),
-    },
+    }] : [{
+      key: 'actions' as const,
+      header: t('common.actions.actions'),
+      isAction: true,
+      cell: (line: LineListDto) => (
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" size="icon" asChild>
+            <Link to={`/lines/${line.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+      ),
+    }]),
   ];
 
   if (loading) {
@@ -83,7 +101,7 @@ export default function LineList() {
   return (
     <ListLayout
       title={t('line.list')}
-      createRoute={ROUTES.LINE_CREATE}
+      createRoute={isAdmin ? ROUTES.LINE_CREATE : undefined}
       searchPlaceholder={t('line.searchPlaceholder')}
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('line.noLines')}

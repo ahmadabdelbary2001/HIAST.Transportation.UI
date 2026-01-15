@@ -9,7 +9,7 @@ import { PageTitle } from './PageTitle';
 interface DetailHeaderProps {
   title: string;
   backRoute: string;
-  editRoute: string;
+  editRoute?: string;
 }
 
 export function DetailHeader({ title, backRoute, editRoute }: DetailHeaderProps) {
@@ -24,12 +24,14 @@ export function DetailHeader({ title, backRoute, editRoute }: DetailHeaderProps)
         </Button>
         <PageTitle>{title}</PageTitle>
       </div>
-      <Button asChild>
-        <Link to={editRoute}>
-          <Edit className="me-2 h-4 w-4" />
-          {t('common.actions.edit')}
-        </Link>
-      </Button>
+      {editRoute && (
+        <Button asChild>
+          <Link to={editRoute}>
+            <Edit className="me-2 h-4 w-4" />
+            {t('common.actions.edit')}
+          </Link>
+        </Button>
+      )}
     </div>
   );
 }

@@ -36,7 +36,7 @@ export function Sidebar({ isOpen = true, onClose, sidebarCollapsed }: SidebarPro
     { icon: ShieldCheck, label: t('nav.supervisors'), path: ROUTES.SUPERVISORS, roles: ['Administrator'] },
     { icon: Bus, label: t('nav.buses'), path: ROUTES.BUSES, roles: ['Administrator'] },
     { icon: Route, label: t('nav.lines'), path: ROUTES.LINES, roles: ['Administrator', 'Employee'] },
-    { icon: MapPin, label: t('nav.stops'), path: ROUTES.STOPS, roles: ['Administrator', 'Employee'] },
+    { icon: MapPin, label: t('nav.stops'), path: ROUTES.STOPS, roles: ['Administrator'] },
     { icon: ClipboardList, label: t('nav.subscriptions'), path: ROUTES.SUBSCRIPTIONS, roles: ['Administrator'] },
   ];
 
