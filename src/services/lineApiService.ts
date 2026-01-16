@@ -74,6 +74,26 @@ export const lineApiService = {
       throw new Error(`Failed to update line ${line.id}: ${response.statusText}. Details: ${errorBody}`);
     }
   },
+
+  /**
+   * Transfers supervisor role from current supervisor to a new employee.
+   * Used when a supervisor wants to unsubscribe but must maintain a supervisor on the line.
+   */
+  handoverSupervisor: async (lineId: number, newSupervisorId: string): Promise<void> => {
+    const response = await fetchWithAuth(`/api/Line/${lineId}/handover`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        lineId,
+        newSupervisorId,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(`Failed to handover supervisor: ${response.statusText}. Details: ${errorBody}`);
+    }
+  },
 };
 
 

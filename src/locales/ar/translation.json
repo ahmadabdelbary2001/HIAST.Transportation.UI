@@ -191,7 +191,14 @@
     "supervisorName": "اسم المشرف",
     "employeeNumber": "الرقم الذاتي",
     "assignments": "تعيينات",
-    "searchPlaceholder": "ابحث بالاسم أو رقم الموظف أو اسم الخط..."
+    "searchPlaceholder": "ابحث بالاسم أو رقم الموظف أو اسم الخط...",
+    "handoverTitle": "نقل صلاحية الإشراف",
+    "handoverDescription": "أنت حالياً مشرف هذا الخط ولا يمكنك إلغاء اشتراكك مباشرة. اختر موظفاً آخر من المشتركين ليصبح المشرف الجديد، ثم سيتم إلغاء اشتراكك تلقائياً.",
+    "selectNewSupervisor": "اختر المشرف الجديد",
+    "selectPlaceholder": "اختر موظفاً...",
+    "noCandidates": "لا يوجد موظفين مشتركين آخرين في هذا الخط لنقل الإشراف إليهم.",
+    "handoverSuccess": "تم نقل صلاحية الإشراف بنجاح",
+    "handoverError": "فشل نقل صلاحية الإشراف. يرجى المحاولة مرة أخرى."
   },
   "stop": {
     "list": "المواقف",
@@ -247,6 +254,8 @@
     "noSubscriptions": "لم يتم إنشاء أي اشتراكات بعد.",
     "confirmSwitchTitle": "تغيير الاشتراك",
     "confirmSwitch": "أنت مشترك حالياً في خط {{oldLine}}. هل تريد إلغاء هذا الاشتراك والاشتراك في {{newLine}}؟",
+    "confirmSwitchSupervisorTitle": "نقل الإشراف والاشتراك",
+    "confirmSwitchSupervisor": "أنت حالياً مشرف على خط {{oldLine}}. هل تريد نقل صلاحية الإشراف لهذا الخط والاشتراك في خط {{newLine}}؟",
     "subscription": {
       "title": "الاشتراكات",
       "status": "الحالة",

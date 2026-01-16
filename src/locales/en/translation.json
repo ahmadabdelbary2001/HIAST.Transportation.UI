@@ -191,7 +191,14 @@
     "supervisorName": "Supervisor Name",
     "employeeNumber": "Employee Number",
     "assignments": "Assignments",
-    "searchPlaceholder": "Search by name, employee number, or line name..."
+    "searchPlaceholder": "Search by name, employee number, or line name...",
+    "handoverTitle": "Transfer Supervision",
+    "handoverDescription": "You are currently the supervisor of this line and cannot unsubscribe directly. Select another employee from the subscribers to become the new supervisor, then your subscription will be automatically cancelled.",
+    "selectNewSupervisor": "Select New Supervisor",
+    "selectPlaceholder": "Choose an employee...",
+    "noCandidates": "No other subscribed employees found on this line to transfer supervision to.",
+    "handoverSuccess": "Supervision successfully transferred",
+    "handoverError": "Failed to transfer supervision. Please try again."
   },
   "stop": {
     "list": "Stops",
@@ -227,8 +234,10 @@
   "subscription": {
     "detail": "Subscription Details",
     "details": "Subscription Details",
-      "confirmSwitchTitle": "Switch Subscription",
-      "confirmSwitch": "You are currently subscribed to {{oldLine}}. Do you want to cancel that subscription and subscribe to {{newLine}}?",
+    "confirmSwitchTitle": "Change Subscription",
+    "confirmSwitch": "You are currently subscribed to {{oldLine}}. Do you want to cancel this subscription and subscribe to {{newLine}}?",
+    "confirmSwitchSupervisorTitle": "Transfer Supervision and Subscribe",
+    "confirmSwitchSupervisor": "You are currently the supervisor of {{oldLine}}. Do you want to transfer supervision of this line and subscribe to {{newLine}}?",
       "errorCancellingOld": "Failed to cancel old subscription.",
       "subscribeSuccess": "Successfully subscribed to {{lineName}}.",
       "subscription": {

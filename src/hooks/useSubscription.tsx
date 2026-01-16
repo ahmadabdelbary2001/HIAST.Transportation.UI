@@ -4,6 +4,7 @@ import { employeeApiService } from '@/services/employeeApiService';
 import { lineSubscriptionApiService } from '@/services/lineSubscriptionApiService';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { SupervisorHandoverDialog } from '@/components/organisms/SupervisorHandoverDialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,6 +34,11 @@ export const useSubscription = () => {
   // New state for Unsubscribe confirmation
   const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
   const [pendingUnsubscribeSuccess, setPendingUnsubscribeSuccess] = useState<(() => void) | undefined>(undefined);
+
+  // Handover State
+  const [showHandover, setShowHandover] = useState(false);
+  const [handoverCandidates, setHandoverCandidates] = useState<{ id: string, name: string }[]>([]);
+  const [isOldLineSupervisor, setIsOldLineSupervisor] = useState(false);
 
   // Check subscription status
   const checkSubscriptionStatus = useCallback(async () => {
@@ -100,6 +106,16 @@ export const useSubscription = () => {
         setOldLineName(employee.subscribedLineName || '');
         setOldSubscriptionId(employee.lineSubscriptionId);
         setPendingSubscription({ lineId, lineName, onSuccess });
+        
+        // Check if user is supervisor of the line they are leaving
+        try {
+            const oldLine = await import('@/services/lineApiService').then(m => m.lineApiService.getById(employee.subscribedLineId!));
+            setIsOldLineSupervisor(oldLine.supervisorId === user.id);
+        } catch (e) {
+            console.error("Failed to check old line supervisor status", e);
+            setIsOldLineSupervisor(false);
+        }
+
         setShowConfirm(true);
         setLoading(false); // Stop loading while waiting for user confirmation
         return;
@@ -116,31 +132,64 @@ export const useSubscription = () => {
   }, [user, t, performSubscription]);
 
   const confirmSubscriptionSwitch = async () => {
-      if (!pendingSubscription || !user || !user.id || !oldSubscriptionId) return;
+      if (!oldSubscriptionId || !pendingSubscription || !user?.id) return;
 
       try {
           setLoading(true);
-          setShowConfirm(false); // Close dialog immediately
-
-          // 3. Delete old subscription
-          await lineSubscriptionApiService.delete(oldSubscriptionId);
+          setShowConfirm(false);
           
-          // 4. Create new subscription
-          await performSubscription(pendingSubscription.lineId, pendingSubscription.lineName, user.id, pendingSubscription.onSuccess);
-
-      } catch (error: unknown) {
-          console.error("Error switching subscription", error);
-          const errorMessage = error instanceof Error ? error.message : String(error);
+          // Check if user is supervisor of the OLD line before switching
+          if (activeLineId) {
+              const oldLine = await import('@/services/lineApiService').then(m => m.lineApiService.getById(activeLineId));
+              
+              if (oldLine.supervisorId === user.id) {
+                  // User IS supervisor of old line. Trigger Handover flow first.
+                  const candidates = oldLine.subscriptions
+                      .filter(s => s.isActive && s.employeeId !== user.id)
+                      .map(s => ({ id: s.employeeId, name: s.employeeName }));
+                  
+                  if (candidates.length === 0) {
+                      toast.error(t('supervisor.noCandidates'));
+                      setLoading(false);
+                      return;
+                  }
+                  
+                  // Save the pending subscription for after handover
+                  setHandoverCandidates(candidates);
+                  setShowHandover(true);
+                  setLoading(false);
+                  return;
+              }
+          }
+          
+          // Normal switch (not a supervisor)
+          await lineSubscriptionApiService.delete(oldSubscriptionId);
+          await performSubscription(
+              pendingSubscription.lineId, 
+              pendingSubscription.lineName, 
+              user.id, 
+              pendingSubscription.onSuccess
+          );
+          toast.success(t('subscription.switchSuccess'));
+          
+          // Cleanup state on success (non-handover case)
+          setPendingSubscription(null);
+          setOldSubscriptionId(null);
+      } catch(error) {
+          console.error('Switching subscription failed', error);
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           
           if (errorMessage.includes('403')) {
                toast.error(t('common.messages.forbiddenAction'));
           } else {
                toast.error(t('subscription.errorCancellingOld'));
           }
-          setLoading(false);
-      } finally {
           setPendingSubscription(null);
           setOldSubscriptionId(null);
+          setLoading(false);
+      } finally {
+          // Only stop loading here
+          setLoading(false);
       }
   };
 
@@ -152,8 +201,40 @@ export const useSubscription = () => {
 
   // Unsubscribe Logic
   const unsubscribe = async (onSuccess?: () => void) => {
-      setPendingUnsubscribeSuccess(() => onSuccess);
-      setShowUnsubscribeConfirm(true);
+      if (!activeLineId || !user?.id) return;
+      
+      setLoading(true);
+      try {
+          // Check if user is supervisor
+          const line = await import('@/services/lineApiService').then(m => m.lineApiService.getById(activeLineId));
+          
+          if (line.supervisorId === user.id) {
+               // User IS supervisor. Trigger Handover flow.
+               const candidates = line.subscriptions
+                   .filter(s => s.isActive && s.employeeId !== user.id)
+                   .map(s => ({ id: s.employeeId, name: s.employeeName }));
+               
+               if (candidates.length === 0) {
+                   toast.error(t('supervisor.noCandidates'));
+                   // Should we allow force unsubscribe? For now, no.
+               } else {
+                   setHandoverCandidates(candidates);
+                   setShowHandover(true);
+                   setPendingUnsubscribeSuccess(() => onSuccess); 
+               }
+          } else {
+               // Normal unsubscribe
+               setPendingUnsubscribeSuccess(() => onSuccess);
+               setShowUnsubscribeConfirm(true);
+          }
+      } catch (err) {
+          console.error("Failed to check supervisor status", err);
+          // Fallback to normal unsubscribe if check fails
+          setPendingUnsubscribeSuccess(() => onSuccess);
+          setShowUnsubscribeConfirm(true);
+      } finally {
+          setLoading(false);
+      }
   };
 
   const confirmUnsubscribe = async () => {
@@ -179,6 +260,49 @@ export const useSubscription = () => {
           setPendingUnsubscribeSuccess(undefined);
       }
   };
+  
+  const handleHandoverConfirm = async (newSupervisorId: string) => {
+      if (!activeLineId || !user?.id) return;
+      
+      try {
+          setLoading(true);
+          setShowHandover(false);
+          
+          // Call the handover API
+          await import('@/services/lineApiService').then(m => 
+              m.lineApiService.handoverSupervisor(activeLineId, newSupervisorId)
+          );
+          
+          toast.success(t('supervisor.handoverSuccess'));
+          
+          // Refresh subscription status
+          await checkSubscriptionStatus();
+          
+          // If there's a pending subscription (user was switching lines), complete it now
+          if (pendingSubscription) {
+              await performSubscription(
+                  pendingSubscription.lineId, 
+                  pendingSubscription.lineName, 
+                  user.id, 
+                  pendingSubscription.onSuccess
+              );
+              setPendingSubscription(null);
+          }
+          
+          // Call the success callback if provided
+          if (pendingUnsubscribeSuccess) {
+              pendingUnsubscribeSuccess();
+              setPendingUnsubscribeSuccess(undefined);
+          }
+          
+          setShowHandover(false);
+      } catch (error) {
+          console.error("Handover failed", error);
+          toast.error(t('supervisor.handoverError'));
+      } finally {
+          setLoading(false);
+      }
+  };
 
   const SubscriptionDialog = () => (
     <>
@@ -186,12 +310,22 @@ export const useSubscription = () => {
         <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
         <AlertDialogContent>
             <AlertDialogHeader>
-            <AlertDialogTitle>{t('subscription.confirmSwitchTitle', { defaultValue: 'Switch Subscription' })}</AlertDialogTitle>
+            <AlertDialogTitle>
+                {isOldLineSupervisor 
+                    ? t('subscription.confirmSwitchSupervisorTitle') 
+                    : t('subscription.confirmSwitchTitle', { defaultValue: 'Switch Subscription' })}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-                {t('subscription.confirmSwitch', { 
-                    oldLine: oldLineName, 
-                    newLine: pendingSubscription?.lineName 
-                })}
+                {isOldLineSupervisor
+                    ? t('subscription.confirmSwitchSupervisor', { 
+                        oldLine: oldLineName, 
+                        newLine: pendingSubscription?.lineName 
+                      })
+                    : t('subscription.confirmSwitch', { 
+                        oldLine: oldLineName, 
+                        newLine: pendingSubscription?.lineName 
+                      })
+                }
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -226,6 +360,16 @@ export const useSubscription = () => {
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
+        
+        {/* Handover Dialog */}
+        {showHandover && (
+            <SupervisorHandoverDialog 
+                open={showHandover}
+                onOpenChange={setShowHandover}
+                onConfirm={handleHandoverConfirm}
+                candidates={handoverCandidates}
+            />
+        )}
     </>
   );
 
