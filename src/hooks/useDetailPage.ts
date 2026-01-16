@@ -60,5 +60,6 @@ export function useDetailPage<T>({ fetchFn, listRoute }: UseDetailPageOptions<T>
     listRoute,
     formatDate,
     t,
+    loadData,
   };
 }

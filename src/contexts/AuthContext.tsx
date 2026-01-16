@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { LOCAL_STORAGE_KEYS } from '@/lib/constants';
 
-interface UserData {
+export interface UserData {
   id: string;
   userName: string;
   email: string;
@@ -9,7 +9,7 @@ interface UserData {
   roles: string[];
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: UserData | null;
   token: string | null;
   isAuthenticated: boolean;

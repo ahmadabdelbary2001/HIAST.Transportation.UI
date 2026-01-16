@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { 
   Users, CheckCircle, XCircle,
-  UserCog, UserSquare, Bus, MapPin, Pencil, PlusCircle 
+  UserCog, UserSquare, Bus, MapPin, Pencil, PlusCircle, Link as LinkIcon 
 } from 'lucide-react';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { lineApiService } from '@/services/lineApiService';
 import { useDetailPage } from '@/hooks/useDetailPage';
+import { useSubscription } from '@/hooks/useSubscription';
 import type { Line } from '@/types';
 import { ROUTES } from '@/lib/constants';
 import { Separator } from '@/components/ui/separator';
@@ -27,10 +28,12 @@ export default function LineDetail() {
   const { user } = useAuth();
   const isAdmin = user?.roles.includes('Administrator');
 
+  const { subscribeToLine, unsubscribe, activeLineId, loading: subLoading, SubscriptionDialog } = useSubscription();
+
   // Wrap fetchFn in useCallback to prevent infinite loop in useDetailPage
   const fetchFn = useCallback((id: number | string) => lineApiService.getById(Number(id)), []);
 
-  const { data: line, loading, error, navigate } = useDetailPage<Line>({
+  const { data: line, loading, error, navigate, loadData } = useDetailPage<Line>({
     fetchFn,
     listRoute: ROUTES.LINES,
   });
@@ -51,6 +54,12 @@ export default function LineDetail() {
     });
     return { activeSubscribers: active, inactiveSubscribers: inactive };
   }, [line?.subscriptions]);
+
+  const handleSubscribe = async () => {
+    if (line) {
+         await subscribeToLine(line.id, line.name, () => loadData(line.id));
+    }
+  };
 
   if (loading) {
     return <LoadingSpinner text={t('common.messages.loadingData')} />;
@@ -194,6 +203,31 @@ export default function LineDetail() {
                   </Link>
                 </Button>
               )}
+               {!isAdmin && (
+                <>
+                    {activeLineId === line.id ? (
+                        <Button 
+                            size="sm" 
+                            variant="destructive"
+                            onClick={() => unsubscribe(() => loadData(line.id))}
+                            disabled={subLoading}
+                        >
+                            <XCircle className="me-2 h-4 w-4" />
+                            {t('common.actions.cancelSubscription')}
+                        </Button>
+                    ) : (
+                        <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={handleSubscribe}
+                            disabled={subLoading}
+                        >
+                            <LinkIcon className="me-2 h-4 w-4" />
+                            {t('common.actions.subscribe')}
+                        </Button>
+                    )}
+                </>
+              )}
             </div>
             
             {/* --- Badge remains on the right --- */}
@@ -322,6 +356,7 @@ export default function LineDetail() {
         </CardContent>
       </Card>
       
+      <SubscriptionDialog />
     </div>
   );
 }

@@ -3,12 +3,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Eye, Edit, Trash2 } from 'lucide-react';
+import { Eye, Edit, Trash2, Link as LinkIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ListLayout } from '@/components/templates/ListLayout';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
 import { useListPage } from '@/hooks/useListPage';
+import { useSubscription } from '@/hooks/useSubscription';
 import { lineApiService } from '@/services/lineApiService';
 import type { LineListDto } from '@/types';
 import { ROUTES } from '@/lib/constants';
@@ -20,6 +21,7 @@ export default function LineList() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const isAdmin = user?.roles.includes('Administrator');
+  const { subscribeToLine, unsubscribe, activeLineId, SubscriptionDialog } = useSubscription();
 
   const {
     filteredItems: filteredLines,
@@ -80,6 +82,26 @@ export default function LineList() {
       isAction: true,
       cell: (line: LineListDto) => (
         <div className="flex justify-end gap-2">
+          {activeLineId === line.id ? (
+            <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => unsubscribe(loadItems)}
+                title={t('common.actions.cancelSubscription')}
+                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+            >
+                <Trash2 className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => subscribeToLine(line.id, line.name, loadItems)}
+                title={t('common.actions.subscribe')}
+            >
+                <LinkIcon className="h-4 w-4" />
+            </Button>
+          )}
           <Button variant="ghost" size="icon" asChild>
             <Link to={`/lines/${line.id}`}>
               <Eye className="h-4 w-4" />
@@ -125,6 +147,8 @@ export default function LineList() {
       onDeleteClose={() => setDeleteId(null)}
       onDeleteConfirm={() => deleteId && handleDelete(deleteId)}
       countLabel={t('line.lines')}
-    />
+    >
+        <SubscriptionDialog />
+    </ListLayout>
   );
 }
