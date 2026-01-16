@@ -235,6 +235,7 @@ export const useSubscription = () => {
     activeLineId,
     loading,
     SubscriptionDialog,
-    checkSubscriptionStatus
+    checkSubscriptionStatus,
+    activeSubscriptionId
   };
 };

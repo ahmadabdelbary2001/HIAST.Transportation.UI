@@ -37,6 +37,7 @@ export const ROUTES = {
   SUBSCRIPTION_CREATE: '/subscriptions/create',
   SUBSCRIPTION_EDIT: '/subscriptions/:id/edit',
   SUPERVISORS: '/supervisors',
+  MY_SUBSCRIPTION: '/my-subscription',
   LOGIN: '/login',
   REGISTER: '/register',
 };

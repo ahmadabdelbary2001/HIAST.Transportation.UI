@@ -9,38 +9,63 @@ import {
   ShieldCheck, 
   ArrowRight,
   Activity,
-  Loader2
+  Loader2,
+  Ticket
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { dashboardService, type DashboardStats } from '@/services/dashboardService';
+import { employeeApiService } from '@/services/employeeApiService';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Dashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState<string | null>(null);
+  const [employeeName, setEmployeeName] = useState<string>('');
+  const [subscriptionInfo, setSubscriptionInfo] = useState<{
+      isActive: boolean;
+      lineName?: string;
+      lineId?: number;
+  } | null>(null);
+
+  const isAdmin = user?.roles.includes('Administrator');
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        setError(null);
-        const data = await dashboardService.getStats();
-        setStats(data);
-      } catch (err) {
-        console.error('Failed to fetch dashboard stats:', err);
-        setError('Failed to load stats');
-      } finally {
-        setLoading(false);
-      }
+    const fetchData = async () => {
+        try {
+            setError(null);
+            
+            if (isAdmin) {
+                const data = await dashboardService.getStats();
+                setStats(data);
+            } else if (user?.id) {
+                // Fetch employee details for non-admins to get full name AND subscription info
+                const employee = await employeeApiService.getById(user.id);
+                setEmployeeName(`${employee.firstName} ${employee.lastName}`);
+                
+                // Store subscription info from hydrated employee object
+                setSubscriptionInfo({
+                    isActive: employee.isSubscriptionActive,
+                    lineName: employee.subscribedLineName,
+                    lineId: employee.subscribedLineId
+                });
+            }
+        } catch (err) {
+            console.error('Failed to fetch dashboard data:', err);
+            setError('Failed to load data');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    fetchStats();
-  }, [t]);
+    fetchData();
+  }, [t, isAdmin, user]);
 
   const statsCards = [
     { 
@@ -73,14 +98,15 @@ export default function Dashboard() {
     },
   ];
 
-  const quickActions = [
+  const allQuickActions = [
     {
       title: t('dashboard.actions.manageLines', 'Manage Lines'),
       description: t('dashboard.actions.manageLinesDesc', 'View and modify bus routes and stops.'),
       icon: Map,
       path: ROUTES.LINES,
       color: "text-emerald-600",
-      bg: "bg-emerald-100 dark:bg-emerald-950/30"
+      bg: "bg-emerald-100 dark:bg-emerald-950/30",
+      roles: ['Administrator']
     },
     {
       title: t('dashboard.actions.fleetManagement', 'Fleet Management'),
@@ -88,7 +114,8 @@ export default function Dashboard() {
       icon: Bus,
       path: ROUTES.BUSES,
       color: "text-blue-600",
-      bg: "bg-blue-100 dark:bg-blue-950/30"
+      bg: "bg-blue-100 dark:bg-blue-950/30",
+      roles: ['Administrator']
     },
     {
       title: t('dashboard.actions.employeeDirectory', 'Employee Directory'),
@@ -96,7 +123,8 @@ export default function Dashboard() {
       icon: Users,
       path: ROUTES.EMPLOYEES,
       color: "text-violet-600",
-      bg: "bg-violet-100 dark:bg-violet-950/30"
+      bg: "bg-violet-100 dark:bg-violet-950/30",
+      roles: ['Administrator']
     },
     {
       title: t('dashboard.actions.subscriptions', 'Subscriptions'),
@@ -104,7 +132,8 @@ export default function Dashboard() {
       icon: CreditCard,
       path: ROUTES.SUBSCRIPTIONS,
       color: "text-amber-600",
-      bg: "bg-amber-100 dark:bg-amber-950/30"
+      bg: "bg-amber-100 dark:bg-amber-950/30",
+      roles: ['Administrator']
     },
     {
       title: t('dashboard.actions.driverReports', 'Driver Reports'),
@@ -112,9 +141,41 @@ export default function Dashboard() {
       icon: ShieldCheck,
       path: ROUTES.DRIVERS,
       color: "text-indigo-600",
-      bg: "bg-indigo-100 dark:bg-indigo-950/30"
+      bg: "bg-indigo-100 dark:bg-indigo-950/30",
+      roles: ['Administrator']
+    },
+    // Employee Specific Actions
+    {
+        title: t('dashboard.actions.viewLines', 'View Lines'),
+        description: t('dashboard.actions.viewLinesDesc', 'Browse available bus routes and stops.'),
+        icon: Map,
+        path: ROUTES.LINES,
+        color: "text-emerald-600",
+        bg: "bg-emerald-100 dark:bg-emerald-950/30",
+        roles: ['Employee']
+    },
+    {
+        // Dynamic Card logic
+        title: subscriptionInfo?.isActive 
+            ? `${t('employee.subscribedLine')}: ${subscriptionInfo.lineName}` 
+            : t('dashboard.actions.subscribeNow'),
+        description: subscriptionInfo?.isActive
+            ? t('dashboard.actions.mySubscriptionDesc') // "View your current subscription details"
+            : t('dashboard.actions.subscribeNowDesc'), // "Subscribe now..."
+        icon: subscriptionInfo?.isActive ? Ticket : CreditCard,
+        path: subscriptionInfo?.isActive && subscriptionInfo.lineId 
+            ? ROUTES.LINE_DETAIL.replace(':id', subscriptionInfo.lineId.toString()) 
+            : ROUTES.LINES,
+        color: subscriptionInfo?.isActive ? "text-primary" : "text-amber-600",
+        bg: subscriptionInfo?.isActive ? "bg-primary/10" : "bg-amber-100 dark:bg-amber-950/30",
+        roles: ['Employee']
     }
   ];
+
+  const filteredActions = allQuickActions.filter(action => {
+      if (isAdmin) return action.roles.includes('Administrator');
+      return action.roles.includes('Employee');
+  });
 
   if (loading) {
     return (
@@ -130,38 +191,44 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-2">
-            {t('dashboard.welcome', 'Welcome to HIAST Transport')}
+            {isAdmin 
+                ? t('dashboard.welcome', 'Welcome to 2AF Work') 
+                : t('dashboard.welcomeEmployee', { name: employeeName || user?.userName || 'Employee' })}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl">
             {t('dashboard.subtitle', 'Smart management for routes, fleet, and employee mobility.')}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-           <Button variant="outline" className={cn("gap-2", error ? "text-red-500 border-red-200" : "")}>
-             <Activity className="h-4 w-4" />
-             {error ? t('dashboard.fetchError', 'System Warning') : t('dashboard.systemStatus', 'System Online')}
-           </Button>
-           <div className={cn("h-2 w-2 rounded-full animate-pulse", error ? "bg-red-500" : "bg-green-500")}></div>
-        </div>
+        {isAdmin && (
+            <div className="flex items-center gap-2">
+            <Button variant="outline" className={cn("gap-2", error ? "text-red-500 border-red-200" : "")}>
+                <Activity className="h-4 w-4" />
+                {error ? t('dashboard.fetchError', 'System Warning') : t('dashboard.systemStatus', 'System Online')}
+            </Button>
+            <div className={cn("h-2 w-2 rounded-full animate-pulse", error ? "bg-red-500" : "bg-green-500")}></div>
+            </div>
+        )}
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {statsCards.map((stat, index) => (
-          <Card key={index} className={cn("overflow-hidden border-none shadow-md", "bg-card relative group hover:shadow-lg transition-all duration-300")}>
-             <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50 transition-opacity group-hover:opacity-100", stat.gradient)} />
-             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
-              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className={cn("h-5 w-5", stat.iconColor)} />
-            </CardHeader>
-            <CardContent className="relative z-10">
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {/* Stats Grid - Admin Only */}
+      {isAdmin && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {statsCards.map((stat, index) => (
+            <Card key={index} className={cn("overflow-hidden border-none shadow-md", "bg-card relative group hover:shadow-lg transition-all duration-300")}>
+                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-50 transition-opacity group-hover:opacity-100", stat.gradient)} />
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                    {stat.title}
+                </CardTitle>
+                <stat.icon className={cn("h-5 w-5", stat.iconColor)} />
+                </CardHeader>
+                <CardContent className="relative z-10">
+                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
+                </CardContent>
+            </Card>
+            ))}
+        </div>
+      )}
 
       {/* Quick Actions Grid */}
       <div>
@@ -169,11 +236,11 @@ export default function Dashboard() {
             {t('dashboard.quickAccess', 'Quick Access')}
             <div className="h-px bg-border flex-1 ml-4 opacity-50"></div>
         </h2>
-        <div className="flex flex-wrap justify-center gap-4">
-          {quickActions.map((action, index) => (
+        <div className="flex flex-wrap justify-center gap-6 mt-12">
+          {filteredActions.map((action, index) => (
             <Card 
               key={index} 
-              className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.67rem)] group cursor-pointer hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 relative overflow-hidden"
+              className="w-full md:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] max-w-sm group cursor-pointer hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 relative overflow-hidden"
               onClick={() => navigate(action.path)}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent to-transparent group-hover:from-primary/5 group-hover:to-transparent transition-all duration-500" />

@@ -44,8 +44,15 @@
       "subscriptions": "Subscriptions",
       "subscriptionsDesc": "Handle monthly passes and renewals.",
       "driverReports": "Driver Reports",
-      "driverReportsDesc": "View logs and performance metrics."
-    }
+      "driverReportsDesc": "View logs and performance metrics.",
+      "viewLines": "View Lines",
+      "viewLinesDesc": "Browse available bus routes and stops.",
+      "mySubscription": "My Subscription",
+      "mySubscriptionDesc": "View your current subscription details.",
+      "subscribeNow": "No Subscription",
+      "subscribeNowDesc": "Subscribe now to access transportation."
+    },
+    "welcomeEmployee": "Welcome, {{name}}"
   },
   "employee": {
     "list": "Employees",

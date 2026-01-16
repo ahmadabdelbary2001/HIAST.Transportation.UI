@@ -44,8 +44,15 @@
       "subscriptions": "الاشتراكات",
       "subscriptionsDesc": "معالجة البطاقات الشهرية والتجديدات.",
       "driverReports": "تقارير السائقين",
-      "driverReportsDesc": "عرض السجلات ومقاييس الأداء."
-    }
+      "driverReportsDesc": "عرض السجلات ومقاييس الأداء.",
+      "viewLines": "عرض الخطوط",
+      "viewLinesDesc": "استعرض خطوط النقل المتاحة والمواقف.",
+      "mySubscription": "اشتراكي",
+      "mySubscriptionDesc": "عرض تفاصيل اشتراكك الحالي.",
+      "subscribeNow": "ليس لديك اشتراك",
+      "subscribeNowDesc": "اشترك الآن واستمتع بخدمة النقل."
+    },
+    "welcomeEmployee": "مرحباً بك، {{name}}"
   },
   "employee": {
     "list": "الموظفون",
