@@ -240,6 +240,7 @@
     "confirmSwitchSupervisor": "You are currently the supervisor of {{oldLine}}. Do you want to transfer supervision of this line and subscribe to {{newLine}}?",
       "errorCancellingOld": "Failed to cancel old subscription.",
       "subscribeSuccess": "Successfully subscribed to {{lineName}}.",
+      "switchSuccess": "Successfully switched subscription from '{{oldLineName}}' to {{lineName}}.",
       "subscription": {
         "title": "Subscriptions",
         "status": "Status",
@@ -283,7 +284,8 @@
       "email": "Email",
       "emailOrUserName": "Email or Username",
       "password": "Password",
-      "userName": "Username"
+      "userName": "Username",
+      "systemAdmin": "System Administrator"
     },
     "passengers": "Passengers",
     "createdAt": "Created At",
@@ -408,6 +410,20 @@
     "supervisorHandover": {
       "title": "Supervisor Handover",
       "message": "{{oldSupervisor}} has handed over supervision of line '{{lineName}}' to {{newSupervisor}}."
-    }
+    },
+    "adminAssignedSupervisor": {
+      "title": "New Responsibility",
+      "message": "You have been assigned as supervisor for line '{{lineName}}' by {{adminName}}."
+    },
+    "peerAssignedSupervisor": {
+      "title": "New Responsibility",
+      "message": "You have been assigned as supervisor for line '{{lineName}}' by {{oldSupervisor}}."
+    },
+    "supervisorChangedDetailed": {
+      "title": "Supervisor Changed",
+      "message": "The supervisor for line '{{lineName}}' has changed from {{oldSupervisor}} to {{newSupervisor}}."
+    },
+    "markAsRead": "Mark as read",
+    "markAllRead": "Mark all as read"
   }
 }

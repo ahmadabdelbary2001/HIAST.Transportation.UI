@@ -65,7 +65,7 @@ export const useSubscription = () => {
   });
 
 
-  const performSubscription = useCallback(async (lineId: number, lineName: string, userId: string, onSuccess?: () => void) => {
+  const performSubscription = useCallback(async (lineId: number, lineName: string, userId: string, onSuccess?: () => void, suppressToast: boolean = false) => {
       try {
         setLoading(true);
         await lineSubscriptionApiService.create({
@@ -75,7 +75,9 @@ export const useSubscription = () => {
             isActive: true
         });
 
-        toast.success(t('subscription.subscribeSuccess', { lineName }));
+        if (!suppressToast) {
+            toast.success(t('subscription.subscribeSuccess', { lineName }));
+        }
         await checkSubscriptionStatus(); // Refresh status
         if (onSuccess) onSuccess();
       } catch(error) {
@@ -168,9 +170,13 @@ export const useSubscription = () => {
               pendingSubscription.lineId, 
               pendingSubscription.lineName, 
               user.id, 
-              pendingSubscription.onSuccess
+              pendingSubscription.onSuccess,
+              true // Suppress generic "Subscribed" toast
           );
-          toast.success(t('subscription.switchSuccess'));
+          toast.success(t('subscription.switchSuccess', { 
+              lineName: pendingSubscription.lineName,
+              oldLineName: oldLineName 
+          }));
           
           // Cleanup state on success (non-handover case)
           setPendingSubscription(null);

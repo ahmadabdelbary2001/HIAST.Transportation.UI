@@ -32,11 +32,14 @@ import '@/i18n';
 
 import { NotificationProvider } from '@/contexts/NotificationContext';
 
+import { GlobalToaster } from '@/components/atoms/GlobalToaster';
+
 const App = () => (
   <ThemeProvider>
     <LanguageProvider>
       <AuthProvider>
         <NotificationProvider>
+          <GlobalToaster />
           <BrowserRouter basename="/HIAST.Transportation.UI">
           <Routes>
             {/* Public Routes */}

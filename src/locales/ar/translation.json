@@ -256,6 +256,8 @@
     "confirmSwitch": "أنت مشترك حالياً في خط {{oldLine}}. هل تريد إلغاء هذا الاشتراك والاشتراك في {{newLine}}؟",
     "confirmSwitchSupervisorTitle": "نقل الإشراف والاشتراك",
     "confirmSwitchSupervisor": "أنت حالياً مشرف على خط {{oldLine}}. هل تريد نقل صلاحية الإشراف لهذا الخط والاشتراك في خط {{newLine}}؟",
+    "subscribeSuccess": "تم الاشتراك بنجاح في الخط {{lineName}}.",
+    "switchSuccess": "تم تغيير الاشتراك بنجاح من الخط {{oldLineName}} إلى الخط {{lineName}}.",
     "subscription": {
       "title": "الاشتراكات",
       "status": "الحالة",
@@ -283,7 +285,8 @@
       "email": "البريد الإلكتروني",
       "emailOrUserName": "البريد الإلكتروني أو اسم المستخدم",
       "password": "كلمة المرور",
-      "userName": "اسم المستخدم"
+      "userName": "اسم المستخدم",
+      "systemAdmin": "مدير النظام"
     },
     "passengers": "ركاب",
     "createdAt": "تاريخ الإنشاء",
@@ -409,6 +412,20 @@
     "supervisorHandover": {
       "title": "تسليم الإشراف",
       "message": "قام {{oldSupervisor}} بتسليم إشراف الخط '{{lineName}}' إلى {{newSupervisor}}."
-    }
+    },
+    "adminAssignedSupervisor": {
+      "title": "مسؤولية جديدة",
+      "message": "تم تعيينك مشرفاً للخط '{{lineName}}' من قبل {{adminName}}."
+    },
+    "peerAssignedSupervisor": {
+      "title": "مسؤولية جديدة",
+      "message": "تم تعيينك مشرفاً للخط '{{lineName}}' من قبل {{oldSupervisor}}."
+    },
+    "supervisorChangedDetailed": {
+      "title": "تغيير المشرف",
+      "message": "تم تغيير مشرف الخط '{{lineName}}' من {{oldSupervisor}} إلى {{newSupervisor}}."
+    },
+    "markAsRead": "تحديد كمقروء",
+    "markAllRead": "تحديد الكل كمقروء"
   }
 }

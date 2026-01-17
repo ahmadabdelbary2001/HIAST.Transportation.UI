@@ -68,8 +68,16 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         }
     };
 
-    const markAllAsRead = () => {
-        // Implement later if needed
+    const markAllAsRead = async () => {
+        const unreadIds = notifications.filter(n => !n.isRead).map(n => n.id);
+        if (unreadIds.length === 0) return;
+
+        try {
+            await Promise.all(unreadIds.map(id => notificationApiService.markAsRead(id)));
+            setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        } catch (error) {
+            console.error("Failed to mark all notifications as read", error);
+        }
     };
 
     return (
