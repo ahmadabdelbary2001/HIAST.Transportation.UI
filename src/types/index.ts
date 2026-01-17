@@ -230,3 +230,17 @@ export interface CreateLineSubscriptionDto {
 export interface UpdateLineSubscriptionDto extends CreateLineSubscriptionDto {
   id: number;
 }
+
+export interface Notification {
+    id: number;
+    title: string;
+    message: string;
+    titleKey?: string;
+    messageKey?: string;
+    data?: string;
+    userId: string;
+    isRead: boolean;
+    relatedEntityId?: string;
+    type?: string;
+    createdAt: string;
+}

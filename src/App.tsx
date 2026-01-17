@@ -30,11 +30,14 @@ import SubscriptionForm from './pages/subscriptions/SubscriptionForm';
 import SubscriptionDetail from './pages/subscriptions/SubscriptionDetail';
 import '@/i18n';
 
+import { NotificationProvider } from '@/contexts/NotificationContext';
+
 const App = () => (
   <ThemeProvider>
     <LanguageProvider>
       <AuthProvider>
-        <BrowserRouter basename="/HIAST.Transportation.UI">
+        <NotificationProvider>
+          <BrowserRouter basename="/HIAST.Transportation.UI">
           <Routes>
             {/* Public Routes */}
             <Route path={ROUTES.LOGIN} element={<Login />} />
@@ -316,6 +319,7 @@ const App = () => (
             <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
           </Routes>
         </BrowserRouter>
+        </NotificationProvider>
       </AuthProvider>
     </LanguageProvider>
   </ThemeProvider>

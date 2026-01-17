@@ -10,6 +10,7 @@ import { ThemeSelector } from '@/components/atoms/ThemeSelector';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/useLanguage';
 import { UserProfile } from '@/components/molecules/UserProfile';
+import { NotificationBell } from '@/components/atoms/NotificationBell';
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -97,16 +98,17 @@ export function Header({
                 />
               </div>
               <div className="sm:hidden">
-                <LanguageSelector 
-                  currentLanguage={language} 
-                  onLanguageChange={handleLanguageChange} 
-                  compact 
+                <LanguageSelector
+                  currentLanguage={language}
+                  onLanguageChange={handleLanguageChange}
+                  compact
                 />
               </div>
             </>
           )}
           <ThemeSelector />
           <ModeToggler />
+          <NotificationBell />
           <UserProfile />
         </div>
       </div>

@@ -395,5 +395,19 @@
       "number": "One number",
       "special": "One special character"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unreadCount": "You have {{count}} unread message",
+    "unreadCount_other": "You have {{count}} unread messages",
+    "noNotifications": "No notifications",
+    "supervisorChanged": {
+      "title": "Supervisor Changed",
+      "message": "The supervisor for line '{{lineName}}' has been changed to '{{newSupervisor}}'."
+    },
+    "supervisorHandover": {
+      "title": "Supervisor Handover",
+      "message": "{{oldSupervisor}} has handed over supervision of line '{{lineName}}' to {{newSupervisor}}."
+    }
   }
 }

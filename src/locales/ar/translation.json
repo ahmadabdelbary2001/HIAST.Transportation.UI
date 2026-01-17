@@ -395,5 +395,20 @@
       "number": "رقم واحد",
       "special": "رمز خاص واحد"
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "unreadCount_zero": "لا توجد رسائل غير مقروءة",
+    "unreadCount": "لديك رسالة واحدة غير مقروءة",
+    "unreadCount_other": "لديك {{count}} رسائل غير مقروءة",
+    "noNotifications": "لا توجد إشعارات",
+    "supervisorChanged": {
+      "title": "تغيير المشرف",
+      "message": "تم تغيير مشرف الخط '{{lineName}}' إلى '{{newSupervisor}}'."
+    },
+    "supervisorHandover": {
+      "title": "تسليم الإشراف",
+      "message": "قام {{oldSupervisor}} بتسليم إشراف الخط '{{lineName}}' إلى {{newSupervisor}}."
+    }
   }
 }

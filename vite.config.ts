@@ -18,6 +18,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/notificationHub': {
+        target: 'http://localhost:5066',
+        changeOrigin: true,
+        secure: false,
+        ws: true // Enable WebSocket proxying
+      },
     },
   },
 })
