@@ -52,7 +52,7 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Explicit checks matching backend Identity rules
     if (formData.password.length < 8) {
       toast.error(t('auth.errors.passwordTooShort'));
@@ -70,7 +70,11 @@ const Register: React.FC = () => {
 
     setLoading(true);
     try {
-      await authApiService.register(formData);
+      const payload = {
+        ...formData,
+        phoneNumber: formData.phoneNumber?.trim() === '' ? undefined : formData.phoneNumber
+      };
+      await authApiService.register(payload);
       toast.success(t('registrationSuccess'));
       navigate(ROUTES.LOGIN);
     } catch (error: unknown) {
@@ -84,7 +88,7 @@ const Register: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
-      
+
       <div className="flex-1 flex items-center justify-center p-4 animate-in slide-in-from-bottom duration-500">
         <div className="w-full max-w-lg bg-theme-secondary p-8 rounded-2xl shadow-xl border border-border theme-card">
           <div className="text-center mb-8">
@@ -254,7 +258,7 @@ const Register: React.FC = () => {
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">{t('alreadyHaveAccount')} </span>
-            <button 
+            <button
               onClick={() => navigate(ROUTES.LOGIN)}
               className="text-primary font-medium hover:underline"
             >

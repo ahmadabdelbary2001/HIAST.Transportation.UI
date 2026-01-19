@@ -24,7 +24,7 @@ export interface EmployeeDto {
   email: string;
   phoneNumber?: string;
   department?: Department;
-  
+
   // Subscription fields (flatted)
   lineSubscriptionId?: number;
   subscribedLineId?: number;
@@ -45,7 +45,7 @@ export interface EmployeeListDto {
   department?: Department;
   userName?: string;
   phoneNumber?: string;
-  
+
   isAssigned?: boolean;
   isSubscriptionActive?: boolean;
 }
@@ -119,7 +119,7 @@ export interface Line extends BaseEntity {
   name: string;
   description?: string;
   // Assuming StopDto and LineSubscriptionDto will be defined for detail views
-  stops: Stop[]; 
+  stops: Stop[];
   subscriptions: LineSubscription[];
   isActive?: boolean;
 }
@@ -213,6 +213,8 @@ export interface LineSubscription extends BaseEntity {
 // Represents the lighter object for list views from GET /api/LineSubscription
 export interface LineSubscriptionListDto {
   id: number;
+  employeeId: string;
+  lineId: number;
   employeeName: string;
   lineName: string;
   isActive?: boolean;
@@ -232,15 +234,15 @@ export interface UpdateLineSubscriptionDto extends CreateLineSubscriptionDto {
 }
 
 export interface Notification {
-    id: number;
-    title: string;
-    message: string;
-    titleKey?: string;
-    messageKey?: string;
-    data?: string;
-    userId: string;
-    isRead: boolean;
-    relatedEntityId?: string;
-    type?: string;
-    createdAt: string;
+  id: number;
+  title: string;
+  message: string;
+  titleKey?: string;
+  messageKey?: string;
+  data?: string;
+  userId: string;
+  isRead: boolean;
+  relatedEntityId?: string;
+  type?: string;
+  createdAt: string;
 }

@@ -17,7 +17,6 @@ import BusList from '@/pages/buses/BusList';
 import BusForm from '@/pages/buses/BusForm';
 import BusDetail from '@/pages/buses/BusDetail';
 import EmployeeList from './pages/employees/EmployeeList';
-import EmployeeForm from './pages/employees/EmployeeForm';
 import EmployeeDetail from './pages/employees/EmployeeDetail';
 import LineList from './pages/lines/LineList';
 import LineForm from './pages/lines/LineForm';
@@ -41,287 +40,257 @@ const App = () => (
         <NotificationProvider>
           <GlobalToaster />
           <BrowserRouter basename="/HIAST.Transportation.UI">
-          <Routes>
-            {/* Public Routes */}
-            <Route path={ROUTES.LOGIN} element={<Login />} />
-            <Route path={ROUTES.REGISTER} element={<Register />} />
+            <Routes>
+              {/* Public Routes */}
+              <Route path={ROUTES.LOGIN} element={<Login />} />
+              <Route path={ROUTES.REGISTER} element={<Register />} />
 
-            {/* Protected Routes */}
-            <Route
-              path={ROUTES.DASHBOARD}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <Dashboard />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEES}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <EmployeeList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEE_CREATE}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <EmployeeForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEE_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <EmployeeForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEE_DETAIL}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <EmployeeDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEE_DETAIL_BY_USERID}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <EmployeeDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.EMPLOYEE_EDIT_BY_USERID}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <EmployeeForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.DRIVERS}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <DriverList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.DRIVER_CREATE}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <DriverForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.DRIVER_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <DriverForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.DRIVER_DETAIL}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <DriverDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.BUSES}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <BusList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.BUS_CREATE}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <BusForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.BUS_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <BusForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.BUS_DETAIL}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <BusDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.LINES}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <LineList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.LINE_CREATE}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <LineForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.LINE_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <LineForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.LINE_DETAIL}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <LineDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.STOPS}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <StopList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.STOP_CREATE}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <StopForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.STOP_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <StopForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.SUPERVISORS}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <SupervisorReport />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.SUBSCRIPTIONS}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <SubscriptionList />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.SUBSCRIPTION_CREATE}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <SubscriptionForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.SUBSCRIPTION_EDIT}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <SubscriptionForm />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={ROUTES.SUBSCRIPTION_DETAIL}
-              element={
-                <ProtectedRoute requiredRole="Administrator">
-                  <MainLayout>
-                    <SubscriptionDetail />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
-          </Routes>
-        </BrowserRouter>
+              {/* Protected Routes */}
+              <Route
+                path={ROUTES.DASHBOARD}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <Dashboard />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.EMPLOYEES}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <EmployeeList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.EMPLOYEE_DETAIL}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <EmployeeDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.EMPLOYEE_DETAIL_BY_USERID}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <EmployeeDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.DRIVERS}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <DriverList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.DRIVER_CREATE}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <DriverForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.DRIVER_EDIT}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <DriverForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.DRIVER_DETAIL}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <DriverDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.BUSES}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <BusList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.BUS_CREATE}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <BusForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.BUS_EDIT}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <BusForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.BUS_DETAIL}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <BusDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.LINES}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <LineList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.LINE_CREATE}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <LineForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.LINE_EDIT}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <LineForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.LINE_DETAIL}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <LineDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.STOPS}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <StopList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.STOP_CREATE}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <StopForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.STOP_EDIT}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <StopForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.SUPERVISORS}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <SupervisorReport />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.SUBSCRIPTIONS}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <SubscriptionList />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.SUBSCRIPTION_CREATE}
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <SubscriptionForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.SUBSCRIPTION_EDIT}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <SubscriptionForm />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.SUBSCRIPTION_DETAIL}
+                element={
+                  <ProtectedRoute requiredRole="Administrator">
+                    <MainLayout>
+                      <SubscriptionDetail />
+                    </MainLayout>
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
+            </Routes>
+          </BrowserRouter>
         </NotificationProvider>
       </AuthProvider>
     </LanguageProvider>

@@ -3,14 +3,13 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Eye, Edit, Trash2 } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ListLayout } from '@/components/templates/ListLayout';
 import { useListPage } from '@/hooks/useListPage';
 import { employeeApiService } from '@/services/employeeApiService';
 import type { EmployeeListDto } from '@/types/index';
 import { Department } from '@/types/enums';
-import { ROUTES } from '@/lib/constants';
 import { type ColumnDefinition } from '@/components/organisms/DataTable';
 
 export default function EmployeeList() {
@@ -24,10 +23,7 @@ export default function EmployeeList() {
     setSearchTerm,
     filterValue: departmentFilter,
     setFilterValue: setDepartmentFilter,
-    deleteId,
-    setDeleteId,
     loadItems,
-    handleDelete,
     clearFilters,
     hasFilters,
   } = useListPage<EmployeeListDto>({
@@ -35,7 +31,6 @@ export default function EmployeeList() {
     filterField: 'department',
     entityName: 'employee',
     getAll: employeeApiService.getAll,
-    deleteItem: employeeApiService.delete,
   });
 
   useEffect(() => {
@@ -59,9 +54,9 @@ export default function EmployeeList() {
       cell: (employee) => `${employee.firstName} ${employee.lastName}`,
     },
     {
-       key: 'userName',
-       header: t('auth.username'), // Ensure translation key exists or use hardcoded string if needed 'Username'
-       cell: (item) => item.userName || '-',
+      key: 'userName',
+      header: t('auth.username'), // Ensure translation key exists or use hardcoded string if needed 'Username'
+      cell: (item) => item.userName || '-',
     },
     {
       key: 'department',
@@ -79,14 +74,6 @@ export default function EmployeeList() {
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link to={`/employees/${item.id}/edit`}>
-              <Edit className="h-4 w-4" />
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => setDeleteId(item.id)}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
         </div>
       ),
     },
@@ -95,13 +82,10 @@ export default function EmployeeList() {
   return (
     <ListLayout
       title={t('employee.list')}
-      createRoute={ROUTES.EMPLOYEE_CREATE}
       searchPlaceholder={t('employee.searchPlaceholder')}
       noDataTitle={t('common.messages.noData')}
       noDataDescription={t('employee.noEmployees')}
       noResultsTitle={t('common.messages.noResults')}
-      deleteTitle={t('common.messages.confirmDeleteTitle')}
-      deleteDescription={t('common.messages.confirmDeleteItem', { item: t('employee.singular') })}
       items={[]}
       filteredItems={filteredEmployees}
       loading={loading}
@@ -116,9 +100,6 @@ export default function EmployeeList() {
       hasFilters={hasFilters}
       showFilter={true}
       filterPlaceholder={t('employee.filterByDepartment')}
-      deleteId={deleteId as string | number | null}
-      onDeleteClose={() => setDeleteId(null)}
-      onDeleteConfirm={() => deleteId && handleDelete(deleteId as string | number)}
       countLabel={t('employee.employees')}
     />
   );

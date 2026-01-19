@@ -21,8 +21,8 @@ interface ListLayoutProps<T> {
   noDataTitle: string;
   noDataDescription: string;
   noResultsTitle: string;
-  deleteTitle: string;
-  deleteDescription: string;
+  deleteTitle?: string;
+  deleteDescription?: string;
 
   // Data
   items: T[];
@@ -43,9 +43,9 @@ interface ListLayoutProps<T> {
   filterPlaceholder?: string;
 
   // Delete
-  deleteId: number | string | null;
-  onDeleteClose: () => void;
-  onDeleteConfirm: () => void;
+  deleteId?: number | string | null;
+  onDeleteClose?: () => void;
+  onDeleteConfirm?: () => void;
 
   // Optional
   countLabel: string;
@@ -131,13 +131,15 @@ export function ListLayout<T extends { id: number | string }>({
         <DataTable columns={columns} data={filteredItems} />
       )}
 
-      <DeleteConfirmationDialog
-        isOpen={deleteId !== null}
-        onClose={onDeleteClose}
-        onConfirm={onDeleteConfirm}
-        title={deleteTitle}
-        description={deleteDescription}
-      />
+      {deleteId !== undefined && deleteId !== null && onDeleteClose && onDeleteConfirm && deleteTitle && deleteDescription && (
+        <DeleteConfirmationDialog
+          isOpen={deleteId !== null}
+          onClose={onDeleteClose}
+          onConfirm={onDeleteConfirm}
+          title={deleteTitle}
+          description={deleteDescription}
+        />
+      )}
     </div>
   );
 }

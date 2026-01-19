@@ -30,7 +30,7 @@ export default function DriverForm() {
   const driverSchema = z.object({
     name: z.string().min(1, t('common.validation.required')),
     licenseNumber: z.string().min(1, t('common.validation.required')),
-    contactInfo: z.string().optional(),
+    contactInfo: z.string().min(1, t('driver.form.contactInfoRequired')),
   });
 
   type DriverFormData = z.infer<typeof driverSchema>;
@@ -78,23 +78,23 @@ export default function DriverForm() {
     try {
       // Manual Validation
       const allDrivers = await driverApiService.getAll();
-      const duplicate = allDrivers.find(d => 
-          d.licenseNumber === data.licenseNumber &&
-          (!isEdit || d.id !== parseInt(id!))
+      const duplicate = allDrivers.find(d =>
+        d.licenseNumber === data.licenseNumber &&
+        (!isEdit || d.id !== parseInt(id!))
       );
 
       if (duplicate) {
-          setError("licenseNumber", {
-              type: "manual",
-              message: t('common.validation.licenseNumberExists')
-          });
-          setLoading(false);
-          return;
+        setError("licenseNumber", {
+          type: "manual",
+          message: t('common.validation.licenseNumberExists')
+        });
+        setLoading(false);
+        return;
       }
 
       if (isEdit && id) {
-        await driverApiService.update({ 
-          ...data, 
+        await driverApiService.update({
+          ...data,
           id: parseInt(id),
         } as UpdateDriverDto & { id: number });
         toast.success(t('common.messages.updateSuccess'));
@@ -105,21 +105,21 @@ export default function DriverForm() {
       navigate(ROUTES.DRIVERS);
     } catch (err: unknown) {
       if (err instanceof ApiValidationError) {
-          Object.entries(err.errors).forEach(([key, messages]) => {
-              const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
-              if (['name', 'licenseNumber', 'contactInfo'].includes(fieldName)) {
-                  setError(fieldName as keyof DriverFormData, {
-                      type: 'server',
-                      message: messages.join(', ')
-                  });
-              } else {
-                  toast.error(messages.join(', '));
-              }
-          });
+        Object.entries(err.errors).forEach(([key, messages]) => {
+          const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
+          if (['name', 'licenseNumber', 'contactInfo'].includes(fieldName)) {
+            setError(fieldName as keyof DriverFormData, {
+              type: 'server',
+              message: messages.join(', ')
+            });
+          } else {
+            toast.error(messages.join(', '));
+          }
+        });
       } else {
-          const error = err as Error;
-          toast.error(error.message || t('common.messages.error'));
-          console.error('Error saving driver:', error);
+        const error = err as Error;
+        toast.error(error.message || t('common.messages.error'));
+        console.error('Error saving driver:', error);
       }
     } finally {
       setLoading(false);

@@ -168,7 +168,10 @@
     "lines": "خطوط",
     "searchPlaceholder": "ابحث بالاسم أو الوصف أو اسم المشرف...",
     "errors": {
-      "allFieldsRequired": "يرجى اختيار مشرف وسائق وحافلة."
+      "allFieldsRequired": "يرجى اختيار مشرف وسائق وحافلة.",
+      "supervisorRequired": "المشرف مطلوب",
+      "driverRequired": "السائق مطلوب",
+      "busRequired": "الحافلة مطلوبة"
     },
     "placeholders": {
       "selectSupervisor": "اختر مشرفًا",
@@ -184,7 +187,7 @@
     "viewStopDetails": "عرض تفاصيل الموقف",
     "supervisorOnLine": "المشرف على الخط"
   },
-    "supervisor": {
+  "supervisor": {
     "reportTitle": "تعيينات مشرف الخط",
     "noAssignments": "لا توجد حاليًا أي خطوط معينة لأي مشرفين.",
     "lineName": "اسم الخط",

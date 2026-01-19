@@ -7,7 +7,7 @@
     "currentTheme": "Current theme",
     "mode": "Mode",
     "syrian": "Syrian Identity",
-    "pastel": "Soft Pastel", 
+    "pastel": "Soft Pastel",
     "default": "Default",
     "light": "light",
     "dark": "dark"
@@ -116,7 +116,7 @@
     "form": {
       "nameRequired": "Name is required",
       "licenseNumberRequired": "License number is required",
-      "contactInfoRequired": "Contact information is required"
+      "contactInfoRequired": "Contact Info is required"
     },
     "assignmentDetails": "Assignment Details",
     "assignedLine": "Assigned Line",
@@ -124,7 +124,6 @@
     "noLineAssigned": "This driver is not currently assigned to a line.",
     "viewLineDetails": "View Line Details",
     "viewBusDetails": "View Bus Details",
-
     "noDrivers": "No drivers have been added yet.",
     "drivers": "Drivers",
     "searchPlaceholder": "Search by name or driver number..."
@@ -146,7 +145,10 @@
     "lines": "Lines",
     "searchPlaceholder": "Search by name, description, or supervisor name...",
     "errors": {
-      "allFieldsRequired": "Please select a supervisor, driver, and bus."
+      "allFieldsRequired": "Please select a supervisor, driver, and bus.",
+      "supervisorRequired": "Supervisor is required",
+      "driverRequired": "Driver is required",
+      "busRequired": "Bus is required"
     },
     "placeholders": {
       "selectSupervisor": "Select a supervisor",
@@ -238,17 +240,17 @@
     "confirmSwitch": "You are currently subscribed to {{oldLine}}. Do you want to cancel this subscription and subscribe to {{newLine}}?",
     "confirmSwitchSupervisorTitle": "Transfer Supervision and Subscribe",
     "confirmSwitchSupervisor": "You are currently the supervisor of {{oldLine}}. Do you want to transfer supervision of this line and subscribe to {{newLine}}?",
-      "errorCancellingOld": "Failed to cancel old subscription.",
-      "subscribeSuccess": "Successfully subscribed to {{lineName}}.",
-      "switchSuccess": "Successfully switched subscription from '{{oldLineName}}' to {{lineName}}.",
-      "subscription": {
-        "title": "Subscriptions",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "startDate": "Start Date",
-        "endDate": "End Date"
-      },
+    "errorCancellingOld": "Failed to cancel old subscription.",
+    "subscribeSuccess": "Successfully subscribed to {{lineName}}.",
+    "switchSuccess": "Successfully switched subscription from '{{oldLineName}}' to {{lineName}}.",
+    "subscription": {
+      "title": "Subscriptions",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
     "status": "Status",
     "active": "Active",
     "inactive": "Inactive",
