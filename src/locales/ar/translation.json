@@ -139,6 +139,8 @@
     "information": "معلومات الحافلة",
     "licensePlate": "لوحة الرخصة",
     "capacity": "السعة",
+    "seats": "مقاعد",
+    "remaining": "المتبقي",
     "status": "الحالة",
     "noBuses": "لا توجد حافلات",
     "selectStatus": "اختر حالة",
@@ -149,6 +151,10 @@
       "Available": "متاح",
       "InService": "قيد الخدمة",
       "OutOfService": "خارج الخدمة"
+    },
+    "errors": {
+      "capacityMin": "يجب أن تكون سعة الحافلة 12 مقعداً على الأقل",
+      "capacityMax": "يجب ألا تتجاوز سعة الحافلة 36 مقعداً"
     }
   },
   "line": {
@@ -276,7 +282,8 @@
     "filterByStatus": "تصفية حسب الحالة",
     "errors": {
       "allFieldsRequired": "يرجى اختيار موظف وخط.",
-      "capacityFull": "عذراً، الحافلة لهذا الخط ممتلئة. السعة القصوى هي {{capacity}} ركاب."
+      "capacityFull": "عذراً، الحافلة لهذا الخط ممتلئة. السعة القصوى هي {{capacity}} ركاب.",
+      "busFullServer": "عذراً، الحافلة لهذا الخط ممتلئة تماماً."
     },
     "selectEmployee": "اختر موظفاً",
     "selectLine": "اختر خطاً"
@@ -427,6 +434,10 @@
     "supervisorChangedDetailed": {
       "title": "تغيير المشرف",
       "message": "تم تغيير مشرف الخط '{{lineName}}' من {{oldSupervisor}} إلى {{newSupervisor}}."
+    },
+    "busFull": {
+      "title": "تم الوصول لسعة الحافلة القصوى",
+      "message": "حاول الموظف {{employeeName}} الاشتراك في الخط {{lineName}}، ولكن الحافلة {{busLicensePlate}} ممتلئة ({{capacity}} مقاعد)"
     },
     "markAsRead": "تحديد كمقروء",
     "markAllRead": "تحديد الكل كمقروء"

@@ -114,6 +114,7 @@ export interface Line extends BaseEntity {
   supervisorName: string;
   busId: number;
   busLicensePlate: string;
+  busCapacity: number;
   driverId: number;
   driverName: string;
   name: string;

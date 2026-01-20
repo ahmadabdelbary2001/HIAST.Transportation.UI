@@ -85,19 +85,19 @@ export default function StopForm() {
       const lineStops = allStops
         .filter(s => s.lineId === lineId)
         .sort((a, b) => a.sequenceOrder - b.sequenceOrder);
-      
+
       // حفظ المحطات الموجودة
       setExistingStops(lineStops);
-      
+
       const mappedStops = lineStops.map(s => {
         let stopTypeValue: number;
-        
+
         if (typeof s.stopType === 'string') {
           stopTypeValue = s.stopType === 'Terminus' ? StopType.Terminus : StopType.Intermediate;
         } else {
           stopTypeValue = s.stopType;
         }
-        
+
         return {
           id: s.id,
           address: s.address,
@@ -107,7 +107,7 @@ export default function StopForm() {
           isMoving: false,
         };
       });
-      
+
       setStopsList(mappedStops);
     } catch (err) {
       console.error("Error loading stops:", err);
@@ -156,7 +156,7 @@ export default function StopForm() {
 
   const recalculateStops = (stops: StopInList[]): StopInList[] => {
     if (stops.length === 0) return [];
-    
+
     return stops.map((stop, index) => ({
       ...stop,
       sequenceOrder: index + 1,
@@ -171,7 +171,7 @@ export default function StopForm() {
     }
 
     // حساب الترتيب التسلسلي التالي بناءً على المحطات الموجودة
-    const nextOrder = stopsList.length > 0 
+    const nextOrder = stopsList.length > 0
       ? Math.max(...stopsList.map(s => s.sequenceOrder)) + 1
       : getNextSequenceOrder();
 
@@ -185,13 +185,13 @@ export default function StopForm() {
 
     // إضافة المحطة الجديدة دون إعادة حساب المحطات الموجودة
     const updatedList = [...stopsList, newStop];
-    
+
     // فقط إعادة حساب الأنواع (جعل الأخير فقط هو النهائي)
     const finalList = updatedList.map((stop, index) => ({
       ...stop,
       stopType: index === updatedList.length - 1 ? StopType.Terminus : StopType.Intermediate,
     }));
-    
+
     setStopsList(finalList);
     setNewStopAddress('');
     toast.success(t('stop.messages.stopAdded'));
@@ -199,7 +199,7 @@ export default function StopForm() {
 
   const moveStop = async (index: number, direction: 'up' | 'down') => {
     if (movingStopId) return;
-    
+
     const newList = [...stopsList];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
@@ -207,13 +207,13 @@ export default function StopForm() {
 
     const movingStop = newList[index];
     setMovingStopId(movingStop.id || -1);
-    
+
     [newList[index], newList[targetIndex]] = [newList[targetIndex], newList[index]];
-    
+
     const recalculatedList = recalculateStops(newList);
-    
+
     setStopsList(recalculatedList);
-    
+
     setTimeout(() => {
       setMovingStopId(null);
     }, 300);
@@ -221,23 +221,23 @@ export default function StopForm() {
 
   const validateStopsBeforeSave = (stops: StopInList[]): boolean => {
     const terminusCount = stops.filter(s => s.stopType === StopType.Terminus).length;
-    
+
     if (terminusCount === 0) {
       toast.error(t('stop.errors.noTerminus'));
       return false;
     }
-    
+
     if (terminusCount > 1) {
       toast.error(t('stop.errors.multipleTerminus'));
       return false;
     }
-    
+
     const lastStop = stops[stops.length - 1];
     if (lastStop.stopType !== StopType.Terminus) {
       toast.error(t('stop.errors.lastMustBeTerminus'));
       return false;
     }
-    
+
     return true;
   };
 
@@ -257,7 +257,7 @@ export default function StopForm() {
 
       if (isEdit && id) {
         // حالة التعديل: استخدام reorderStops فقط مع جميع المحطات
-        
+
         // تحضير البيانات لإعادة الترتيب - فقط المحطات الموجودة (لها id)
         const reorderPayload = stopsList
           .filter(stop => stop.id) // فقط المحطات الموجودة في قاعدة البيانات
@@ -294,7 +294,7 @@ export default function StopForm() {
         // حالة الإنشاء: إنشاء جميع المحطات الجديدة
         // حساب الترتيب التسلسلي الصحيح بدءًا من المحطات الموجودة
         let nextOrder = getNextSequenceOrder();
-        
+
         for (const stop of stopsList) {
           await stopApiService.create({
             address: stop.address,
@@ -311,7 +311,7 @@ export default function StopForm() {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error submitting form:", error);
-      
+
       if (error.message.includes('duplicate key')) {
         toast.error(t('stop.errors.duplicateSequenceOrder'));
       } else if (error.message.includes('Terminus')) {
@@ -371,11 +371,6 @@ export default function StopForm() {
                     </div>
                   )}
                 />
-                {selectedLineId > 0 && !isEdit && (
-                  <p className="text-sm text-muted-foreground">
-                    {t('stop.existingStopsCount', { count: existingStops.length })}
-                  </p>
-                )}
               </div>
 
               {isEdit && (
@@ -417,7 +412,7 @@ export default function StopForm() {
                       {stopsList.map((stop, index) => {
                         const isTerminus = stop.stopType === StopType.Terminus;
                         const isMoving = movingStopId === stop.id;
-                        
+
                         return (
                           <div
                             key={stop.id || `new-${index}`}
@@ -429,7 +424,7 @@ export default function StopForm() {
                               ${stop.isNew ? 'border-dashed border-yellow-300 bg-yellow-50/30' : ''}
                               animate-in fade-in slide-in-from-left-2
                             `}
-                            style={{ 
+                            style={{
                               animationDelay: `${index * 50}ms`,
                               transitionProperty: 'all'
                             }}
@@ -454,7 +449,7 @@ export default function StopForm() {
                                 )}
                               </div>
                             </div>
-                            <Badge 
+                            <Badge
                               variant={isTerminus ? "default" : "secondary"}
                               className={`
                                 transition-all duration-200
@@ -521,17 +516,13 @@ export default function StopForm() {
                           }
                         }}
                       />
-                      <Button 
-                        type="button" 
+                      <Button
+                        type="button"
                         onClick={addNewStop}
                         disabled={!newStopAddress.trim()}
                       >
                         {t('common.actions.add')}
                       </Button>
-                    </div>
-                    <div className="text-xs text-muted-foreground space-y-1">
-                      <p>{t('stop.hints.lastStopTerminus')}</p>
-                      <p>{t('stop.hints.sequenceWillStartFrom', { number: getNextSequenceOrder() })}</p>
                     </div>
                   </div>
                 )}
@@ -539,8 +530,8 @@ export default function StopForm() {
             )}
 
             <div className="flex gap-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={loading || stopsList.length === 0 || !!movingStopId}
                 className="min-w-[100px]"
               >

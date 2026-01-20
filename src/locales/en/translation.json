@@ -174,6 +174,8 @@
     "information": "Bus Information",
     "licensePlate": "License Plate",
     "capacity": "Capacity",
+    "seats": "Seats",
+    "remaining": "Remaining",
     "status": "Status",
     "noBuses": "No buses found",
     "selectStatus": "Select a status",
@@ -184,6 +186,10 @@
       "Available": "Available",
       "InService": "In Service",
       "OutOfService": "Out of Service"
+    },
+    "errors": {
+      "capacityMin": "Bus capacity must be at least 12 seats",
+      "capacityMax": "Bus capacity must not exceed 36 seats"
     }
   },
   "supervisor": {
@@ -274,7 +280,8 @@
     "filterByStatus": "Filter by Status",
     "errors": {
       "allFieldsRequired": "Please select an employee and a line.",
-      "capacityFull": "Sorry, the bus for this line is full. Maximum capacity is {{capacity}} passengers."
+      "capacityFull": "Sorry, the bus for this line is full. Maximum capacity is {{capacity}} passengers.",
+      "busFullServer": "The bus for this line has reached its maximum capacity."
     },
     "selectEmployee": "Select Employee",
     "selectLine": "Select Line"
@@ -424,6 +431,10 @@
     "supervisorChangedDetailed": {
       "title": "Supervisor Changed",
       "message": "The supervisor for line '{{lineName}}' has changed from {{oldSupervisor}} to {{newSupervisor}}."
+    },
+    "busFull": {
+      "title": "Bus Capacity Reached",
+      "message": "Employee {{employeeName}} attempted to subscribe to line {{lineName}}, but bus {{busLicensePlate}} is full ({{capacity}} seats)"
     },
     "markAsRead": "Mark as read",
     "markAllRead": "Mark all as read"

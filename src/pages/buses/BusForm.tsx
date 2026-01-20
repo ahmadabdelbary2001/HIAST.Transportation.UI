@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ValidationError } from '@/components/atoms/ValidationError';
 import { busApiService } from '@/services/busApiService';
 import type { CreateBusDto, UpdateBusDto } from '@/types';
-import { BusStatus, busStatusInfo } from '@/types/enums'; 
+import { BusStatus, busStatusInfo } from '@/types/enums';
 import { ROUTES } from '@/lib/constants';
 import { toast } from 'sonner';
 import { ApiValidationError } from '@/services/apiHelper';
@@ -31,7 +31,9 @@ export default function BusForm() {
 
   const busSchema = z.object({
     licensePlate: z.string().min(3, t('common.validation.minLength', { count: 3 })),
-    capacity: z.number().min(1, t('common.validation.required')).max(100, t('common.validation.maxLength', { count: 100 })),
+    capacity: z.number()
+      .min(12, t('bus.errors.capacityMin'))
+      .max(36, t('bus.errors.capacityMax')),
     status: z.nativeEnum(BusStatus)
   });
 
@@ -48,7 +50,7 @@ export default function BusForm() {
     resolver: zodResolver(busSchema),
     defaultValues: {
       licensePlate: '',
-      capacity: 50,
+      capacity: 20,
       status: BusStatus.Available,
     },
   });
@@ -81,16 +83,16 @@ export default function BusForm() {
     try {
       // 1. Manual Validation for Duplicates
       const allBuses = await busApiService.getAll();
-      const duplicate = allBuses.find(b => 
+      const duplicate = allBuses.find(b =>
         b.licensePlate.toLowerCase() === data.licensePlate.toLowerCase() &&
         // Exclude current bus if in Edit mode
-        (!isEdit || b.id !== parseInt(id!)) 
+        (!isEdit || b.id !== parseInt(id!))
       );
 
       if (duplicate) {
         setError("licensePlate", {
-           type: "manual",
-           message: t('common.validation.licensePlateExists')
+          type: "manual",
+          message: t('common.validation.licensePlateExists')
         });
         // We set the error manually, but we also need to stop.
         // And reset loading.
@@ -99,8 +101,8 @@ export default function BusForm() {
       }
 
       if (isEdit && id) {
-        await busApiService.update({ 
-          ...data, 
+        await busApiService.update({
+          ...data,
           id: parseInt(id),
         } as UpdateBusDto & { id: number });
         toast.success(t('common.messages.updateSuccess'));
@@ -111,30 +113,30 @@ export default function BusForm() {
       navigate(ROUTES.BUSES);
     } catch (err: unknown) {
       if (err instanceof ApiValidationError) {
-          Object.entries(err.errors).forEach(([key, messages]) => {
-              // Map backend field names (TitleCase) to frontend (camelCase) if needed.
-              // Assuming standard mapping where LicensePlate -> licensePlate
-              const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
-              // Handle general errors or map specific fields
-              if (['licensePlate', 'capacity', 'status'].includes(fieldName)) {
-                  setError(fieldName as keyof BusFormData, {
-                      type: 'server',
-                      message: messages.join(', ')
-                  });
-              } else {
-                  toast.error(messages.join(', '));
-              }
-          });
+        Object.entries(err.errors).forEach(([key, messages]) => {
+          // Map backend field names (TitleCase) to frontend (camelCase) if needed.
+          // Assuming standard mapping where LicensePlate -> licensePlate
+          const fieldName = key.charAt(0).toLowerCase() + key.slice(1);
+          // Handle general errors or map specific fields
+          if (['licensePlate', 'capacity', 'status'].includes(fieldName)) {
+            setError(fieldName as keyof BusFormData, {
+              type: 'server',
+              message: messages.join(', ')
+            });
+          } else {
+            toast.error(messages.join(', '));
+          }
+        });
       } else {
-          const error = err as Error;
-          toast.error(error.message || t('common.messages.error'));
-          console.error('Error saving bus:', error);
+        const error = err as Error;
+        toast.error(error.message || t('common.messages.error'));
+        console.error('Error saving bus:', error);
       }
     } finally {
-        // Only set loading to false if we didn't return early (duplicate case handles its own loading state)
-        // But since we returned, this finally block runs anyway?
-        // Yes, finally runs even after return.
-        // So we just set loading false here.
+      // Only set loading to false if we didn't return early (duplicate case handles its own loading state)
+      // But since we returned, this finally block runs anyway?
+      // Yes, finally runs even after return.
+      // So we just set loading false here.
       setLoading(false);
     }
   };
@@ -194,17 +196,17 @@ export default function BusForm() {
                         <SelectTrigger error={errors.status?.message}>
                           <SelectValue placeholder={t('bus.selectStatus')} />
                         </SelectTrigger>
-                          <SelectContent>
-                            {busStatusInfo
-                              .filter(status => 
-                                status.value !== BusStatus.InService // Hide 'In Service' as it's auto-managed
-                              )
-                              .map((statusInfo) => (
-                                <SelectItem key={statusInfo.value} value={statusInfo.value}>
-                                  {t(statusInfo.key)}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
+                        <SelectContent>
+                          {busStatusInfo
+                            .filter(status =>
+                              status.value !== BusStatus.InService // Hide 'In Service' as it's auto-managed
+                            )
+                            .map((statusInfo) => (
+                              <SelectItem key={statusInfo.value} value={statusInfo.value}>
+                                {t(statusInfo.key)}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
                       </Select>
                       <ValidationError message={errors.status?.message || ''} />
                     </div>

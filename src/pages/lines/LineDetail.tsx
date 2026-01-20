@@ -3,9 +3,9 @@
 import { useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { 
+import {
   Users, CheckCircle, XCircle,
-  UserCog, UserSquare, Bus, MapPin, Pencil, PlusCircle, Link as LinkIcon 
+  UserCog, UserSquare, Bus, MapPin, Pencil, PlusCircle, Link as LinkIcon
 } from 'lucide-react';
 import { LoadingSpinner } from '@/components/atoms/LoadingSpinner';
 import { ErrorMessage } from '@/components/atoms/ErrorMessage';
@@ -57,7 +57,7 @@ export default function LineDetail() {
 
   const handleSubscribe = async () => {
     if (line) {
-         await subscribeToLine(line.id, line.name, () => loadData(line.id));
+      await subscribeToLine(line.id, line.name, () => loadData(line.id));
     }
   };
 
@@ -112,15 +112,15 @@ export default function LineDetail() {
           <DetailField
             label={t('line.driver')}
             value={
-               isAdmin ? (
+              isAdmin ? (
                 <Link to={`/drivers/${line.driverId}`} className="font-semibold text-primary hover:underline">
                   {line.driverName}
                 </Link>
-               ) : (
+              ) : (
                 <span className="font-semibold text-primary cursor-default">
                   {line.driverName}
                 </span>
-               )
+              )
             }
             icon={UserSquare}
             className="items-start"
@@ -129,17 +129,33 @@ export default function LineDetail() {
           <DetailField
             label={t('line.bus')}
             value={
-               isAdmin ? (
+              isAdmin ? (
                 <Link to={`/buses/${line.busId}`} className="font-semibold text-primary hover:underline">
                   {line.busLicensePlate}
                 </Link>
-               ) : (
-                 <span className="font-semibold text-primary cursor-default">
+              ) : (
+                <span className="font-semibold text-primary cursor-default">
                   {line.busLicensePlate}
                 </span>
-               )
+              )
             }
             icon={Bus}
+            className="items-start"
+          />
+
+          <DetailField
+            label={t('bus.capacity')}
+            value={
+              <div className="flex flex-col">
+                <span className="font-semibold text-primary">
+                  {line.busCapacity} {t('bus.seats')}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {t('bus.remaining')}: {Math.max(0, line.busCapacity - activeSubscribers.length)}
+                </span>
+              </div>
+            }
+            icon={Users}
             className="items-start"
           />
         </CardContent>
@@ -155,7 +171,7 @@ export default function LineDetail() {
           ) : (
             <div className="relative ps-6">
               <div className="absolute start-3 top-0 h-full w-0.5 bg-muted" />
-              
+
               <ol className="space-y-8">
                 {line.stops.map((stop) => (
                   <li key={stop.id} className="relative flex items-center gap-4">
@@ -203,33 +219,33 @@ export default function LineDetail() {
                   </Link>
                 </Button>
               )}
-               {!isAdmin && (
+              {!isAdmin && (
                 <>
-                    {activeLineId === line.id ? (
-                        <Button 
-                            size="sm" 
-                            variant="destructive"
-                            onClick={() => unsubscribe(() => loadData(line.id))}
-                            disabled={subLoading}
-                        >
-                            <XCircle className="me-2 h-4 w-4" />
-                            {t('common.actions.cancelSubscription')}
-                        </Button>
-                    ) : (
-                        <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={handleSubscribe}
-                            disabled={subLoading}
-                        >
-                            <LinkIcon className="me-2 h-4 w-4" />
-                            {t('common.actions.subscribe')}
-                        </Button>
-                    )}
+                  {activeLineId === line.id ? (
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => unsubscribe(() => loadData(line.id))}
+                      disabled={subLoading}
+                    >
+                      <XCircle className="me-2 h-4 w-4" />
+                      {t('common.actions.cancelSubscription')}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={handleSubscribe}
+                      disabled={subLoading}
+                    >
+                      <LinkIcon className="me-2 h-4 w-4" />
+                      {t('common.actions.subscribe')}
+                    </Button>
+                  )}
                 </>
               )}
             </div>
-            
+
             {/* --- Badge remains on the right --- */}
             <Badge variant="secondary" className="text-base">
               {activeSubscribers.length} {t('line.activeSubscribers')}
@@ -245,41 +261,41 @@ export default function LineDetail() {
               {activeSubscribers.filter(sub => sub.employeeId === line.supervisorId).map((sub) => (
                 <li key={sub.id} className="flex items-center justify-between p-3 rounded-md bg-primary/10 border border-primary/20 hover:bg-primary/20 mb-3">
                   <div className="flex items-center gap-3">
-                     <div className="p-2 bg-background rounded-full">
-                        <UserCog className="h-4 w-4 text-primary" />
-                     </div>
+                    <div className="p-2 bg-background rounded-full">
+                      <UserCog className="h-4 w-4 text-primary" />
+                    </div>
                     <div>
-                        <div className="flex items-center gap-2">
-                           {isAdmin ? (
-                            <Link to={`/employees/${sub.employeeId}`} className="font-semibold text-primary hover:underline">
+                      <div className="flex items-center gap-2">
+                        {isAdmin ? (
+                          <Link to={`/employees/${sub.employeeId}`} className="font-semibold text-primary hover:underline">
                             {sub.employeeName}
-                            </Link>
-                           ) : (
-                            <span className="font-semibold text-primary cursor-default">
-                              {sub.employeeName}
-                            </span>
-                           )}
-                            <Badge variant="default" className="text-xs">{t('line.supervisor')}</Badge>
-                        </div>
+                          </Link>
+                        ) : (
+                          <span className="font-semibold text-primary cursor-default">
+                            {sub.employeeName}
+                          </span>
+                        )}
+                        <Badge variant="default" className="text-xs">{t('line.supervisor')}</Badge>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     {isAdmin && (
-                        <Button asChild variant="ghost" size="icon">
+                      <Button asChild variant="ghost" size="icon">
                         <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                            <Pencil className="h-4 w-4" />
+                          <Pencil className="h-4 w-4" />
                         </Link>
-                        </Button>
+                      </Button>
                     )}
                   </div>
                 </li>
               ))}
 
-               {activeSubscribers.some(sub => sub.employeeId === line.supervisorId) && activeSubscribers.length > 1 && (
-                  <li className="py-1">
-                     <Separator className="my-2"/>
-                  </li>
-               )}
+              {activeSubscribers.some(sub => sub.employeeId === line.supervisorId) && activeSubscribers.length > 1 && (
+                <li className="py-1">
+                  <Separator className="my-2" />
+                </li>
+              )}
 
               {/* Render other Active Subscribers */}
               {activeSubscribers.filter(sub => sub.employeeId !== line.supervisorId).map((sub) => (
@@ -302,11 +318,11 @@ export default function LineDetail() {
                       {t('subscription.active')}
                     </Badge>
                     {isAdmin && (
-                        <Button asChild variant="ghost" size="icon">
+                      <Button asChild variant="ghost" size="icon">
                         <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                            <Pencil className="h-4 w-4" />
+                          <Pencil className="h-4 w-4" />
                         </Link>
-                        </Button>
+                      </Button>
                     )}
                   </div>
                 </li>
@@ -342,11 +358,11 @@ export default function LineDetail() {
                       {t('subscription.inactive')}
                     </Badge>
                     {isAdmin && (
-                        <Button asChild variant="ghost" size="icon">
+                      <Button asChild variant="ghost" size="icon">
                         <Link to={`/subscriptions/${sub.id}/edit`} title={t('employee.actions.editSubscription')}>
-                            <Pencil className="h-4 w-4" />
+                          <Pencil className="h-4 w-4" />
                         </Link>
-                        </Button>
+                      </Button>
                     )}
                   </div>
                 </li>
@@ -355,7 +371,7 @@ export default function LineDetail() {
           )}
         </CardContent>
       </Card>
-      
+
       <SubscriptionDialog />
     </div>
   );
